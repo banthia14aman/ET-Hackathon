@@ -1,42 +1,53 @@
 import type { Objection, OptionCard } from '../../contracts/types';
+import { articleName, leverPlain, optionLabel, prettify, STATUS_LABEL, STATUS_PILL } from '../../lib/labels';
 
 function ObjectionChip({ o }: { o: Objection }) {
-  // ponytail: verdict = first 4 words of the validator message, uppercased
-  const verdict = o.message.split(/\s+/).slice(0, 4).join(' ').toUpperCase();
   return (
     <div className={`objection${o.severity === 'block' ? ' objection-block' : ''}`}>
-      <div className="objection-verdict">{verdict}</div>
-      <div className="objection-cite">{o.rule_id} · {o.evidence.join(', ') || o.validator}</div>
+      <div className="objection-article">{articleName(o.rule_id)}</div>
+      <div className="objection-msg">{o.message}</div>
+      <div className="objection-cite mono" title={`${o.rule_id} · ${o.validator}`}>
+        {o.severity === 'block' ? 'BLOCKS' : 'FLAGS'} · cited: {o.evidence.slice(0, 2).join(', ') || o.validator}
+      </div>
     </div>
   );
 }
 
 export default function DebatePanel({ options, objections }: { options: OptionCard[]; objections: Objection[] }) {
   const empty = options.length === 0 && objections.length === 0;
+  // proposer rows: dedupe identical human labels to one ×N line
+  const proposed = [...options.reduce((m, o) => {
+    const label = `${leverPlain(o.lever)}${o.grade ? ` · ${prettify(o.grade)}` : ''}${o.target_refinery ? ` → ${prettify(o.target_refinery)}` : ''}`;
+    const hit = m.get(label);
+    if (hit) hit.n += 1; else m.set(label, { n: 1 });
+    return m;
+  }, new Map<string, { n: number }>()).entries()];
+
   return (
     <div>
-      <div className="panel-title">DEBATE</div>
-      {empty && <div className="debate-empty">Awaiting proposals — 0 objections</div>}
+      <div className="panel-title">The debate</div>
+      <div className="panel-sub">An AI proposes moves. A rules-only critic (no AI) objects. An arbiter decides.</div>
+      {empty && <div className="debate-empty">Awaiting proposals — the desk hasn't moved yet.</div>}
       {!empty && (
         <>
-          <div className="label">PROPOSER</div>
-          {/* cosmetic dedupe: identical proposer rows (e.g. 14× kochi diverts) collapse to ×N */}
-          {[...options.reduce((m, o) => {
-            const label = `${o.lever}${o.grade ? ` · ${o.grade}` : ''}${o.target_refinery ? ` → ${o.target_refinery}` : ''}`;
-            const hit = m.get(label);
-            if (hit) hit.n += 1; else m.set(label, { id: o.id, n: 1 });
-            return m;
-          }, new Map<string, { id: string; n: number }>()).entries()].map(([label, { id, n }]) => (
-            <div key={id} className="debate-row">
-              {label}{n > 1 ? ` ×${n}` : ''}
+          <div className="debate-group-label">Proposer <span className="debate-role">— the AI suggests substitute cargoes</span></div>
+          {proposed.map(([label, { n }]) => (
+            <div key={label} className="debate-row">
+              <span className="dr-name">{label}</span>
+              {n > 1 && <span className="label">×{n}</span>}
             </div>
           ))}
-          <div className="label" style={{ marginTop: 12 }}>CRITIC — {objections.length} OBJECTIONS</div>
-          {objections.map((o) => <ObjectionChip key={o.id} o={o} />)}
-          <div className="label" style={{ marginTop: 12 }}>ARBITER</div>
+
+          <div className="debate-group-label">Critic <span className="debate-role">— {objections.length} rule objections, computed with zero AI</span></div>
+          {objections.length === 0
+            ? <div className="debate-empty">No rule violations.</div>
+            : objections.map((o) => <ObjectionChip key={o.id} o={o} />)}
+
+          <div className="debate-group-label">Arbiter <span className="debate-role">— the verdict on each move</span></div>
           {options.map((o) => (
             <div key={o.id} className="debate-row">
-              <span className={`status-${o.status}`}>{o.status.toUpperCase()}</span> {o.id}
+              <span className={`pill ${STATUS_PILL[o.status]}`}>{STATUS_LABEL[o.status].split(' —')[0]}</span>
+              <span className="dr-name">{optionLabel(o)}</span>
             </div>
           ))}
         </>

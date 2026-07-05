@@ -34,7 +34,7 @@ Counter-positioning line vs. the likely winning rival (a team with live Kpler da
 2. "Our critic cannot hallucinate — it contains no LLM at all."
 3. "We froze our knowledge base in 2018 and let two real crises grade us — misses included."
 4. "When tankers go dark in the Gulf, TRINETRA reads the silence — dead zones in AIS are a signal, not a gap."
-5. "We don't ask refiners what crude they can run — we learned each refinery's envelope from eight years of what it actually ran."
+5. "We don't hard-code which crude each refinery can run — a compatibility model we trained learns the envelope and predicts run / blend / reject with a confidence; then a zero-LLM critic enforces the call. Right tool per layer: our own model for the number, rules for the veto, an LLM only for the sentence." (The model is fit at build time on assay-labelled data — provenance E — and ships as frozen weights; inference is deterministic and offline. See docs/nvidia-bakeoff.md for the narration model and `scripts/train-refinery-model.mjs` for this one.)
 
 ## 1.2 Innovation traps + counters
 - **"Rules engine with an LLM front-end."** Say it first, proudly: "Yes — that's the invention. The industry's failure mode is generative systems with no veto power; ours separates creativity from authority by design." Then the live charter edit proves the rules are user-authored and hot-swappable.

@@ -1,5 +1,10 @@
 import type { CharterArticle } from '../../contracts/types';
 
+const PARAM_PLAIN: Record<string, string> = {
+  min_cover_days: 'min days of cover',
+  max_corridor_share: 'max share via one chokepoint',
+};
+
 export default function CharterPanel({
   charter,
   onParamChange,
@@ -9,14 +14,15 @@ export default function CharterPanel({
 }) {
   return (
     <div>
-      <div className="panel-title">CHARTER</div>
+      <div className="panel-title">The rules (charter)</div>
+      <div className="panel-sub">The constitution the AI argues under. Edit a number → the plan re-decides itself.</div>
       {charter.map((a) => (
         <div key={a.id} className="charter-row" title={a.description}>
           <span className="charter-id">{a.id}</span>
           <span className="charter-title">{a.title}</span>
           {a.param_key && (
             <label className="charter-param">
-              {a.param_key.replace(/_/g, ' ').toUpperCase()}
+              {PARAM_PLAIN[a.param_key] ?? a.param_key.replace(/_/g, ' ')}
               <input
                 type="number"
                 value={a.param_value ?? 0}

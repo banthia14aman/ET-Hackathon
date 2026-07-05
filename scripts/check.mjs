@@ -158,6 +158,18 @@ check('nayara: buyer override → RED rail → rejected, note names Nayara',
 check('nayara: dormant before the Apr-08 advisory (beats at T untouched)',
   !r1.options.some((o) => o.target_refinery === 'ref:vadinar'));
 
+// (f) refinery compatibility model — advisory prediction on every reroute card
+const rerouteCards = r1.options.filter((o) => o.lever === 'reroute');
+check('model: every reroute card carries a learned tier + confidence',
+  rerouteCards.length > 0 && rerouteCards.every((o) => o.model_tier && o.model_confidence > 0 && o.model_confidence <= 1),
+  rerouteCards.map((o) => `${o.grade}:${o.model_tier}@${o.model_confidence}`).join(', '));
+const agree = rerouteCards.filter((o) => o.model_tier === o.compat_tier).length;
+check('model: learned tier agrees with the physical screen on >=85% of reroute cards',
+  agree / rerouteCards.length >= 0.85, `${agree}/${rerouteCards.length} agree`);
+check('model: prediction is deterministic across pipeline re-runs',
+  r2.options.filter((o) => o.lever === 'reroute').every((o, i) =>
+    o.model_tier === rerouteCards[i].model_tier && o.model_confidence === rerouteCards[i].model_confidence));
+
 // ---------- report ----------
 let failed = 0;
 for (const r of results) {

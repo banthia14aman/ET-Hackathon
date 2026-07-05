@@ -4,6 +4,7 @@ import type {
   AssayEnv, CompatTier, CrudeGrade, Graph, GraphNode, Lever, OptionCard,
   SanctionsRules, ScenarioState, SpotCargo,
 } from '../contracts/types';
+import { classifyCrude } from './refinery_model';
 
 const DIMS = ['api', 'sulfur', 'tan', 'ni_v', 'resid', 'pour'] as const;
 
@@ -100,6 +101,9 @@ export function generateOptions(
         .sort((a, b) => a.id.localeCompare(b.id))[0];
       if (!edge) continue; // no existing route -> skip (new-route estimation is out of scope)
       const { tier, binding } = assayScreen(grade, ref.assay_env);
+      // Advisory: the frozen learned model predicts the same tier + a confidence (UI only;
+      // the deterministic assayScreen above remains the authority for the decision).
+      const pred = classifyCrude(grade, ref.assay_env);
       // buyer designation (key 'buyer:<name>', note names the refinery) overrides origin rail
       const buyerKey = Object.keys(sanctions)
         .filter((k) => k.startsWith('buyer:') && sanctions[k].note.includes(ref.id)).sort()[0];
@@ -109,6 +113,7 @@ export function generateOptions(
         grade: grade.id, origin: cargo.origin_country, target_refinery: ref.id,
         volume_kb: vol, voyage_days: edge.transit_days, eta_days: edge.transit_days + 5,
         compat_tier: tier, compat_binding: binding,
+        model_tier: pred.tier, model_confidence: pred.confidence,
         payment_rail: rule?.rail ?? 'GREEN', payment_note: rule?.note,
         jwc_flag: edge.via_chokepoints.some((c) => status(c) !== 'ok'),
         port_ok: edge.mode === 'vlcc' && ref.port_limits ? ref.port_limits.spm : true,

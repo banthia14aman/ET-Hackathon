@@ -112,6 +112,10 @@ export interface OptionCard {
   status: OptionStatus;
   conditions?: string[]; // set by arbiter when status === 'conditional'
   evidence: string[]; // ReplayEvent ids and/or source_refs
+  // Advisory prediction from the frozen refinery-compatibility model (src/engine/refinery_model.ts).
+  // The deterministic critic remains the authority; this surfaces a learned confidence in the UI.
+  model_tier?: CompatTier;
+  model_confidence?: number;
 }
 
 export interface Objection {

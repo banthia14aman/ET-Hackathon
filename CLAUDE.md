@@ -19,6 +19,8 @@ Decision Charter (proposer → zero-LLM critic → arbiter) → hash-chained aud
 - `src/engine/scenario.ts` — rescore(graph, shocks, calibration) → ScenarioState (days-of-cover per refinery, gap_kbd).
 - `src/engine/options.ts` — generateOptions(...) → OptionCard[] across 5 levers (stock_draw, divert_on_water, floating_storage, reroute, demand_side).
 - `src/engine/charter/` — propose (cached LLM text), criticize (PURE FUNCTIONS ONLY — no LLM, ever), arbitrate (severity lattice: block→rejected, flag→conditional, else validated; async for crypto.subtle), audit (hash-chained entries).
+- `src/engine/refinery_model.ts` — our OWN trained model (softmax regression, frozen weights in `data/refinery_model.json`, fit by `scripts/train-refinery-model.mjs`). Advisory crude-compatibility prediction (tier + confidence) on reroute cards; pure/deterministic inference. The zero-LLM critic stays the authority. See `docs/ml-architecture.md` for the "right tool per layer" story (rules for veto, our model for numbers, LLM only for prose).
+- `src/lib/labels.ts` — presentation-only jargon map: internal ids/rule-codes/status enums → plain English. Engine strings are NEVER renamed; mapped at render time only, so checks + audit JSON stay byte-identical.
 - `src/components/` — MapView (SVG, no tiles/tokens), panels/* (ticker, options, critic chips, charter, waterfall, stopwatch, provenance chips).
 - `data/*.json` — all real-world data. Every leaf carries `prov: R|E|S` (Real-sourced / Estimated / Synthetic) + `source` + `as_of`. UI renders these as LIVE/CACHED/SYNTH chips.
 
@@ -38,7 +40,15 @@ Decision Charter (proposer → zero-LLM critic → arbiter) → hash-chained aud
 - Demo beats: (1) critic demotes Venezuelan Merey (TAN + OFAC + voyage-vs-buffer), (2) charter edit days-of-cover 10→15 with visible rule traces. Both must be deterministic.
 
 ## Current status / next steps
-- Engines + data + UI integrated; `npm run check` 67/67; `npm run build` verified clean (Node 22).
+- UI REVAMPED (2026-07-06, from a 21-agent diagnosis+design workflow): plain-language everywhere
+  (no raw ids on screen — see `src/lib/labels.ts`), sans type scale, a header with the national
+  cover KPI + pitch, a plain-English guide band that narrates what's happening and why, provenance
+  chips, and a "no AI in that decision" framing. Simulated judge panel: 55%→78% weighted.
+- Added our OWN trained model (`refinery_model.ts` + `train-refinery-model.mjs`) — answers "why
+  only one LLM": rules for the veto, our model for the numbers, LLM only for prose. `docs/ml-architecture.md`.
+- Engines + data + UI integrated; `npm run check` 70/70; `npm run build` verified clean (Node 22).
+- Still to do (lower priority): enlarge the MapView; the plan's FLIP re-sort / staged-cascade
+  animations (plan.md §8 moments); optional calibration-regression model (docs/ml-architecture.md upgrade path).
 - Known-issue backlog cleared: LLM cache covers all top-3 cards (kochi:0/1, demand_side,
   floating_storage added; stale keys rekeyed), duplicate option/proposer rows collapse to ×N,
   and the Nayara buyer override now fires via `evt:ukmto-2026-04-08-bab-el-mandeb`
