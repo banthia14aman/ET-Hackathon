@@ -1,0 +1,346 @@
+[
+  {
+    "id": "edge:basrah-jamnagar",
+    "from": "sup:iraq-basrah",
+    "to": "ref:jamnagar",
+    "mode": "vlcc",
+    "via_chokepoints": [
+      "ck:hormuz"
+    ],
+    "transit_days": 7,
+    "volume_kbd": 500,
+    "cost_usd_bbl": 1.4,
+    "status": "open"
+  },
+  {
+    "id": "edge:basrah-paradip",
+    "from": "sup:iraq-basrah",
+    "to": "ref:paradip",
+    "mode": "vlcc",
+    "via_chokepoints": [
+      "ck:hormuz"
+    ],
+    "transit_days": 11,
+    "volume_kbd": 200,
+    "cost_usd_bbl": 1.8,
+    "status": "open"
+  },
+  {
+    "id": "edge:basrah-kochi",
+    "from": "sup:iraq-basrah",
+    "to": "ref:kochi",
+    "mode": "vlcc",
+    "via_chokepoints": [
+      "ck:hormuz"
+    ],
+    "transit_days": 8,
+    "volume_kbd": 150,
+    "cost_usd_bbl": 1.5,
+    "status": "open"
+  },
+  {
+    "id": "edge:basrah-visakh",
+    "from": "sup:iraq-basrah",
+    "to": "ref:visakh",
+    "mode": "vlcc",
+    "via_chokepoints": [
+      "ck:hormuz"
+    ],
+    "transit_days": 10,
+    "volume_kbd": 130,
+    "cost_usd_bbl": 1.7,
+    "status": "open"
+  },
+  {
+    "id": "edge:saudi-jamnagar",
+    "from": "sup:saudi",
+    "to": "ref:jamnagar",
+    "mode": "vlcc",
+    "via_chokepoints": [
+      "ck:hormuz"
+    ],
+    "transit_days": 6,
+    "volume_kbd": 250,
+    "cost_usd_bbl": 1.3,
+    "status": "open"
+  },
+  {
+    "id": "edge:saudi-panipat",
+    "from": "sup:saudi",
+    "to": "ref:panipat",
+    "mode": "vlcc",
+    "via_chokepoints": [
+      "ck:hormuz"
+    ],
+    "transit_days": 7,
+    "volume_kbd": 200,
+    "cost_usd_bbl": 1.6,
+    "status": "open"
+  },
+  {
+    "id": "edge:saudi-visakh",
+    "from": "sup:saudi",
+    "to": "ref:visakh",
+    "mode": "vlcc",
+    "via_chokepoints": [
+      "ck:hormuz"
+    ],
+    "transit_days": 9,
+    "volume_kbd": 190,
+    "cost_usd_bbl": 1.7,
+    "status": "open"
+  },
+  {
+    "id": "edge:murban-jamnagar",
+    "from": "sup:uae-murban",
+    "to": "ref:jamnagar",
+    "mode": "vlcc",
+    "via_chokepoints": [
+      "ck:hormuz"
+    ],
+    "transit_days": 5,
+    "volume_kbd": 220,
+    "cost_usd_bbl": 1.2,
+    "status": "open"
+  },
+  {
+    "id": "edge:murban-mangalore",
+    "from": "sup:uae-murban",
+    "to": "ref:mangalore",
+    "mode": "vlcc",
+    "via_chokepoints": [
+      "ck:hormuz"
+    ],
+    "transit_days": 6,
+    "volume_kbd": 120,
+    "cost_usd_bbl": 1.3,
+    "status": "open"
+  },
+  {
+    "id": "edge:murban-mumbai",
+    "from": "sup:uae-murban",
+    "to": "ref:mumbai",
+    "mode": "suezmax",
+    "via_chokepoints": [
+      "ck:hormuz"
+    ],
+    "transit_days": 5,
+    "volume_kbd": 100,
+    "cost_usd_bbl": 1.3,
+    "status": "open"
+  },
+  {
+    "id": "edge:kuwait-kochi",
+    "from": "sup:kuwait",
+    "to": "ref:kochi",
+    "mode": "vlcc",
+    "via_chokepoints": [
+      "ck:hormuz"
+    ],
+    "transit_days": 8,
+    "volume_kbd": 150,
+    "cost_usd_bbl": 1.5,
+    "status": "open"
+  },
+  {
+    "id": "edge:urals-vadinar",
+    "from": "sup:russia-urals",
+    "to": "ref:vadinar",
+    "mode": "suezmax",
+    "via_chokepoints": [
+      "ck:suez",
+      "ck:bab-el-mandeb"
+    ],
+    "transit_days": 28,
+    "volume_kbd": 400,
+    "cost_usd_bbl": 4.5,
+    "status": "open"
+  },
+  {
+    "id": "edge:urals-jamnagar",
+    "from": "sup:russia-urals",
+    "to": "ref:jamnagar",
+    "mode": "suezmax",
+    "via_chokepoints": [
+      "ck:suez",
+      "ck:bab-el-mandeb"
+    ],
+    "transit_days": 28,
+    "volume_kbd": 300,
+    "cost_usd_bbl": 4.5,
+    "status": "open"
+  },
+  {
+    "id": "edge:urals-paradip",
+    "from": "sup:russia-urals",
+    "to": "ref:paradip",
+    "mode": "suezmax",
+    "via_chokepoints": [
+      "ck:suez",
+      "ck:bab-el-mandeb"
+    ],
+    "transit_days": 32,
+    "volume_kbd": 250,
+    "cost_usd_bbl": 4.9,
+    "status": "open"
+  },
+  {
+    "id": "edge:urals-koyali",
+    "from": "sup:russia-urals",
+    "to": "ref:koyali",
+    "mode": "suezmax",
+    "via_chokepoints": [
+      "ck:suez",
+      "ck:bab-el-mandeb"
+    ],
+    "transit_days": 29,
+    "volume_kbd": 250,
+    "cost_usd_bbl": 4.7,
+    "status": "open"
+  },
+  {
+    "id": "edge:urals-visakh",
+    "from": "sup:russia-urals",
+    "to": "ref:visakh",
+    "mode": "suezmax",
+    "via_chokepoints": [
+      "ck:suez",
+      "ck:bab-el-mandeb"
+    ],
+    "transit_days": 31,
+    "volume_kbd": 150,
+    "cost_usd_bbl": 4.8,
+    "status": "open"
+  },
+  {
+    "id": "edge:urals-mumbai",
+    "from": "sup:russia-urals",
+    "to": "ref:mumbai",
+    "mode": "suezmax",
+    "via_chokepoints": [
+      "ck:suez",
+      "ck:bab-el-mandeb"
+    ],
+    "transit_days": 30,
+    "volume_kbd": 110,
+    "cost_usd_bbl": 4.7,
+    "status": "open"
+  },
+  {
+    "id": "edge:urals-vadinar-cape",
+    "from": "sup:russia-urals",
+    "to": "ref:vadinar",
+    "mode": "suezmax",
+    "via_chokepoints": [
+      "ck:cape"
+    ],
+    "transit_days": 35,
+    "volume_kbd": 0,
+    "cost_usd_bbl": 6.2,
+    "status": "open"
+  },
+  {
+    "id": "edge:usgc-jamnagar",
+    "from": "sup:usa-usgc",
+    "to": "ref:jamnagar",
+    "mode": "vlcc",
+    "via_chokepoints": [
+      "ck:cape"
+    ],
+    "transit_days": 32,
+    "volume_kbd": 120,
+    "cost_usd_bbl": 5.5,
+    "status": "open"
+  },
+  {
+    "id": "edge:usgc-paradip",
+    "from": "sup:usa-usgc",
+    "to": "ref:paradip",
+    "mode": "vlcc",
+    "via_chokepoints": [
+      "ck:cape"
+    ],
+    "transit_days": 35,
+    "volume_kbd": 80,
+    "cost_usd_bbl": 5.9,
+    "status": "open"
+  },
+  {
+    "id": "edge:angola-paradip",
+    "from": "sup:angola",
+    "to": "ref:paradip",
+    "mode": "vlcc",
+    "via_chokepoints": [
+      "ck:cape"
+    ],
+    "transit_days": 22,
+    "volume_kbd": 70,
+    "cost_usd_bbl": 3.6,
+    "status": "open"
+  },
+  {
+    "id": "edge:angola-jamnagar",
+    "from": "sup:angola",
+    "to": "ref:jamnagar",
+    "mode": "vlcc",
+    "via_chokepoints": [
+      "ck:cape"
+    ],
+    "transit_days": 20,
+    "volume_kbd": 50,
+    "cost_usd_bbl": 3.4,
+    "status": "open"
+  },
+  {
+    "id": "edge:nigeria-koyali",
+    "from": "sup:nigeria",
+    "to": "ref:koyali",
+    "mode": "suezmax",
+    "via_chokepoints": [
+      "ck:cape"
+    ],
+    "transit_days": 21,
+    "volume_kbd": 90,
+    "cost_usd_bbl": 3.5,
+    "status": "open"
+  },
+  {
+    "id": "edge:nigeria-mangalore",
+    "from": "sup:nigeria",
+    "to": "ref:mangalore",
+    "mode": "suezmax",
+    "via_chokepoints": [
+      "ck:cape"
+    ],
+    "transit_days": 20,
+    "volume_kbd": 60,
+    "cost_usd_bbl": 3.4,
+    "status": "open"
+  },
+  {
+    "id": "edge:venezuela-jamnagar",
+    "from": "sup:venezuela",
+    "to": "ref:jamnagar",
+    "mode": "vlcc",
+    "via_chokepoints": [
+      "ck:cape"
+    ],
+    "transit_days": 38,
+    "volume_kbd": 80,
+    "cost_usd_bbl": 6.5,
+    "status": "open"
+  },
+  {
+    "id": "edge:brazil-jamnagar",
+    "from": "sup:brazil",
+    "to": "ref:jamnagar",
+    "mode": "vlcc",
+    "via_chokepoints": [
+      "ck:cape"
+    ],
+    "transit_days": 28,
+    "volume_kbd": 60,
+    "cost_usd_bbl": 4.6,
+    "status": "open"
+  }
+]

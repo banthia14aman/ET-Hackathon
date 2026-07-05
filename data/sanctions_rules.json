@@ -1,0 +1,14 @@
+{
+  "USA": { "rail": "GREEN", "note": "USD LC. Snapshot 2026-03-01." },
+  "Angola": { "rail": "GREEN", "note": "USD LC. Snapshot 2026-03-01." },
+  "Brazil": { "rail": "GREEN", "note": "USD LC. Snapshot 2026-03-01." },
+  "Nigeria": { "rail": "GREEN", "note": "USD LC. Snapshot 2026-03-01." },
+  "Saudi Arabia": { "rail": "GREEN", "note": "USD LC. Snapshot 2026-03-01." },
+  "UAE": { "rail": "GREEN", "note": "USD LC. Snapshot 2026-03-01." },
+  "Kuwait": { "rail": "GREEN", "note": "USD LC. Snapshot 2026-03-01." },
+  "Iraq": { "rail": "GREEN", "note": "USD LC. Snapshot 2026-03-01." },
+  "Russia": { "rail": "AMBER", "note": "Dirham/yuan rail; US waiver branch for pre-cutoff loadings valid to 2026-04-03 (evt:milestone-2026-03-06-ofac-waiver). Snapshot 2026-03-06." },
+  "Venezuela": { "rail": "AMBER", "note": "OFAC comfort letter required per cargo. Snapshot 2026-03-01." },
+  "Iran": { "rail": "RED", "note": "Comprehensive US/EU sanctions; no compliant rail. Snapshot 2026-03-01." },
+  "buyer:Nayara": { "rail": "RED", "note": "Buyer override — Nayara Energy designated under EU 18th package (Jul 2025); overrides origin-country rail for cargoes destined ref:vadinar. Snapshot 2026-03-01." }
+}

@@ -1,0 +1,128 @@
+[
+  {
+    "key": "opt:reroute:gr:merey-16:ref:jamnagar:8",
+    "kind": "rationale",
+    "text": "Merey 16 fills the heavy-sour hole Iranian barrels left at Jamnagar: 16 API / 2.5% S sits inside the coker envelope, but TAN ~1.9 binds — cap at 30% of diet blended against Basrah Medium. 2,000 kb parcel covers ~3 d of crude runs. 38 d Caribbean voyage is the real cost: it lands 26 d after the 12 d cover buffer runs out, so it is a second-month fix, not a bridge. Freight adds ~$3.1/bbl vs Gulf barrels; OFAC posture is AMBER, not GREEN — book only against the current GL snapshot.",
+    "generated_by": "PLACEHOLDER — regenerate via scripts/generate-llm-cache.mjs with real credentials",
+    "model": null
+  },
+  {
+    "key": "opt:reroute:gr:merey-16:ref:jamnagar:8",
+    "kind": "memo",
+    "text": "MEMO — Merey 16 → Jamnagar. Approve CONDITIONAL: (1) bridge the 26 d cover gap with SPR draw or on-water diversion before fixing; (2) blend ≤30% against low-TAN base to clear the 1.9 TAN bind; (3) re-confirm AMBER rail against the OFAC GL snapshot dated at fixture, not at loading. Volume 2,000 kb ≈ 3 d of runs; net cost delta ~$3.1/bbl. Do not treat as first-response supply.",
+    "generated_by": "PLACEHOLDER — regenerate via scripts/generate-llm-cache.mjs with real credentials",
+    "model": null
+  },
+  {
+    "key": "opt:reroute:gr:girassol:ref:jamnagar:2",
+    "kind": "rationale",
+    "text": "Girassol is the clean swing barrel: 31 API / 0.33% S runs neat at Jamnagar — RUN_NOW, no blend gymnastics — and Angola loadings clear GREEN rails with no snapshot risk. 20 d voyage via the Cape lands day 25, past the 12 d buffer but the nearest big clean parcel on the board. Downside is price: Atlantic sweet has it ~$3.5/bbl over pre-crisis Gulf terms. 16,000 kb sized against the gap buys ~13 d of Jamnagar cover — this is volume, not just quality insurance.",
+    "generated_by": "PLACEHOLDER — regenerate via scripts/generate-llm-cache.mjs with real credentials",
+    "model": null
+  },
+  {
+    "key": "opt:reroute:gr:girassol:ref:jamnagar:2",
+    "kind": "memo",
+    "text": "MEMO — Girassol → Jamnagar. Approve CONDITIONAL: bridge the 25 d ETA vs 12 d buffer gap with SPR draw or on-water diversion until discharge. RUN_NOW compatibility, GREEN rail, no sanctions work. Accept ~$3.5/bbl premium as availability cost; pair with a heavy parcel to hold coker economics.",
+    "generated_by": "PLACEHOLDER — regenerate via scripts/generate-llm-cache.mjs with real credentials",
+    "model": null
+  },
+  {
+    "key": "opt:reroute:gr:wti-midland:ref:jamnagar:7",
+    "kind": "rationale",
+    "text": "WTI Midland is the deepest liquid pool available: 42 API / 0.2% S, GREEN rail, and USGC can surge loadings within a week. It lightens Jamnagar's diet — resid starvation on the coker if pushed past ~25% of intake, so it displaces naphtha economics rather than replacing heavy sour. 32 d voyage via Cape lands day 37, the worst ETA still on the board; 16,575 kb ≈ 13 d of cover arriving well after the buffer window. Structural backfill for month 2+.",
+    "generated_by": "PLACEHOLDER — regenerate via scripts/generate-llm-cache.mjs with real credentials",
+    "model": null
+  },
+  {
+    "key": "opt:reroute:gr:wti-midland:ref:jamnagar:7",
+    "kind": "memo",
+    "text": "MEMO — WTI Midland → Jamnagar. Approve CONDITIONAL: bridge the voyage-vs-buffer gap (37 d ETA vs 12 d cover) with nearer barrels or stock draw; cap light-sweet share ~25% to protect coker feed. GREEN rail, no sanctions work needed. Book as month-2 baseload.",
+    "generated_by": "PLACEHOLDER — regenerate via scripts/generate-llm-cache.mjs with real credentials",
+    "model": null
+  },
+  {
+    "key": "opt:reroute:gr:urals:ref:jamnagar:3",
+    "kind": "rationale",
+    "text": "Urals is the cheapest barrel on the board — discount still nets ~$0.5/bbl over baseline after Suez freight — and 31 API / 1.7% S runs neat at Jamnagar. The rail is the problem, not the molecule: cap-price attestation chain is AMBER under the pre-cutoff waiver branch, and that waiver expires 2026-04-03; a fixture that slips past cutoff loses its rail mid-voyage. 28 d transit lands day 33 against a 12 d buffer, so it needs a bridge regardless. 16,575 kb ≈ 13 d of cover.",
+    "generated_by": "PLACEHOLDER — regenerate via scripts/generate-llm-cache.mjs with real credentials",
+    "model": null
+  },
+  {
+    "key": "opt:reroute:gr:urals:ref:jamnagar:3",
+    "kind": "memo",
+    "text": "MEMO — Urals → Jamnagar. Approve CONDITIONAL: (1) counsel sign-off against the dated cap-price snapshot before nomination, loading must complete pre-waiver-cutoff; (2) payment via the attested AMBER rail only, no fallback intermediaries; (3) bridge the 33 d ETA vs 12 d buffer with SPR draw. Cheapest cover-days on the board if the rail holds.",
+    "generated_by": "PLACEHOLDER — regenerate via scripts/generate-llm-cache.mjs with real credentials",
+    "model": null
+  },
+  {
+    "key": "opt:stock_draw:-:-:0",
+    "kind": "rationale",
+    "text": "SPR draw is the only lever with a 0 d voyage: release adds ~5-6 d of cover at Jamnagar run rates immediately, buying time for every seaborne option that lands beyond the buffer. Cost is strategic, not commercial — reserves refill at post-crisis prices, and a visible draw signals stress to the market. Use it as the bridge under long-haul fixtures, not as standalone supply.",
+    "generated_by": "PLACEHOLDER — regenerate via scripts/generate-llm-cache.mjs with real credentials",
+    "model": null
+  },
+  {
+    "key": "opt:stock_draw:-:-:0",
+    "kind": "memo",
+    "text": "MEMO — SPR draw (Jamnagar system). Approve as BRIDGE: release sized to hold cover above the A2 floor until first conditional cargo discharges; announce volume once, not incrementally. Pair explicitly with the Merey/WTI fixtures whose ETAs exceed buffer. Refill plan required within 30 d.",
+    "generated_by": "PLACEHOLDER — regenerate via scripts/generate-llm-cache.mjs with real credentials",
+    "model": null
+  },
+  {
+    "key": "opt:demand_side:-:-:0",
+    "kind": "rationale",
+    "text": "Demand-side is the lever nobody wants and everybody uses: a 300 kb/d run-cut plus product-import swap for 30 days frees 9,000 kb of crude demand — ~5.4 d of system cover — with a 7 d ramp and zero voyage risk. It is GREEN-rail by construction and reversible weekly. The cost is margin, not molecules: every day of cut trades refining spread for cover, and product imports land at crisis premiums. Price it against the SPR refill cost, not against crude FOB.",
+    "generated_by": "PLACEHOLDER — regenerate via scripts/generate-llm-cache.mjs with real credentials",
+    "model": null
+  },
+  {
+    "key": "opt:demand_side:-:-:0",
+    "kind": "memo",
+    "text": "MEMO — Demand-side (run-cut / product-import swap). Approve as STANDING RESERVE: pre-authorize 300 kb/d for 30 d, activate in weekly tranches only while long-haul fixtures remain undischarged. Review against product-crack spread weekly; stand down the moment conditional cargoes land. Volume 9,000 kb ≈ 5.4 d of cover.",
+    "generated_by": "PLACEHOLDER — regenerate via scripts/generate-llm-cache.mjs with real credentials",
+    "model": null
+  },
+  {
+    "key": "opt:divert_on_water:-:ref:kochi:0",
+    "kind": "rationale",
+    "text": "Diverting an owned/chartered cargo already at sea toward the critical West Coast system is the cheapest fast barrel: no new fixture, ~3 d ETA, GREEN rail unchanged. The cost is the hole it leaves at the original discharge port — netback the demurrage, deviation clause, and any resale penalty (~$0.8/bbl all-in est.). Works once; the second diversion starts cannibalizing the same system it is defending.",
+    "generated_by": "PLACEHOLDER — regenerate via scripts/generate-llm-cache.mjs with real credentials",
+    "model": null
+  },
+  {
+    "key": "opt:divert_on_water:-:ref:kochi:0",
+    "kind": "memo",
+    "text": "MEMO — On-water diversion (Kochi system, tranche 1). Approve. 3 d ETA inside buffer, GREEN rail, deviation cost ~$0.8/bbl accepted. Log the origin-port shortfall as a new gap in the next rescore so it is not double-counted as free supply.",
+    "generated_by": "PLACEHOLDER — regenerate via scripts/generate-llm-cache.mjs with real credentials",
+    "model": null
+  },
+  {
+    "key": "opt:divert_on_water:-:ref:kochi:1",
+    "kind": "rationale",
+    "text": "Second on-water diversion tranche into the critical West Coast system: same 3 d ETA and GREEN rail as tranche 1, but the marginal economics are worse — the origin-port hole is now two cargoes deep, and resale penalties compound. Size it only against the residual gap after tranche 1 discharges; past that point diversion stops being supply and starts being reshuffling.",
+    "generated_by": "PLACEHOLDER — regenerate via scripts/generate-llm-cache.mjs with real credentials",
+    "model": null
+  },
+  {
+    "key": "opt:divert_on_water:-:ref:kochi:1",
+    "kind": "memo",
+    "text": "MEMO — On-water diversion (Kochi system, tranche 2). Approve CONDITIONAL: activate only if the post-tranche-1 rescore still shows Kochi below buffer; cap total diverted volume at the residual gap. Same GREEN rail and ~$0.8/bbl deviation economics; watch cumulative origin-port shortfall.",
+    "generated_by": "PLACEHOLDER — regenerate via scripts/generate-llm-cache.mjs with real credentials",
+    "model": null
+  },
+  {
+    "key": "opt:floating_storage:-:-:0",
+    "kind": "rationale",
+    "text": "Floating storage is optionality, not supply: a 2,000 kb parcel held on a VLCC off the west coast discharges on 10 d notice into whichever refinery the next rescore says is shortest. In a crisis the market pays you to wait — contango covers demurrage past month 1 — but war-risk premium on a laden ship near a shocked corridor erodes it fast. ~1.2 d of system cover; its real value is that it converts to a diversion card the day a port goes down.",
+    "generated_by": "PLACEHOLDER — regenerate via scripts/generate-llm-cache.mjs with real credentials",
+    "model": null
+  },
+  {
+    "key": "opt:floating_storage:-:-:0",
+    "kind": "memo",
+    "text": "MEMO — Floating storage (2,000 kb VLCC parcel). Approve: hold west of the JWC listed area, discharge on 10 d notice to the shortest-cover refinery at decision time. Re-price war-risk weekly; unwind if contango no longer covers demurrage + premium. Log as optionality, not as cover, in the gap arithmetic.",
+    "generated_by": "PLACEHOLDER — regenerate via scripts/generate-llm-cache.mjs with real credentials",
+    "model": null
+  }
+]

@@ -1,0 +1,41 @@
+[
+  {
+    "id": "A1",
+    "title": "Completeness",
+    "description": "Every option card must state volume, timing, payment rail, port fit, and evidence before it may be arbitrated."
+  },
+  {
+    "id": "A2",
+    "title": "Security floor",
+    "param_key": "min_cover_days",
+    "param_value": 10,
+    "description": "No accepted plan may leave any refinery below the minimum days-of-cover floor."
+  },
+  {
+    "id": "A3",
+    "title": "Concentration cap",
+    "param_key": "max_corridor_share",
+    "param_value": 0.35,
+    "description": "No single corridor or chokepoint may carry more than the capped share of total accepted volume."
+  },
+  {
+    "id": "A4",
+    "title": "Sanctions transparency",
+    "description": "Every option must declare its payment rail and sanctions exposure explicitly; AMBER rails require a stated mitigation and RED rails are never silently laundered into a plan."
+  },
+  {
+    "id": "A5",
+    "title": "Stated uncertainty",
+    "description": "Every quantitative claim in an option carries its provenance (R/E/S) and estimated values are never presented as confirmed."
+  },
+  {
+    "id": "A6",
+    "title": "Reversibility",
+    "description": "Prefer options that can be unwound or redirected mid-voyage over irreversible commitments of similar value."
+  },
+  {
+    "id": "A7",
+    "title": "Traceability and human sovereignty",
+    "description": "Every accept/reject decision is hash-chained in the audit log and a human can override any system verdict, with the override itself logged."
+  }
+]

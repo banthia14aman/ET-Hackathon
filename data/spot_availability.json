@@ -1,0 +1,72 @@
+[
+  {
+    "id": "sc:angola-girassol-q2",
+    "grade_id": "gr:girassol",
+    "origin_country": "Angola",
+    "volume_kb": 16000,
+    "loading_port": "sup:angola",
+    "avail_from_day": 35,
+    "prov": "E",
+    "source": "JODI/EIA-derived: Angola ~350 kb/d spot-available over 3mo, split across grades"
+  },
+  {
+    "id": "sc:angola-cabinda-q2",
+    "grade_id": "gr:cabinda",
+    "origin_country": "Angola",
+    "volume_kb": 15500,
+    "loading_port": "sup:angola",
+    "avail_from_day": 40,
+    "prov": "E",
+    "source": "JODI/EIA-derived: Angola ~350 kb/d spot-available over 3mo, split across grades"
+  },
+  {
+    "id": "sc:nigeria-bonny-q2",
+    "grade_id": "gr:bonny-light",
+    "origin_country": "Nigeria",
+    "volume_kb": 27000,
+    "loading_port": "sup:nigeria",
+    "avail_from_day": 30,
+    "prov": "E",
+    "source": "JODI/EIA-derived: Nigeria ~300 kb/d spot-available over 3mo"
+  },
+  {
+    "id": "sc:usa-wti-q2",
+    "grade_id": "gr:wti-midland",
+    "origin_country": "USA",
+    "volume_kb": 45000,
+    "loading_port": "sup:usa-usgc",
+    "avail_from_day": 20,
+    "prov": "E",
+    "source": "EIA-derived: USGC ~500 kb/d spot-available over 3mo"
+  },
+  {
+    "id": "sc:brazil-tupi-q2",
+    "grade_id": "gr:tupi",
+    "origin_country": "Brazil",
+    "volume_kb": 22500,
+    "loading_port": "sup:brazil",
+    "avail_from_day": 45,
+    "prov": "E",
+    "source": "ANP/JODI-derived: Brazil ~250 kb/d spot-available over 3mo"
+  },
+  {
+    "id": "sc:venezuela-merey-q2",
+    "grade_id": "gr:merey-16",
+    "origin_country": "Venezuela",
+    "volume_kb": 27000,
+    "loading_port": "sup:venezuela",
+    "avail_from_day": 55,
+    "prov": "E",
+    "source": "Tanker-tracking-derived: Venezuela ~300 kb/d over 3mo — rail-gated, OFAC comfort letter required"
+  },
+  {
+    "id": "sc:urals-onwater-waiver",
+    "grade_id": "gr:urals",
+    "origin_country": "Russia",
+    "volume_kb": 30000,
+    "loading_port": "sup:russia-urals",
+    "avail_from_day": 64,
+    "prov": "R",
+    "source": "evt:milestone-2026-03-10-india-urals-buy — one-off 30M bbl stranded Urals, waiver branch to 2026-04-03"
+  }
+]

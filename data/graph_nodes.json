@@ -1,0 +1,693 @@
+[
+  {
+    "id": "sup:iraq-basrah",
+    "type": "supplier",
+    "name": "Iraq — Basrah terminals",
+    "lat": 29.85,
+    "lon": 48.65,
+    "capacity_kbd": 3300,
+    "status": "ok",
+    "prov": "R",
+    "source": "SOMO / PPAC FY25 country mix",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "sup:saudi",
+    "type": "supplier",
+    "name": "Saudi Arabia — Ras Tanura",
+    "lat": 26.64,
+    "lon": 50.16,
+    "capacity_kbd": 9000,
+    "status": "ok",
+    "prov": "R",
+    "source": "Saudi Aramco / PPAC FY25 country mix",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "sup:uae-murban",
+    "type": "supplier",
+    "name": "UAE — Murban (Jebel Dhanna / Fujairah)",
+    "lat": 24.19,
+    "lon": 52.6,
+    "capacity_kbd": 2100,
+    "status": "ok",
+    "prov": "R",
+    "source": "ADNOC / PPAC FY25 country mix",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "sup:kuwait",
+    "type": "supplier",
+    "name": "Kuwait — Mina al-Ahmadi",
+    "lat": 29.07,
+    "lon": 48.15,
+    "capacity_kbd": 2400,
+    "status": "ok",
+    "prov": "R",
+    "source": "KPC / PPAC FY25 country mix",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "sup:russia-urals",
+    "type": "supplier",
+    "name": "Russia — Urals (Primorsk/Ust-Luga Baltic)",
+    "lat": 60.34,
+    "lon": 28.7,
+    "capacity_kbd": 4500,
+    "status": "ok",
+    "prov": "R",
+    "source": "PPAC FY25 country mix (36% of Indian imports)",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "sup:usa-usgc",
+    "type": "supplier",
+    "name": "USA — Gulf Coast (Corpus Christi)",
+    "lat": 27.8,
+    "lon": -97.4,
+    "capacity_kbd": 4000,
+    "status": "ok",
+    "prov": "R",
+    "source": "EIA / PPAC FY25 country mix",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "sup:angola",
+    "type": "supplier",
+    "name": "Angola — offshore terminals (Girassol/Cabinda)",
+    "lat": -6.1,
+    "lon": 12.35,
+    "capacity_kbd": 1100,
+    "status": "ok",
+    "prov": "R",
+    "source": "Sonangol / JODI",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "sup:nigeria",
+    "type": "supplier",
+    "name": "Nigeria — Bonny/Qua Iboe",
+    "lat": 4.43,
+    "lon": 7.17,
+    "capacity_kbd": 1400,
+    "status": "ok",
+    "prov": "R",
+    "source": "NNPC / JODI",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "sup:venezuela",
+    "type": "supplier",
+    "name": "Venezuela — Jose terminal",
+    "lat": 10.08,
+    "lon": -64.85,
+    "capacity_kbd": 900,
+    "status": "ok",
+    "prov": "R",
+    "source": "PDVSA / tanker tracking",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "sup:brazil",
+    "type": "supplier",
+    "name": "Brazil — Santos basin FPSOs",
+    "lat": -25.0,
+    "lon": -45.0,
+    "capacity_kbd": 3600,
+    "status": "ok",
+    "prov": "R",
+    "source": "Petrobras / ANP",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "ck:hormuz",
+    "type": "chokepoint",
+    "name": "Strait of Hormuz",
+    "lat": 26.57,
+    "lon": 56.25,
+    "capacity_kbd": 21000,
+    "status": "ok",
+    "prov": "R",
+    "source": "EIA World Oil Transit Chokepoints",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "ck:bab-el-mandeb",
+    "type": "chokepoint",
+    "name": "Bab-el-Mandeb",
+    "lat": 12.58,
+    "lon": 43.33,
+    "capacity_kbd": 8800,
+    "status": "ok",
+    "prov": "R",
+    "source": "EIA World Oil Transit Chokepoints",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "ck:suez",
+    "type": "chokepoint",
+    "name": "Suez Canal / SUMED",
+    "lat": 30.45,
+    "lon": 32.35,
+    "capacity_kbd": 5500,
+    "status": "ok",
+    "prov": "R",
+    "source": "EIA World Oil Transit Chokepoints",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "ck:cape",
+    "type": "chokepoint",
+    "name": "Cape of Good Hope",
+    "lat": -34.36,
+    "lon": 18.47,
+    "capacity_kbd": 99000,
+    "status": "ok",
+    "prov": "E",
+    "source": "open-water routing point, no physical cap",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "ck:malacca",
+    "type": "chokepoint",
+    "name": "Strait of Malacca",
+    "lat": 2.5,
+    "lon": 101.0,
+    "capacity_kbd": 23700,
+    "status": "ok",
+    "prov": "R",
+    "source": "EIA World Oil Transit Chokepoints",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "cor:gulf-west-india",
+    "type": "corridor",
+    "name": "Gulf → West India corridor",
+    "lat": 22.0,
+    "lon": 64.0,
+    "status": "ok",
+    "prov": "S",
+    "source": "map choreography midpoint",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "cor:wafr-india",
+    "type": "corridor",
+    "name": "West Africa → India corridor",
+    "lat": -10.0,
+    "lon": 55.0,
+    "status": "ok",
+    "prov": "S",
+    "source": "map choreography midpoint",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "cor:americas-cape-india",
+    "type": "corridor",
+    "name": "Americas → Cape → India corridor",
+    "lat": -30.0,
+    "lon": 10.0,
+    "status": "ok",
+    "prov": "S",
+    "source": "map choreography midpoint",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "cor:baltic-suez-india",
+    "type": "corridor",
+    "name": "Baltic → Suez → India corridor",
+    "lat": 35.0,
+    "lon": 20.0,
+    "status": "ok",
+    "prov": "S",
+    "source": "map choreography midpoint (Med leg)",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "cor:baltic-cape-india",
+    "type": "corridor",
+    "name": "Baltic → Cape → India corridor",
+    "lat": -20.0,
+    "lon": 5.0,
+    "status": "ok",
+    "prov": "S",
+    "source": "map choreography midpoint (S. Atlantic leg)",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "port:vadinar",
+    "type": "port",
+    "name": "Vadinar (SPM, VLCC-capable)",
+    "lat": 22.4,
+    "lon": 69.7,
+    "port_limits": {
+      "spm": true,
+      "draft_m": 32.0
+    },
+    "status": "ok",
+    "prov": "E",
+    "source": "port authority knowledge — Vadinar SPM handles fully laden VLCC",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "port:sikka",
+    "type": "port",
+    "name": "Sikka / Jamnagar SPMs (RIL)",
+    "lat": 22.43,
+    "lon": 69.83,
+    "port_limits": {
+      "spm": true,
+      "draft_m": 32.0
+    },
+    "status": "ok",
+    "prov": "E",
+    "source": "port authority knowledge — RIL SPMs handle VLCC",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "port:mundra",
+    "type": "port",
+    "name": "Mundra (SPM for HMEL line)",
+    "lat": 22.74,
+    "lon": 69.7,
+    "port_limits": {
+      "spm": true,
+      "draft_m": 17.0
+    },
+    "status": "ok",
+    "prov": "E",
+    "source": "port authority knowledge — SPM plus berth draft limit",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "port:paradip",
+    "type": "port",
+    "name": "Paradip (SPM, VLCC-capable east coast)",
+    "lat": 20.27,
+    "lon": 86.7,
+    "port_limits": {
+      "spm": true,
+      "draft_m": 30.0
+    },
+    "status": "ok",
+    "prov": "E",
+    "source": "port authority knowledge — Paradip SPM commissioned for VLCC",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "port:kochi",
+    "type": "port",
+    "name": "Kochi (BPCL SPM)",
+    "lat": 9.97,
+    "lon": 76.25,
+    "port_limits": {
+      "spm": true,
+      "draft_m": 30.0
+    },
+    "status": "ok",
+    "prov": "E",
+    "source": "port authority knowledge — Kochi SPM handles VLCC",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "port:chennai",
+    "type": "port",
+    "name": "Chennai (berth-limited, no SPM)",
+    "lat": 13.1,
+    "lon": 80.3,
+    "port_limits": {
+      "spm": false,
+      "draft_m": 16.5
+    },
+    "status": "ok",
+    "prov": "E",
+    "source": "port authority knowledge — Suezmax-max at berth",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "port:fujairah",
+    "type": "port",
+    "name": "Fujairah anchorage/bunker hub",
+    "lat": 25.15,
+    "lon": 56.35,
+    "port_limits": {
+      "spm": false,
+      "draft_m": 18.0
+    },
+    "status": "ok",
+    "prov": "E",
+    "source": "port authority knowledge — anchorage staging for AIS layer",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "ref:jamnagar",
+    "type": "refinery",
+    "name": "Jamnagar (RIL, DTA+SEZ)",
+    "lat": 22.28,
+    "lon": 69.85,
+    "capacity_kbd": 1240,
+    "cover_days": 15,
+    "assay_env": {
+      "api": [
+        18,
+        45
+      ],
+      "sulfur": [
+        0,
+        4.5
+      ],
+      "tan": [
+        0,
+        2
+      ],
+      "ni_v": [
+        0,
+        600
+      ],
+      "resid": [
+        0,
+        55
+      ],
+      "pour": [
+        -30,
+        30
+      ]
+    },
+    "status": "ok",
+    "prov": "E",
+    "source": "empirical envelope — NCI ~14, deep conversion, high-TAN and heavy-sour tolerant",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "ref:vadinar",
+    "type": "refinery",
+    "name": "Vadinar (Nayara Energy)",
+    "lat": 22.37,
+    "lon": 69.72,
+    "capacity_kbd": 400,
+    "cover_days": 14,
+    "assay_env": {
+      "api": [
+        22,
+        42
+      ],
+      "sulfur": [
+        0,
+        3.8
+      ],
+      "tan": [
+        0,
+        2.0
+      ],
+      "ni_v": [
+        0,
+        350
+      ],
+      "resid": [
+        0,
+        45
+      ],
+      "pour": [
+        -25,
+        25
+      ]
+    },
+    "status": "ok",
+    "prov": "E",
+    "source": "empirical envelope — high-complexity, Urals-optimized",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "ref:paradip",
+    "type": "refinery",
+    "name": "Paradip (IOC, coker)",
+    "lat": 20.28,
+    "lon": 86.67,
+    "capacity_kbd": 300,
+    "cover_days": 12,
+    "assay_env": {
+      "api": [
+        22,
+        40
+      ],
+      "sulfur": [
+        0,
+        3.5
+      ],
+      "tan": [
+        0,
+        1.5
+      ],
+      "ni_v": [
+        0,
+        300
+      ],
+      "resid": [
+        0,
+        45
+      ],
+      "pour": [
+        -20,
+        25
+      ]
+    },
+    "status": "ok",
+    "prov": "E",
+    "source": "empirical envelope — coker-equipped but TAN-limited at 1.5",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "ref:panipat",
+    "type": "refinery",
+    "name": "Panipat (IOC, inland)",
+    "lat": 29.42,
+    "lon": 76.95,
+    "capacity_kbd": 300,
+    "cover_days": 10,
+    "assay_env": {
+      "api": [
+        30,
+        45
+      ],
+      "sulfur": [
+        0,
+        2.0
+      ],
+      "tan": [
+        0,
+        0.5
+      ],
+      "ni_v": [
+        0,
+        100
+      ],
+      "resid": [
+        0,
+        30
+      ],
+      "pour": [
+        -20,
+        20
+      ]
+    },
+    "status": "ok",
+    "prov": "E",
+    "source": "empirical envelope — inland pipeline-fed, light-sweet biased",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "ref:koyali",
+    "type": "refinery",
+    "name": "Koyali / Gujarat (IOC, inland)",
+    "lat": 22.37,
+    "lon": 73.12,
+    "capacity_kbd": 275,
+    "cover_days": 10,
+    "assay_env": {
+      "api": [
+        30,
+        46
+      ],
+      "sulfur": [
+        0,
+        1.5
+      ],
+      "tan": [
+        0,
+        0.5
+      ],
+      "ni_v": [
+        0,
+        80
+      ],
+      "resid": [
+        0,
+        28
+      ],
+      "pour": [
+        -15,
+        25
+      ]
+    },
+    "status": "ok",
+    "prov": "E",
+    "source": "empirical envelope — inland, light-sweet biased",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "ref:mumbai",
+    "type": "refinery",
+    "name": "Mumbai (BPCL)",
+    "lat": 19.03,
+    "lon": 72.88,
+    "capacity_kbd": 240,
+    "cover_days": 8,
+    "assay_env": {
+      "api": [
+        26,
+        42
+      ],
+      "sulfur": [
+        0,
+        2.5
+      ],
+      "tan": [
+        0,
+        0.8
+      ],
+      "ni_v": [
+        0,
+        150
+      ],
+      "resid": [
+        0,
+        35
+      ],
+      "pour": [
+        -20,
+        20
+      ]
+    },
+    "status": "ok",
+    "prov": "E",
+    "source": "empirical envelope — urban site, moderate complexity, tight tankage",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "ref:visakh",
+    "type": "refinery",
+    "name": "Visakh (HPCL)",
+    "lat": 17.7,
+    "lon": 83.27,
+    "capacity_kbd": 300,
+    "cover_days": 9,
+    "assay_env": {
+      "api": [
+        24,
+        40
+      ],
+      "sulfur": [
+        0,
+        3.0
+      ],
+      "tan": [
+        0,
+        1.0
+      ],
+      "ni_v": [
+        0,
+        200
+      ],
+      "resid": [
+        0,
+        40
+      ],
+      "pour": [
+        -20,
+        25
+      ]
+    },
+    "status": "ok",
+    "prov": "E",
+    "source": "empirical envelope — post-expansion moderate-sour capable",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "ref:mangalore",
+    "type": "refinery",
+    "name": "Mangalore (MRPL)",
+    "lat": 12.95,
+    "lon": 74.8,
+    "capacity_kbd": 300,
+    "cover_days": 12,
+    "assay_env": {
+      "api": [
+        24,
+        42
+      ],
+      "sulfur": [
+        0,
+        3.2
+      ],
+      "tan": [
+        0,
+        1.0
+      ],
+      "ni_v": [
+        0,
+        250
+      ],
+      "resid": [
+        0,
+        40
+      ],
+      "pour": [
+        -20,
+        25
+      ]
+    },
+    "status": "ok",
+    "prov": "E",
+    "source": "empirical envelope — high-complexity coastal, sour-capable",
+    "as_of": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "ref:kochi",
+    "type": "refinery",
+    "name": "Kochi (BPCL)",
+    "lat": 9.96,
+    "lon": 76.28,
+    "capacity_kbd": 310,
+    "cover_days": 11,
+    "assay_env": {
+      "api": [
+        24,
+        42
+      ],
+      "sulfur": [
+        0,
+        3.5
+      ],
+      "tan": [
+        0,
+        1.2
+      ],
+      "ni_v": [
+        0,
+        250
+      ],
+      "resid": [
+        0,
+        42
+      ],
+      "pour": [
+        -20,
+        25
+      ]
+    },
+    "status": "ok",
+    "prov": "E",
+    "source": "empirical envelope — post-IREP sour-capable",
+    "as_of": "2026-01-01T00:00:00Z"
+  }
+]

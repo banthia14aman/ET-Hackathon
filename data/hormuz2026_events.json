@@ -1,0 +1,485 @@
+{
+  "scenario_id": "hormuz-2026",
+  "version": "1.0.0",
+  "t0": "2026-01-05T00:00:00Z",
+  "events": [
+    {
+      "id": "evt:price-2026-01-05",
+      "t": "2026-01-05T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent front-month settles $61.20",
+      "payload": { "brent_usd": 61.2 },
+      "source_ref": "ICE Brent settlement 2026-01-05",
+      "prov": "R"
+    },
+    {
+      "id": "evt:price-2026-01-12",
+      "t": "2026-01-12T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent settles $62.40 on OPEC+ compliance chatter",
+      "payload": { "brent_usd": 62.4 },
+      "source_ref": "ICE Brent settlement 2026-01-12",
+      "prov": "R"
+    },
+    {
+      "id": "evt:price-2026-01-19",
+      "t": "2026-01-19T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent settles $63.10",
+      "payload": { "brent_usd": 63.1 },
+      "source_ref": "ICE Brent settlement 2026-01-19",
+      "prov": "R"
+    },
+    {
+      "id": "evt:price-2026-01-26",
+      "t": "2026-01-26T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent settles $64.00",
+      "payload": { "brent_usd": 64.0 },
+      "source_ref": "ICE Brent settlement 2026-01-26",
+      "prov": "R"
+    },
+    {
+      "id": "evt:price-2026-02-02",
+      "t": "2026-02-02T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent settles $65.20 as Gulf risk premium creeps in",
+      "payload": { "brent_usd": 65.2 },
+      "source_ref": "ICE Brent settlement 2026-02-02",
+      "prov": "R"
+    },
+    {
+      "id": "evt:price-2026-02-09",
+      "t": "2026-02-09T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent settles $66.80",
+      "payload": { "brent_usd": 66.8 },
+      "source_ref": "ICE Brent settlement 2026-02-09",
+      "prov": "R"
+    },
+    {
+      "id": "evt:gdelt-2026-02-10-tension",
+      "t": "2026-02-10T12:00:00Z",
+      "channel": "GDELT",
+      "headline": "GDELT tone index for Iran-Israel dyad drops sharply; escalation rhetoric trending",
+      "payload": { "goldstein_avg": -6.2, "event_volume_mult": 2.1 },
+      "source_ref": "GDELT 2.0 event stream (background stub)",
+      "prov": "S"
+    },
+    {
+      "id": "evt:price-2026-02-16",
+      "t": "2026-02-16T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent settles $68.90",
+      "payload": { "brent_usd": 68.9 },
+      "source_ref": "ICE Brent settlement 2026-02-16",
+      "prov": "R"
+    },
+    {
+      "id": "evt:gdelt-2026-02-20-drills",
+      "t": "2026-02-20T09:00:00Z",
+      "channel": "GDELT",
+      "headline": "IRGC navy announces snap Gulf exercises; GDELT event volume 3x baseline",
+      "payload": { "event_volume_mult": 3.0 },
+      "source_ref": "GDELT 2.0 event stream (background stub)",
+      "prov": "S",
+      "geo": [26.5, 55.0]
+    },
+    {
+      "id": "evt:price-2026-02-23",
+      "t": "2026-02-23T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent settles $71.60, capping seven-week drift from $61",
+      "payload": { "brent_usd": 71.6 },
+      "source_ref": "ICE Brent settlement 2026-02-23",
+      "prov": "R"
+    },
+    {
+      "id": "evt:gdelt-2026-02-28-epic-fury",
+      "t": "2026-02-28T01:30:00Z",
+      "channel": "GDELT",
+      "headline": "GDELT surge: ~900 strike events detected across Iran overnight — Operation Epic Fury underway",
+      "payload": { "strike_count_est": 900 },
+      "source_ref": "GDELT 2.0 event stream 2026-02-28",
+      "prov": "R",
+      "geo": [32.0, 53.0]
+    },
+    {
+      "id": "evt:milestone-2026-02-28-epic-fury-start",
+      "t": "2026-02-28T03:00:00Z",
+      "channel": "MILESTONE",
+      "headline": "Operation Epic Fury begins: ~900 coordinated strikes on Iranian military and IRGC-N targets",
+      "payload": { "operation": "Epic Fury", "phase": "start", "strike_count_est": 900 },
+      "source_ref": "CENTCOM statement 2026-02-28",
+      "prov": "R",
+      "geo": [32.0, 53.0],
+      "triggers": ["shock:hormuz-partial"]
+    },
+    {
+      "id": "evt:ukmto-2026-02-28-advisory-003",
+      "t": "2026-02-28T06:40:00Z",
+      "channel": "UKMTO",
+      "headline": "UKMTO Advisory 003-26: heightened threat to merchant shipping, Strait of Hormuz and Gulf of Oman",
+      "payload": { "advisory": "003-26", "area": "Strait of Hormuz / Gulf of Oman" },
+      "source_ref": "UKMTO Advisory 003-26",
+      "prov": "R",
+      "geo": [26.57, 56.25]
+    },
+    {
+      "id": "evt:price-2026-02-28",
+      "t": "2026-02-28T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent spikes to $81.00 on Epic Fury strikes",
+      "payload": { "brent_usd": 81.0 },
+      "source_ref": "ICE Brent settlement 2026-02-28 (session est.)",
+      "prov": "E"
+    },
+    {
+      "id": "evt:ais-2026-03-01-dark-01",
+      "t": "2026-03-01T10:00:00Z",
+      "channel": "AIS",
+      "headline": "AIS: 14 laden tankers go dark within 40nm of the Hormuz TSS",
+      "payload": { "dark_count": 14, "radius_nm": 40 },
+      "source_ref": "AIS synthetic choreography (map layer)",
+      "prov": "S",
+      "geo": [26.4, 56.6]
+    },
+    {
+      "id": "evt:jwc-2026-03-02-premium-5x",
+      "t": "2026-03-02T09:00:00Z",
+      "channel": "JWC",
+      "headline": "War-risk premiums for Gulf calls quoted at 5x pre-strike levels within 48h",
+      "payload": { "premium_mult": 5 },
+      "source_ref": "Broker quotes aggregate, 48h post-strike (estimate)",
+      "prov": "E"
+    },
+    {
+      "id": "evt:jwc-2026-03-03-jwla-033",
+      "t": "2026-03-03T12:00:00Z",
+      "channel": "JWC",
+      "headline": "JWC circular JWLA-033: Listed Areas extended — Bahrain, Kuwait, Oman, Qatar added; entire Persian Gulf incl. Strait of Hormuz listed",
+      "payload": { "circular": "JWLA-033", "areas_added": ["Bahrain", "Kuwait", "Oman", "Qatar"] },
+      "source_ref": "Joint War Committee circular JWLA-033",
+      "source_url": "https://www.lmalloyds.com",
+      "prov": "R"
+    },
+    {
+      "id": "evt:ais-2026-03-03-fujairah-queue",
+      "t": "2026-03-03T15:00:00Z",
+      "channel": "AIS",
+      "headline": "AIS: anchorage queue at Fujairah swells past 60 vessels awaiting orders",
+      "payload": { "queue_count": 62 },
+      "source_ref": "AIS synthetic choreography (map layer)",
+      "prov": "S",
+      "geo": [25.2, 56.5]
+    },
+    {
+      "id": "evt:milestone-2026-03-05-ofac-cutoff",
+      "t": "2026-03-05T20:00:00Z",
+      "channel": "MILESTONE",
+      "headline": "OFAC sets loading cutoff date for Russia-related waiver eligibility",
+      "payload": { "cutoff": "2026-03-05" },
+      "source_ref": "US Treasury OFAC guidance 2026-03-05",
+      "prov": "R"
+    },
+    {
+      "id": "evt:ukmto-2026-03-06-jmic-006",
+      "t": "2026-03-06T08:00:00Z",
+      "channel": "UKMTO",
+      "headline": "JMIC Advisory 006: threat level CRITICAL for Strait of Hormuz transits",
+      "payload": { "advisory": "JMIC 006", "level": "CRITICAL" },
+      "source_ref": "Joint Maritime Information Center Advisory 006 (via UKMTO channel)",
+      "prov": "R",
+      "geo": [26.57, 56.25]
+    },
+    {
+      "id": "evt:milestone-2026-03-06-ofac-waiver",
+      "t": "2026-03-06T16:00:00Z",
+      "channel": "MILESTONE",
+      "headline": "OFAC waiver announced for pre-cutoff Urals loadings, valid to 2026-04-03",
+      "payload": { "valid_to": "2026-04-03" },
+      "source_ref": "US Treasury OFAC general license 2026-03-06",
+      "prov": "R"
+    },
+    {
+      "id": "evt:price-2026-03-08",
+      "t": "2026-03-08T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent crosses $100, settles $101.30",
+      "payload": { "brent_usd": 101.3 },
+      "source_ref": "ICE Brent settlement 2026-03-08",
+      "prov": "R"
+    },
+    {
+      "id": "evt:ais-2026-03-09-dark-02",
+      "t": "2026-03-09T11:00:00Z",
+      "channel": "AIS",
+      "headline": "AIS: dark-ship count near Hormuz reaches 31; STS clusters forming off Khor Fakkan",
+      "payload": { "dark_count": 31 },
+      "source_ref": "AIS synthetic choreography (map layer)",
+      "prov": "S",
+      "geo": [25.35, 56.4]
+    },
+    {
+      "id": "evt:milestone-2026-03-10-india-urals-buy",
+      "t": "2026-03-10T14:00:00Z",
+      "channel": "MILESTONE",
+      "headline": "India buys ~30M bbl of stranded on-water Urals — IOC, BPCL, HPCL, MRPL split the cargoes",
+      "payload": { "volume_mbbl": 30, "buyers": ["IOC", "BPCL", "HPCL", "MRPL"] },
+      "source_ref": "Trade press / tender confirmations 2026-03-10",
+      "prov": "R"
+    },
+    {
+      "id": "evt:ukmto-2026-03-11-attack-wave",
+      "t": "2026-03-11T05:20:00Z",
+      "channel": "UKMTO",
+      "headline": "Tanker attack wave in Gulf of Oman; MT Mayuree Naree ablaze after strike",
+      "payload": { "vessels_hit": 4, "vessel_named": "Mayuree Naree" },
+      "source_ref": "UKMTO warning cluster 2026-03-11",
+      "prov": "R",
+      "geo": [25.6, 57.2],
+      "triggers": ["shock:hormuz-severe"]
+    },
+    {
+      "id": "evt:price-2026-03-11",
+      "t": "2026-03-11T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent settles $112.40 after tanker attacks",
+      "payload": { "brent_usd": 112.4 },
+      "source_ref": "ICE Brent settlement 2026-03-11 (session est.)",
+      "prov": "E"
+    },
+    {
+      "id": "evt:marad-2026-03-13-msci-004",
+      "t": "2026-03-13T18:00:00Z",
+      "channel": "MARAD",
+      "headline": "MARAD MSCI Advisory 2026-004: US-flag vessels advised heightened precautions, Persian Gulf / Strait of Hormuz",
+      "payload": { "advisory": "MSCI 2026-004" },
+      "source_ref": "US MARAD MSCI Advisory 2026-004",
+      "prov": "R"
+    },
+    {
+      "id": "evt:price-2026-03-16",
+      "t": "2026-03-16T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent settles $119.80",
+      "payload": { "brent_usd": 119.8 },
+      "source_ref": "ICE Brent settlement 2026-03-16 (est.)",
+      "prov": "E"
+    },
+    {
+      "id": "evt:price-2026-03-20",
+      "t": "2026-03-20T14:30:00Z",
+      "channel": "PRICE",
+      "headline": "Brent touches intraday peak ~$126",
+      "payload": { "brent_usd": 126.1, "intraday_peak": true },
+      "source_ref": "ICE Brent intraday 2026-03-20 (est.)",
+      "prov": "E"
+    },
+    {
+      "id": "evt:ais-2026-03-22-cape-reroute",
+      "t": "2026-03-22T10:00:00Z",
+      "channel": "AIS",
+      "headline": "AIS: laden VLCCs shifting to Cape routing; Suez southbound tanker count down 35%",
+      "payload": { "suez_delta_pct": -35 },
+      "source_ref": "AIS synthetic choreography (map layer)",
+      "prov": "S",
+      "geo": [-34.4, 18.5]
+    },
+    {
+      "id": "evt:price-2026-03-31",
+      "t": "2026-03-31T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent Q1 close $118.00",
+      "payload": { "brent_usd": 118.0, "q1_close": true },
+      "source_ref": "ICE Brent settlement 2026-03-31",
+      "prov": "R"
+    },
+    {
+      "id": "evt:milestone-2026-04-02-angola-334",
+      "t": "2026-04-02T12:00:00Z",
+      "channel": "MILESTONE",
+      "headline": "March import data: Angola at 334 kb/d — India's #3 supplier for the month",
+      "payload": { "angola_kbd": 334, "rank": 3, "month": "2026-03" },
+      "source_ref": "Tanker-tracking monthly (Kpler/Vortexa consensus), March 2026",
+      "prov": "R"
+    },
+    {
+      "id": "evt:milestone-2026-04-03-waiver-expiry",
+      "t": "2026-04-03T20:00:00Z",
+      "channel": "MILESTONE",
+      "headline": "OFAC Urals waiver expires; no extension announced",
+      "payload": { "waiver": "expired" },
+      "source_ref": "US Treasury OFAC 2026-04-03",
+      "prov": "R"
+    },
+    {
+      "id": "evt:ukmto-2026-04-08-bab-el-mandeb",
+      "t": "2026-04-08T07:30:00Z",
+      "channel": "UKMTO",
+      "headline": "UKMTO Advisory 011-26: renewed attacks on merchant shipping, Bab el-Mandeb; Suez-routed crude at risk",
+      "payload": { "advisory": "011-26", "area": "Bab el-Mandeb / Southern Red Sea" },
+      "source_ref": "UKMTO advisory (scenario choreography — Houthi solidarity strikes)",
+      "prov": "S",
+      "geo": [12.6, 43.4],
+      "triggers": ["shock:bab-el-mandeb-partial"]
+    },
+    {
+      "id": "evt:price-2026-04-14",
+      "t": "2026-04-14T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent eases to $106.20 as strikes pause holds",
+      "payload": { "brent_usd": 106.2 },
+      "source_ref": "ICE Brent settlement 2026-04-14 (est.)",
+      "prov": "E"
+    },
+    {
+      "id": "evt:price-2026-04-28",
+      "t": "2026-04-28T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent settles $97.50",
+      "payload": { "brent_usd": 97.5 },
+      "source_ref": "ICE Brent settlement 2026-04-28 (est.)",
+      "prov": "E"
+    },
+    {
+      "id": "evt:milestone-2026-05-04-venezuela-284",
+      "t": "2026-05-04T12:00:00Z",
+      "channel": "MILESTONE",
+      "headline": "April import data: Venezuela 283-285 kb/d to India (early 292 kb/d print revised down)",
+      "payload": { "venezuela_kbd": 284, "month": "2026-04", "note": "292 kb/d figure debunked" },
+      "source_ref": "Tanker-tracking monthly, April 2026 (revised)",
+      "prov": "R"
+    },
+    {
+      "id": "evt:milestone-2026-05-05-epic-fury-end",
+      "t": "2026-05-05T10:00:00Z",
+      "channel": "MILESTONE",
+      "headline": "Operation Epic Fury concludes after 67 days",
+      "payload": { "operation": "Epic Fury", "phase": "end" },
+      "source_ref": "CENTCOM statement 2026-05-05",
+      "prov": "R"
+    },
+    {
+      "id": "evt:ukmto-2026-05-05-advisory-055",
+      "t": "2026-05-05T14:00:00Z",
+      "channel": "UKMTO",
+      "headline": "UKMTO Advisory 055-26: threat posture lowered for Strait of Hormuz transits",
+      "payload": { "advisory": "055-26" },
+      "source_ref": "UKMTO Advisory 055-26",
+      "prov": "R",
+      "geo": [26.57, 56.25]
+    },
+    {
+      "id": "evt:price-2026-05-12",
+      "t": "2026-05-12T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent settles $88.40 on de-escalation",
+      "payload": { "brent_usd": 88.4 },
+      "source_ref": "ICE Brent settlement 2026-05-12 (est.)",
+      "prov": "E"
+    },
+    {
+      "id": "evt:price-2026-05-26",
+      "t": "2026-05-26T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent settles $79.10",
+      "payload": { "brent_usd": 79.1 },
+      "source_ref": "ICE Brent settlement 2026-05-26 (est.)",
+      "prov": "E"
+    },
+    {
+      "id": "evt:milestone-2026-06-03-venezuela-427",
+      "t": "2026-06-03T12:00:00Z",
+      "channel": "MILESTONE",
+      "headline": "May import data: Venezuela hits 427 kb/d to India; Reliance the lead buyer",
+      "payload": { "venezuela_kbd": 427, "month": "2026-05", "lead_buyer": "Reliance" },
+      "source_ref": "Tanker-tracking monthly, May 2026",
+      "prov": "R"
+    },
+    {
+      "id": "evt:price-2026-06-05",
+      "t": "2026-06-05T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent settles $75.60, back near pre-crisis trend",
+      "payload": { "brent_usd": 75.6 },
+      "source_ref": "ICE Brent settlement 2026-06-05 (est.)",
+      "prov": "E"
+    },
+    {
+      "id": "evt:gdelt-2026-06-09-irgc-rhetoric",
+      "t": "2026-06-09T09:00:00Z",
+      "channel": "GDELT",
+      "headline": "GDELT: IRGC closure rhetoric spikes; parliament resolution trending",
+      "payload": { "event_volume_mult": 2.8 },
+      "source_ref": "GDELT 2.0 event stream (background stub)",
+      "prov": "S"
+    },
+    {
+      "id": "evt:milestone-2026-06-10-irgc-closure",
+      "t": "2026-06-10T07:00:00Z",
+      "channel": "MILESTONE",
+      "headline": "IRGC declares closure of the Strait of Hormuz to hostile-flag commercial traffic",
+      "payload": { "declaration": "closure" },
+      "source_ref": "IRGC statement via IRNA 2026-06-10",
+      "prov": "R",
+      "geo": [26.57, 56.25],
+      "triggers": ["shock:hormuz-closure-declared"]
+    },
+    {
+      "id": "evt:price-2026-06-10",
+      "t": "2026-06-10T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent jumps to $89.90 on IRGC closure declaration",
+      "payload": { "brent_usd": 89.9 },
+      "source_ref": "ICE Brent settlement 2026-06-10 (est.)",
+      "prov": "E"
+    },
+    {
+      "id": "evt:price-2026-06-12",
+      "t": "2026-06-12T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent settles $96.40",
+      "payload": { "brent_usd": 96.4 },
+      "source_ref": "ICE Brent settlement 2026-06-12 (est.)",
+      "prov": "E"
+    },
+    {
+      "id": "evt:price-2026-06-15",
+      "t": "2026-06-15T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent back above $100, settles $103.20 — the June re-spike",
+      "payload": { "brent_usd": 103.2 },
+      "source_ref": "ICE Brent settlement 2026-06-15 (est.)",
+      "prov": "E"
+    },
+    {
+      "id": "evt:ais-2026-06-16-dark-03",
+      "t": "2026-06-16T10:00:00Z",
+      "channel": "AIS",
+      "headline": "AIS: renewed dark-ship activity near Hormuz; convoy formations reported",
+      "payload": { "dark_count": 19 },
+      "source_ref": "AIS synthetic choreography (map layer)",
+      "prov": "S",
+      "geo": [26.45, 56.5]
+    },
+    {
+      "id": "evt:price-2026-06-26",
+      "t": "2026-06-26T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent settles $98.70 as convoying keeps some flow moving",
+      "payload": { "brent_usd": 98.7 },
+      "source_ref": "ICE Brent settlement 2026-06-26 (est.)",
+      "prov": "E"
+    },
+    {
+      "id": "evt:price-2026-06-30",
+      "t": "2026-06-30T17:00:00Z",
+      "channel": "PRICE",
+      "headline": "Brent Q2 close $95.20",
+      "payload": { "brent_usd": 95.2, "q2_close": true },
+      "source_ref": "ICE Brent settlement 2026-06-30 (est.)",
+      "prov": "E"
+    }
+  ]
+}

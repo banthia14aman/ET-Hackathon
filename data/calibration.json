@@ -1,0 +1,54 @@
+{
+  "brent_baseline_usd": {
+    "value": 61.2, "min": 58, "max": 64, "unit": "USD/bbl",
+    "source_ref": "evt:price-2026-01-05", "prov": "R"
+  },
+  "hormuz_partial_flow_mult": {
+    "value": 0.6, "min": 0.4, "max": 0.8,
+    "source_ref": "evt:milestone-2026-02-28-epic-fury-start", "prov": "E"
+  },
+  "hormuz_severe_flow_mult": {
+    "value": 0.25, "min": 0.1, "max": 0.4,
+    "source_ref": "evt:ukmto-2026-03-11-attack-wave", "prov": "E"
+  },
+  "hormuz_closure_flow_mult": {
+    "value": 0.1, "min": 0.0, "max": 0.25,
+    "source_ref": "evt:milestone-2026-06-10-irgc-closure", "prov": "E"
+  },
+  "reroute_friction_weeks": {
+    "value": 3, "min": 2, "max": 5, "unit": "weeks",
+    "source_ref": "8 pre-2024 reroute episodes (Suez 2021, Red Sea 2023-24, et al.); anchors prov R, range E", "prov": "E"
+  },
+  "reroute_transit_delta_cape_days": {
+    "value": 14, "min": 10, "max": 18, "unit": "days",
+    "source_ref": "edge:urals-vadinar vs edge:urals-vadinar-cape and Red Sea 2024 diversions", "prov": "E"
+  },
+  "insurance_repricing_lag_days": {
+    "value": 1, "min": 0, "max": 2, "unit": "days",
+    "source_ref": "Abqaiq 2019 repricing; JWC Red Sea circulars 2024; anchors prov R", "prov": "R"
+  },
+  "price_spike_pct_partial": {
+    "value": 18, "min": 10, "max": 25, "unit": "%",
+    "source_ref": "evt:price-2026-02-28 vs evt:price-2026-02-23", "prov": "E"
+  },
+  "price_spike_pct_severe": {
+    "value": 45, "min": 30, "max": 65, "unit": "%",
+    "source_ref": "evt:price-2026-03-20 vs pre-strike baseline", "prov": "E"
+  },
+  "spr_withdrawal_kbd_max": {
+    "value": 300, "min": 200, "max": 400, "unit": "kbd",
+    "source_ref": "ISPRL Phase I 39.1M bbl caverns, drawdown engineering estimate", "prov": "E"
+  },
+  "panic_premium_usd_bbl": {
+    "value": 15, "min": 8, "max": 23, "unit": "USD/bbl",
+    "source_ref": "evt:price-2026-03-08; spread of settlements over supply-loss fair value", "prov": "E"
+  },
+  "cover_burn_rate_mult": {
+    "value": 1.0, "min": 0.8, "max": 1.3,
+    "source_ref": "refinery run-rate vs receipts, PPAC monthly", "prov": "E"
+  },
+  "war_risk_premium_mult": {
+    "value": 5, "min": 3, "max": 8,
+    "source_ref": "evt:jwc-2026-03-02-premium-5x", "prov": "E"
+  }
+}

@@ -1,0 +1,120 @@
+/* Base theme + layout. LEAD owns everything above the SWE6 marker.
+   SWE6: APPEND component styles below the marker only. Never edit above it. */
+
+:root {
+  --bg: #0B0F14;
+  --panel: #131A22;
+  --border: #243040;
+  --text: #E8EEF4;
+  --muted: #8B99A8;
+  --green: #34D399;
+  --amber: #FBBF24;
+  --red: #F87171;
+  --synth: #A78BFA;
+  --accent: #22D3EE;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums; /* monospace numerals everywhere */
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 16px;
+  overflow: auto;
+}
+
+.app-grid {
+  display: grid;
+  height: 100vh;
+  gap: 8px;
+  padding: 8px;
+  grid-template-columns: 460px 1fr 580px;
+  grid-template-rows: 48px 1fr 1fr 112px;
+  grid-template-areas:
+    'ticker    ticker ticker'
+    'taxonomy  map    charter'
+    'debate    map    options'
+    'waterfall waterfall waterfall';
+}
+
+/* ======== SWE6: append component styles BELOW this line only ======== */
+
+/* shared type scale */
+.panel-title { font-size: 20px; margin-bottom: 10px; }
+.label { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.hero-num { font-size: 34px; line-height: 1.1; }
+
+/* ticker */
+.ticker { grid-area: ticker; height: 48px; overflow: hidden; display: flex; align-items: center;
+  background: var(--panel); border: 1px solid var(--border); white-space: nowrap; }
+.ticker-track { display: inline-flex; animation: ticker-scroll 45s linear infinite; }
+.ticker-item { font-size: 18px; margin-right: 48px; display: inline-flex; align-items: baseline; gap: 10px; }
+.ticker-chan { font-size: 13px; color: var(--accent); border: 1px solid var(--border); padding: 1px 6px; }
+.ticker-ts { font-size: 13px; color: var(--muted); }
+@keyframes ticker-scroll { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+
+/* provenance chip */
+.chip { display: inline-flex; align-items: center; gap: 6px; min-height: 24px; padding: 2px 8px;
+  border: 1px solid; font-size: 13px; text-transform: uppercase; }
+.chip-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; }
+
+/* taxonomy */
+.taxonomy-shock { font-size: 34px; margin: 8px 0; }
+.taxonomy-analog { display: flex; justify-content: space-between; font-size: 16px; padding: 3px 0;
+  border-bottom: 1px solid var(--border); }
+
+/* debate */
+.debate-row { font-size: 16px; padding: 3px 0; }
+.debate-empty { color: var(--muted); font-size: 16px; padding: 12px 0; }
+.objection { border-left: 3px solid var(--amber); padding: 6px 10px; margin: 6px 0; background: rgba(251,191,36,0.05); }
+.objection-block { border-left-color: var(--red); background: rgba(248,113,113,0.07); }
+.objection-verdict { font-size: 18px; font-weight: 700; }
+.objection-cite { font-size: 14px; color: var(--muted); }
+.status-validated { color: var(--green); }
+.status-conditional { color: var(--amber); }
+.status-rejected { color: var(--red); }
+.status-proposed { color: var(--muted); }
+
+/* option cards */
+.option-card { border: 1px solid var(--border); border-left-width: 3px; padding: 10px; margin: 8px 0; }
+.option-validated { border-left-color: var(--green); }
+.option-conditional { border-left-color: var(--amber); }
+.option-title { font-size: 20px; display: flex; align-items: center; gap: 10px; }
+.tier-badge { font-size: 13px; border: 1px solid var(--border); color: var(--muted); padding: 1px 6px; }
+.option-meta { display: flex; gap: 16px; font-size: 16px; margin-top: 6px; align-items: center; }
+.option-condition { font-size: 13px; color: var(--amber); margin-top: 4px; }
+.option-row { font-size: 13px; color: var(--muted); padding: 3px 0; border-bottom: 1px solid var(--border); }
+
+/* charter */
+.charter-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.charter-id { color: var(--accent); width: 26px; }
+.charter-title { flex: 1; font-size: 16px; }
+.charter-param { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+.charter-param input { width: 64px; background: var(--bg); color: var(--text); border: 1px solid var(--border);
+  font: inherit; padding: 2px 4px; }
+
+/* waterfall */
+.waterfall { display: flex; gap: 24px; align-items: center; height: 100%; }
+.waterfall-hero { display: flex; flex-direction: column; min-width: 180px; }
+.waterfall-bars { flex: 1; }
+.waterfall-lane { margin: 4px 0; }
+.waterfall-label { display: block; font-size: 16px; margin-bottom: 2px; }
+.waterfall-bar { height: 12px; }
+.waterfall-fills { display: flex; gap: 2px; }
+
+/* stopwatch */
+.stopwatch { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.stopwatch-ts { font-size: 13px; color: var(--muted); }
+
+/* audit */
+.audit-row { display: grid; grid-template-columns: 32px 70px 1fr 80px; gap: 8px; padding: 2px 0; font-size: 13px; }
