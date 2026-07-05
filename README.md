@@ -61,10 +61,11 @@ or any static host, offline.
 ## Regenerating the LLM cache
 
 Proposer rationales and arbiter memos are generated **at build time** by
-`node scripts/generate-llm-cache.mjs`, which needs Bedrock or Anthropic credentials
-via env (`AWS_*` / `ANTHROPIC_API_KEY`). The committed cache is a labeled placeholder —
-regenerate it when credentials are available. Cache misses degrade to a visible
-`[rationale pending — cache miss]` template — never a network call.
+`node scripts/generate-llm-cache.mjs`, which accepts Anthropic (`ANTHROPIC_API_KEY`),
+NVIDIA NIM (`NVIDIA_API_KEY`, optional `NVIDIA_MODEL`), or Bedrock (`AWS_*`) credentials
+via env. Cache misses degrade to a visible `[rationale pending — cache miss]` template —
+never a network call. The runtime app stays 100% offline regardless of which provider
+generated the cache.
 
 ## Sandbox note (why dist/ is not committed)
 

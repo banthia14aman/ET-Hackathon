@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 // SWE5 — scripts/generate-llm-cache.mjs
 // Build-time (NOT runtime) regenerator for src/cache/llm-cache.json.
-// Provider-agnostic: ANTHROPIC_API_KEY → Anthropic API, else AWS_BEDROCK_MODEL_ID (+ AWS creds
-// resolved by the SDK) → Bedrock. `--dry-run` prints prompts and calls no network.
+// Provider-agnostic: ANTHROPIC_API_KEY → Anthropic API, else NVIDIA_API_KEY → NVIDIA NIM
+// (OpenAI-compatible), else AWS_BEDROCK_MODEL_ID (+ AWS creds resolved by the SDK) → Bedrock.
+// `--dry-run` prints prompts and calls no network.
 //
 //   node scripts/generate-llm-cache.mjs --dry-run
 //   ANTHROPIC_API_KEY=... node scripts/generate-llm-cache.mjs
+//   NVIDIA_API_KEY=nvapi-... [NVIDIA_MODEL=...] node scripts/generate-llm-cache.mjs
 //   AWS_BEDROCK_MODEL_ID=... AWS_REGION=... node scripts/generate-llm-cache.mjs
 
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
@@ -85,6 +87,27 @@ async function callAnthropic(prompt) {
   return { text: body.content.map((b) => b.text ?? '').join(''), model };
 }
 
+async function callNvidia(prompt) {
+  // Default model chosen by the 2026-07-06 10-model bakeoff (see docs/nvidia-bakeoff.md).
+  const model = process.env.NVIDIA_MODEL ?? 'qwen/qwen3.5-397b-a17b';
+  const res = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      authorization: `Bearer ${process.env.NVIDIA_API_KEY}`,
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      model, max_tokens: 1024, temperature: 0.2,
+      messages: [{ role: 'user', content: prompt }],
+    }),
+  });
+  if (!res.ok) throw new Error(`nvidia ${res.status}: ${await res.text()}`);
+  const body = await res.json();
+  // Reasoning models may prefix <think>…</think> — cache only the final answer.
+  const text = (body.choices[0].message.content ?? '').replace(/<think>[\s\S]*?<\/think>/g, '');
+  return { text, model };
+}
+
 async function callBedrock(prompt) {
   const model = process.env.AWS_BEDROCK_MODEL_ID;
   const { BedrockRuntimeClient, InvokeModelCommand } = await import('@aws-sdk/client-bedrock-runtime');
@@ -104,6 +127,7 @@ async function callBedrock(prompt) {
 
 function pickProvider() {
   if (process.env.ANTHROPIC_API_KEY) return callAnthropic;
+  if (process.env.NVIDIA_API_KEY) return callNvidia;
   if (process.env.AWS_BEDROCK_MODEL_ID) return callBedrock;
   return null;
 }
@@ -126,14 +150,27 @@ if (DRY) {
 
 const call = pickProvider();
 if (!call) {
-  console.error('No credentials: set ANTHROPIC_API_KEY, or AWS_BEDROCK_MODEL_ID + AWS creds. (Use --dry-run to preview prompts.)');
+  console.error('No credentials: set ANTHROPIC_API_KEY, NVIDIA_API_KEY, or AWS_BEDROCK_MODEL_ID + AWS creds. (Use --dry-run to preview prompts.)');
   process.exit(1);
+}
+
+// Transient 5xx/timeouts happen on hosted endpoints; retry each call up to 3 times.
+async function withRetry(fn) {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      if (attempt >= 3) throw err;
+      process.stdout.write(`retry ${attempt} (${String(err).slice(0, 60)}) ... `);
+      await new Promise((r) => setTimeout(r, 2000 * attempt));
+    }
+  }
 }
 
 const entries = [];
 for (const j of jobs) {
   process.stdout.write(`generating ${j.kind} for ${j.key} ... `);
-  const { text, model } = await call(j.prompt);
+  const { text, model } = await withRetry(() => call(j.prompt));
   entries.push({
     key: j.key,
     kind: j.kind,

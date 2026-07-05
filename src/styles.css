@@ -93,6 +93,10 @@ body {
 .tier-badge { font-size: 13px; border: 1px solid var(--border); color: var(--muted); padding: 1px 6px; }
 .option-meta { display: flex; gap: 16px; font-size: 16px; margin-top: 6px; align-items: center; }
 .option-condition { font-size: 13px; color: var(--amber); margin-top: 4px; }
+.option-rationale {
+  font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.35;
+  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
+}
 .option-row { font-size: 13px; color: var(--muted); padding: 3px 0; border-bottom: 1px solid var(--border); }
 
 /* charter */

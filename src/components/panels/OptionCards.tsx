@@ -8,6 +8,8 @@ const RAIL_COLOR: Record<PaymentRail, string> = {
 };
 
 function Card({ o }: { o: OptionCard }) {
+  // proposer narration attached by propose() (build-time LLM cache; never a network call)
+  const rationale = (o as OptionCard & { rationale?: string }).rationale;
   return (
     <div className={`option-card option-${o.status}`}>
       <div className="option-title">
@@ -21,6 +23,9 @@ function Card({ o }: { o: OptionCard }) {
         <span>{fmtDays(o.eta_days)}</span>
         {o.cost_delta_usd_bbl !== undefined && <span>{fmtDelta(o.cost_delta_usd_bbl)}</span>}
       </div>
+      {rationale && !rationale.startsWith('[') && (
+        <div className="option-rationale">{rationale}</div>
+      )}
       {o.status === 'conditional' && o.conditions?.map((c) => (
         <div key={c} className="option-condition">⚠ {c}</div>
       ))}
