@@ -12,12 +12,14 @@ const TIER_LABEL: Record<string, string> = {
   RUN_NOW: 'Runs neat', BLEND: 'Blend only', CANNOT_RUN: 'Cannot run',
 };
 
-function Card({ o }: { o: OptionCard }) {
+function Card({ o, selected, onSelect }: { o: OptionCard; selected?: boolean; onSelect?: (id: string) => void }) {
   const rationale = (o as OptionCard & { rationale?: string }).rationale;
   const rail = RAIL_LABEL[o.payment_rail];
   const model = o as OptionCard & { model_tier?: string; model_confidence?: number };
+  const routable = o.lever === 'reroute' || o.lever === 'divert_on_water';
   return (
-    <div className={`option-card option-${o.status}`}>
+    <div className={`option-card option-${o.status}${selected ? ' option-selected' : ''}${routable ? ' option-clickable' : ''}`}
+      onClick={routable ? () => onSelect?.(o.id) : undefined}>
       <div className="option-title">
         <span className="grow">{optionLabel(o)}</span>
         <span className={`pill ${STATUS_PILL[o.status]}`}>{STATUS_LABEL[o.status].split(' —')[0]}</span>
@@ -51,7 +53,7 @@ function Card({ o }: { o: OptionCard }) {
   );
 }
 
-export default function OptionCards({ options }: { options: OptionCard[] }) {
+export default function OptionCards({ options, selectedId, onSelect }: { options: OptionCard[]; selectedId?: string; onSelect?: (id: string) => void }) {
   const active = options.filter((o) => o.status !== 'rejected');
   const cards = active.slice(0, 3);
   const rows = [...active.slice(3), ...options.filter((o) => o.status === 'rejected')];
@@ -64,13 +66,15 @@ export default function OptionCards({ options }: { options: OptionCard[] }) {
   return (
     <div>
       <div className="panel-title">The plan</div>
-      <div className="panel-sub">Top substitute cargoes the desk can execute now. Losers collapse below.</div>
+      <div className="panel-sub">Top substitute cargoes the desk can execute now. Click one to trace its route on the map.</div>
       {options.length === 0 && <div className="debate-empty">No options yet — the crisis hasn't opened a gap.</div>}
-      {cards.map((o) => <Card key={o.id} o={o} />)}
+      {cards.map((o) => <Card key={o.id} o={o} selected={o.id === selectedId} onSelect={onSelect} />)}
       {[...collapsed.entries()].map(([, { o, n }]) => {
         const model = o as OptionCard & { model_tier?: string; model_confidence?: number };
+        const routable = o.lever === 'reroute' || o.lever === 'divert_on_water';
         return (
-          <div key={o.id} className="option-row">
+          <div key={o.id} className={`option-row${o.id === selectedId ? ' option-selected' : ''}${routable ? ' option-clickable' : ''}`}
+            onClick={routable ? () => onSelect?.(o.id) : undefined}>
             <span className={`pill ${STATUS_PILL[o.status]}`}>{STATUS_LABEL[o.status].split(' —')[0]}</span>
             <span className="grow">{optionLabel(o)}</span>
             {model.model_tier && (

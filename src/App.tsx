@@ -2,8 +2,9 @@
 // The setInterval play loop is PRESENTATION-LAYER ONLY: each beat advances SIM time by a
 // fixed step; wall-clock time never enters any derivation (CONTRACTS.md §3.1).
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { ArticleId, CharterArticle, GraphNode, NodeStatus, ReplayEvent, ScenarioState, OptionCard } from './contracts/types';
+import { boxAround, boxFromLonLat, type Box } from './lib/geo';
 import {
   CalibrationSchema, CharterFileSchema, GradesFileSchema, GraphEdgesFileSchema,
   GraphNodesFileSchema, ReplayBundleSchema, SanctionsRulesSchema, SpotAvailabilityFileSchema,
@@ -143,6 +144,30 @@ const LEGEND = [
   { c: 'var(--synth)', t: 'synthetic data' },
 ];
 
+// ---- map camera targets (presentation-only) ----
+
+/** Bounding box over the currently-affected nodes: shocked chokepoints + critical refineries. */
+function affectedBox(scenario: ScenarioState | null, nodes: GraphNode[]): { box: Box; label: string } | null {
+  if (!scenario) return null;
+  const hit = nodes.filter((n) =>
+    (n.type === 'chokepoint' && scenario.node_status[n.id] === 'critical')
+    || (n.type === 'refinery' && scenario.node_status[n.id] === 'critical'));
+  const chokes = hit.filter((n) => n.type === 'chokepoint');
+  if (hit.length === 0) return null;
+  const lons = hit.map((n) => n.lon); const lats = hit.map((n) => n.lat);
+  const box = boxFromLonLat({ lonMin: Math.min(...lons), lonMax: Math.max(...lons), latMin: Math.min(...lats), latMax: Math.max(...lats) });
+  const label = chokes.length === 1 ? chokes[0].name.split(/[(—/]/)[0].trim().toUpperCase()
+    : chokes.length > 1 ? 'AFFECTED STRAITS' : 'AFFECTED REFINERIES';
+  return { box, label };
+}
+
+/** Supplier node for an option's origin country (best-effort id/name match). */
+function supplierFor(option: OptionCard, nodes: GraphNode[]): GraphNode | undefined {
+  const c = (option.origin ?? '').toLowerCase();
+  if (!c) return undefined;
+  return nodes.find((n) => n.type === 'supplier' && (n.id.includes(c) || n.name.toLowerCase().startsWith(c)));
+}
+
 export default function App() {
   const cursor = useStore((s) => s.cursor);
   const scenario = useStore((s) => s.scenario);
@@ -152,6 +177,8 @@ export default function App() {
   const charter = useStore((s) => s.charter);
   const playing = useStore((s) => s.playing);
   const initialized = useRef(false);
+  // map camera selection (presentation-only): a chosen route/node overrides the shock auto-focus
+  const [sel, setSel] = useState<{ kind: 'route' | 'node'; id: string } | null>(null);
 
   useEffect(() => {
     if (!initialized.current) {
@@ -193,10 +220,35 @@ export default function App() {
   const guide = guideFor(scenario, options, cover, safeLine);
   const coverBelow = cover !== null && cover < safeLine;
 
+  // ---- map camera: selected route/node wins; else auto-frame the affected straits ----
+  const nodeById = (id: string) => DATA.graph.nodes.find((n) => n.id === id);
+  let mapFocus: Box | null = null;
+  let focusLabel = 'WORLD';
+  let highlight: { from: string; to: string } | null = null;
+  const selOption = sel?.kind === 'route' ? options.find((o) => o.id === sel.id) : undefined;
+  if (selOption) {
+    const ref = selOption.target_refinery ? nodeById(selOption.target_refinery) : undefined;
+    const sup = supplierFor(selOption, DATA.graph.nodes);
+    const pts = [ref, sup].filter(Boolean) as GraphNode[];
+    if (pts.length) {
+      const lons = pts.map((n) => n.lon); const lats = pts.map((n) => n.lat);
+      mapFocus = boxFromLonLat({ lonMin: Math.min(...lons), lonMax: Math.max(...lons), latMin: Math.min(...lats), latMax: Math.max(...lats) });
+      focusLabel = `ROUTE · ${(sup?.name ?? 'origin').split(/[(—/]/)[0].trim()} → ${ref?.name.split(/[(—/]/)[0].trim() ?? ''}`;
+      if (sup && ref) highlight = { from: sup.id, to: ref.id };
+    }
+  } else if (sel?.kind === 'node') {
+    const n = nodeById(sel.id);
+    if (n) { mapFocus = boxAround(n.lat, n.lon, 26); focusLabel = n.name.split(/[(—/]/)[0].trim().toUpperCase(); }
+  } else {
+    const aff = affectedBox(scenario, DATA.graph.nodes);
+    if (aff) { mapFocus = aff.box; focusLabel = aff.label; }
+  }
+
   return (
     <div className="app-grid">
       <header className="header">
         <div className="wordmark">TRIN<span className="eye">△</span>ETRA</div>
+        <div className="cmdline">CRUDE DECISION <span className="go-key">GO</span></div>
         <div className="pitch">
           When Hormuz closed, India took <b>6 days</b> to reroute crude. TRINETRA does it in <b>4 minutes</b> —
           and every rejection is a machine-checked rule, not an AI guess.
@@ -228,13 +280,18 @@ export default function App() {
       <div className="panel" style={{ gridArea: 'taxonomy' }}>
         <TaxonomyCard shock={scenario?.shocks_active.join(' · ') || undefined} analogs={analogs} />
       </div>
-      <div className="panel" style={{ gridArea: 'map', padding: 6 }}>
+      <div className="panel" style={{ gridArea: 'map', padding: 0 }}>
         <MapView
           nodes={DATA.graph.nodes}
           edges={DATA.graph.edges}
           nodeStatus={(scenario?.node_status ?? {}) as Record<string, NodeStatus>}
           edgeStatus={scenario?.edge_status ?? {}}
           darkVessels={darkVessels}
+          focus={mapFocus}
+          focusLabel={focusLabel}
+          highlight={highlight}
+          onSelectNode={(id) => setSel({ kind: 'node', id })}
+          onReset={() => setSel(null)}
         />
       </div>
       <div className="panel" style={{ gridArea: 'charter' }}>
@@ -247,7 +304,7 @@ export default function App() {
         <DebatePanel options={options} objections={objections} />
       </div>
       <div className="panel" style={{ gridArea: 'options' }}>
-        <OptionCards options={options} />
+        <OptionCards options={options} selectedId={sel?.kind === 'route' ? sel.id : undefined} onSelect={(id) => setSel({ kind: 'route', id })} />
       </div>
       <div className="panel" style={{ gridArea: 'waterfall' }}>
         <Waterfall gap_kbd={scenario?.gap_kbd ?? 0} contributions={contributions} />

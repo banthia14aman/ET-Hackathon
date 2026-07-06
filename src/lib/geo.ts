@@ -13,10 +13,40 @@ const KX = VIEW_W / (LON_MAX - LON_MIN);
 const KY = VIEW_H / (LAT_MAX - LAT_MIN);
 
 export interface Pt { x: number; y: number; }
+export interface Box { x: number; y: number; w: number; h: number; }
+export interface LonLatBox { lonMin: number; lonMax: number; latMin: number; latMax: number; }
+
+export const WORLD_BOX: Box = { x: 0, y: 0, w: VIEW_W, h: VIEW_H };
 
 /** [lat, lon] → viewBox coords. Off-window points project off-canvas (SVG clips). */
 export function project(lat: number, lon: number): Pt {
   return { x: (lon - LON_MIN) * KX, y: (LAT_MAX - lat) * KY };
+}
+
+/** A lat/lon bounding box → a viewBox rect, padded and fit to the map's aspect ratio,
+    clamped inside the world. Used by the map camera to frame a strait or a route. */
+export function boxFromLonLat(b: LonLatBox, padFrac = 0.35): Box {
+  const p1 = project(b.latMax, b.lonMin);
+  const p2 = project(b.latMin, b.lonMax);
+  let x = Math.min(p1.x, p2.x);
+  let y = Math.min(p1.y, p2.y);
+  let w = Math.max(20, Math.abs(p2.x - p1.x));
+  let h = Math.max(20, Math.abs(p2.y - p1.y));
+  const padX = w * padFrac; const padY = h * padFrac;
+  x -= padX; y -= padY; w += padX * 2; h += padY * 2;
+  const aspect = VIEW_W / VIEW_H;
+  if (w / h > aspect) h = w / aspect; else w = h * aspect; // grow the short side
+  const cx = x + w / 2; const cy = y + h / 2;
+  w = Math.min(w, VIEW_W); h = Math.min(h, VIEW_H);
+  x = Math.max(0, Math.min(VIEW_W - w, cx - w / 2));
+  y = Math.max(0, Math.min(VIEW_H - h, cy - h / 2));
+  return { x, y, w, h };
+}
+
+/** Center a point with a longitude span → viewBox rect (for framing one chokepoint). */
+export function boxAround(lat: number, lon: number, spanLon: number): Box {
+  const half = spanLon / 2;
+  return boxFromLonLat({ lonMin: lon - half, lonMax: lon + half, latMin: lat - half, latMax: lat + half }, 0.1);
 }
 
 const r1 = (n: number): number => Math.round(n * 10) / 10;
