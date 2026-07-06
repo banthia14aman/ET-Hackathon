@@ -23,6 +23,7 @@ export interface AppState {
   charter: CharterArticle[];
   playing: boolean;
   speed: number; // sim-time multiplier
+  sandbox: boolean; // true while a what-if scenario is displayed instead of the replay
 }
 
 export const initialState: AppState = {
@@ -35,6 +36,7 @@ export const initialState: AppState = {
   charter: [],
   playing: false,
   speed: 1,
+  sandbox: false,
 };
 
 export interface Store {

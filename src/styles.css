@@ -195,4 +195,38 @@ body.projector { font-size: 14px; }
 .lg-dia { width: 8px; height: 8px; display: inline-block; transform: rotate(45deg); }
 .lg-x { color: var(--synth); font-size: 11px; width: 8px; display: inline-block; text-align: center; }
 
+/* ---------- what-if scenario modal ---------- */
+.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.72); display: flex; align-items: center; justify-content: center; z-index: 50; }
+.modal { width: 540px; max-width: 92vw; max-height: 88vh; overflow: auto; background: #000; border: 1px solid var(--amber); }
+.modal-head { background: var(--amber); color: #000; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 5px 10px; display: flex; align-items: center; justify-content: space-between; }
+.modal-x { background: none; border: none; color: #000; font-weight: 700; cursor: pointer; font-size: 14px; }
+.modal-body { padding: 12px; }
+.modal-note { font-size: 12px; color: var(--dim); line-height: 1.4; margin-bottom: 12px; }
+.modal-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--blue); margin: 12px 0 6px; }
+.preset-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.preset-btn { background: var(--panel-2); border: 1px solid var(--border-2); color: var(--text); font: inherit; font-size: 12px; padding: 4px 9px; cursor: pointer; }
+.preset-btn:hover { border-color: var(--amber); color: var(--amber); }
+.scn-row { display: flex; align-items: center; gap: 12px; padding: 5px 0; border-bottom: 1px solid var(--border); }
+.scn-name { flex: 1; font-size: 13px; }
+.seg { display: flex; border: 1px solid var(--border-2); }
+.seg button { background: #000; border: none; border-right: 1px solid var(--border-2); color: var(--dim); font: inherit; font-size: 11px; font-weight: 700; padding: 3px 10px; cursor: pointer; }
+.seg button:last-child { border-right: none; }
+.seg button.on { background: var(--amber); color: #000; }
+.scn-brent { display: flex; align-items: center; gap: 10px; }
+.scn-brent input { width: 200px; accent-color: var(--amber); }
+.scn-brent-val { color: var(--amber); font-weight: 700; font-size: 13px; min-width: 78px; text-align: right; }
+.modal-actions { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--border); }
+.btn-primary { background: var(--amber); color: #000; border: none; font: inherit; font-weight: 700; font-size: 12px; padding: 5px 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.04em; }
+.btn-ghost { background: #000; color: var(--dim); border: 1px solid var(--border-2); font: inherit; font-weight: 700; font-size: 12px; padding: 5px 12px; cursor: pointer; }
+.btn-ghost:hover { color: var(--text); border-color: var(--text); }
+.scn-open-btn { background: #000; border: 1px solid var(--amber); color: var(--amber); font: inherit; font-weight: 700; font-size: 11px; padding: 2px 9px; cursor: pointer; letter-spacing: 0.04em; }
+.scn-open-btn:hover { background: var(--amber); color: #000; }
+
+/* sandbox mode banner (replaces the guide band while a what-if is active) */
+.sandbox { grid-area: guide; display: flex; align-items: center; gap: 16px; background: #1a1206; border: 1px solid var(--amber); padding: 6px 12px; }
+.sandbox-tag { background: var(--amber); color: #000; font-weight: 700; font-size: 11px; padding: 1px 7px; letter-spacing: 0.05em; }
+.sandbox-txt { flex: 1; font-size: 14px; color: var(--text); }
+.sandbox-txt b { color: var(--amber); }
+
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }

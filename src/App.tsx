@@ -9,11 +9,13 @@ import {
   CalibrationSchema, CharterFileSchema, GradesFileSchema, GraphEdgesFileSchema,
   GraphNodesFileSchema, ReplayBundleSchema, SanctionsRulesSchema, SpotAvailabilityFileSchema,
 } from './contracts/schemas';
+import type { ShockContext } from './contracts/types';
 import { advanceSim } from './engine/replay';
 import { verifyChain } from './engine/charter/audit';
-import { computeAt, rerunWithCharter, type StaticData } from './lib/pipeline';
+import { computeAt, computeScenario, rerunWithCharter, type StaticData } from './lib/pipeline';
 import { loadBundle, setCharterParam, store, useStore } from './lib/store';
 import MapView, { type DarkVessel } from './components/MapView';
+import ScenarioBuilder from './components/ScenarioBuilder';
 import {
   AuditTrace, CharterPanel, DebatePanel, OptionCards, Stopwatch, TaxonomyCard, Ticker, Waterfall,
 } from './components/panels';
@@ -54,7 +56,7 @@ async function runAt(t_sim: string): Promise<void> {
   try {
     const r = await computeAt(DATA, t_sim, store.getState().charter);
     store.setState({
-      cursor: r.cursor, scenario: r.scenario, options: r.options,
+      sandbox: false, cursor: r.cursor, scenario: r.scenario, options: r.options,
       objections: r.objections, audit: r.audit,
     });
   } finally {
@@ -78,6 +80,14 @@ function seekBy(delta: number): void {
   simTime = target === -1 ? DATA.bundle.t0 : events[target].t;
   void runAt(simTime);
 }
+
+async function runScenario(sc: ShockContext): Promise<void> {
+  const r = await computeScenario(DATA, sc, store.getState().charter);
+  store.setState({ sandbox: true, playing: false, cursor: r.cursor, scenario: r.scenario, options: r.options, objections: r.objections, audit: r.audit });
+}
+
+/** Leave the what-if and return to the live replay at the current sim time. */
+function exitSandbox(): void { void runAt(simTime); }
 
 async function onCharterParam(id: string, value: number): Promise<void> {
   const before = store.getState().charter.find((a) => a.id === id)?.param_value;
@@ -176,9 +186,11 @@ export default function App() {
   const audit = useStore((s) => s.audit);
   const charter = useStore((s) => s.charter);
   const playing = useStore((s) => s.playing);
+  const sandbox = useStore((s) => s.sandbox);
   const initialized = useRef(false);
   // map camera selection (presentation-only): a chosen route/node overrides the shock auto-focus
   const [sel, setSel] = useState<{ kind: 'route' | 'node'; id: string } | null>(null);
+  const [scenarioOpen, setScenarioOpen] = useState(false);
 
   useEffect(() => {
     if (!initialized.current) {
@@ -249,6 +261,7 @@ export default function App() {
       <header className="header">
         <div className="wordmark">TRIN<span className="eye">△</span>ETRA</div>
         <div className="cmdline">CRUDE DECISION <span className="go-key">GO</span></div>
+        <button className="scn-open-btn" onClick={() => setScenarioOpen(true)}>WHAT-IF ⌂</button>
         <div className="pitch">
           When Hormuz closed, India took <b>6 days</b> to reroute crude. TRINETRA does it in <b>4 minutes</b> —
           and every rejection is a machine-checked rule, not an AI guess.
@@ -262,18 +275,30 @@ export default function App() {
         <Stopwatch ts_sim={scenario?.t_sim ?? DATA.bundle.t0} elapsed_label={simElapsedLabel(scenario?.t_sim ?? DATA.bundle.t0)} />
       </header>
 
-      <div className="guide">
-        <div>
-          <div className="guide-what">{guide.what}</div>
-          <div className="guide-why">{guide.why}</div>
+      {sandbox && scenario ? (
+        <div className="sandbox">
+          <span className="sandbox-tag">SANDBOX</span>
+          <div className="sandbox-txt">
+            <b>Hypothetical scenario</b> — {scenario.shocks_active.map((s) => s.replace('shock:', '').replace(/-(partial|severe)$/, ' ($1)')).join(', ') || 'no disruption'}
+            {' · '}Brent ${Math.round(scenario.brent_usd)} · national cover {cover !== null ? cover.toFixed(0) : '—'} d.
+            This is what TRINETRA's rules would decide under that future — same engine, not real data.
+          </div>
+          <button className="btn-ghost" onClick={exitSandbox}>EXIT SANDBOX</button>
         </div>
-        <div className="guide-legend">
-          {LEGEND.map((l) => (
-            <span key={l.t} className="legend-item"><span className="legend-dot" style={{ background: l.c }} />{l.t}</span>
-          ))}
-          <span className="legend-item"><ProvenanceChip prov="E" as_of="2026-03-01" source="Public PPAC / EIA estimates" /></span>
+      ) : (
+        <div className="guide">
+          <div>
+            <div className="guide-what">{guide.what}</div>
+            <div className="guide-why">{guide.why}</div>
+          </div>
+          <div className="guide-legend">
+            {LEGEND.map((l) => (
+              <span key={l.t} className="legend-item"><span className="legend-dot" style={{ background: l.c }} />{l.t}</span>
+            ))}
+            <span className="legend-item"><ProvenanceChip prov="E" as_of="2026-03-01" source="Public PPAC / EIA estimates" /></span>
+          </div>
         </div>
-      </div>
+      )}
 
       <Ticker events={applied} />
 
@@ -309,6 +334,15 @@ export default function App() {
       <div className="panel" style={{ gridArea: 'waterfall' }}>
         <Waterfall gap_kbd={scenario?.gap_kbd ?? 0} contributions={contributions} />
       </div>
+
+      {scenarioOpen && (
+        <ScenarioBuilder
+          nodes={DATA.graph.nodes}
+          currentBrent={scenario?.brent_usd ?? 90}
+          onClose={() => setScenarioOpen(false)}
+          onRun={(sc) => { setScenarioOpen(false); setSel(null); void runScenario(sc); }}
+        />
+      )}
     </div>
   );
 }

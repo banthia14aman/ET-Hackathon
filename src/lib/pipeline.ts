@@ -104,6 +104,18 @@ export async function computeAt(
   return { cursor: step.cursor, applied: step.events, scenario, ...d };
 }
 
+/** What-if sandbox: run the full derivation from a USER-BUILT ShockContext (bypasses event
+    replay). Same pure engine → same determinism; only the shock inputs are hypothetical. */
+export async function computeScenario(
+  data: StaticData,
+  shocks: ShockContext,
+  charter: CharterArticle[],
+): Promise<PipelineState> {
+  const scenario = rescore(data.graph, shocks, data.calibration);
+  const d = await decide(data, scenario, charter, []);
+  return { cursor: -1, applied: [], scenario, ...d };
+}
+
 /** Charter edit (Beat 2): append a user audit entry, then re-run from the scenario
     stage (generateOptions is pure ⇒ re-proposing is idempotent). */
 export async function rerunWithCharter(

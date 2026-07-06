@@ -170,6 +170,17 @@ check('model: prediction is deterministic across pipeline re-runs',
   r2.options.filter((o) => o.lever === 'reroute').every((o, i) =>
     o.model_tier === rerouteCards[i].model_tier && o.model_confidence === rerouteCards[i].model_confidence));
 
+// (g) what-if sandbox — user-built ShockContext runs the same deterministic engine
+const { computeScenario } = await mod('../src/lib/pipeline.ts');
+const whatIf = { t_sim: '2027-01-01T00:00:00Z', shocks_active: ['shock:bab-el-mandeb-severe', 'shock:hormuz-severe'], brent_usd: 145 };
+const w1 = await computeScenario(data, whatIf, charter);
+const w2 = await computeScenario(data, whatIf, charter);
+check('whatif: scenario is deterministic on re-run (canonicalJson)', canonicalJson(w1) === canonicalJson(w2));
+check('whatif: hypothetical two-strait crisis produces options + a wider gap than the Mar-15 replay',
+  w1.options.length > 0 && w1.scenario.gap_kbd > r1.scenario.gap_kbd,
+  `gap ${w1.scenario.gap_kbd.toFixed(0)} vs ${r1.scenario.gap_kbd.toFixed(0)}`);
+check('whatif: audit chain verifies from GENESIS', verifyChain(w1.audit) && w1.audit[0].prev_hash === 'GENESIS');
+
 // ---------- report ----------
 let failed = 0;
 for (const r of results) {
