@@ -40,6 +40,8 @@ const DATA: StaticData = {
 };
 const CHARTER: CharterArticle[] = CharterFileSchema.parse(charterJson);
 const DEMO_START = '2026-02-28T00:00:00Z';
+const BEAT_T = '2026-03-15T00:00:00Z'; // canonical crisis timestamp (Beat 1/2 — see docs/beats.md)
+const TWO_STRAIT: ShockContext = { t_sim: '2027-01-01T00:00:00Z', shocks_active: ['shock:bab-el-mandeb-severe', 'shock:hormuz-severe'], brent_usd: 145 };
 const SIM_STEP_MS = 86_400_000;
 const TICK_MS = 800;
 
@@ -88,6 +90,9 @@ async function runScenario(sc: ShockContext): Promise<void> {
 
 /** Leave the what-if and return to the live replay at the current sim time. */
 function exitSandbox(): void { void runAt(simTime); }
+
+/** Jump the replay to an absolute sim time (used by the guided tour). */
+function goTo(iso: string): void { simTime = iso; void runAt(iso); }
 
 async function onCharterParam(id: string, value: number): Promise<void> {
   const before = store.getState().charter.find((a) => a.id === id)?.param_value;
@@ -191,12 +196,52 @@ export default function App() {
   // map camera selection (presentation-only): a chosen route/node overrides the shock auto-focus
   const [sel, setSel] = useState<{ kind: 'route' | 'node'; id: string } | null>(null);
   const [scenarioOpen, setScenarioOpen] = useState(false);
+  // Beat-2 amber ring: option ids whose status just changed
+  const [changedIds, setChangedIds] = useState<Set<string>>(new Set());
+  const prevStatus = useRef<Record<string, string>>({});
+  // guided tour / demo
+  const [tourStep, setTourStep] = useState<number | null>(null);
+  const [tourPlaying, setTourPlaying] = useState(false);
+
+  // The guided-demo script. Each caption doubles as the video voiceover; each action drives the
+  // real app (seek the replay, select a route, edit a rule, run a what-if) — nothing is faked.
+  const TOUR: { area: string; title: string; text: string; action?: () => void }[] = [
+    { area: 'header', title: 'What TRINETRA is',
+      text: 'When Hormuz closed, India took six days to reroute crude. TRINETRA does it in four minutes — an AI proposes, a rules-only machine decides, and every step is on the record.',
+      action: () => { setSel(null); void onCharterParam('A2', 10); goTo(DEMO_START); } },
+    { area: 'map', title: 'The crisis hits',
+      text: 'March 2026: the Strait of Hormuz is disrupted — roughly 40% of India’s crude transits here. The map flies to the affected straits automatically.',
+      action: () => goTo(BEAT_T) },
+    { area: 'header', title: 'The exposure',
+      text: 'Jamnagar’s days-of-cover falls below the safe line and a national shortfall opens — about 2,240 kb/d, a third of India’s daily crude runs.',
+      action: () => goTo(BEAT_T) },
+    { area: 'plan', title: 'The options',
+      text: 'The desk’s AI proposes substitute cargoes from around the world. Each carries a provenance chip and a prediction from our own trained compatibility model. Click any card to trace its route on the map.',
+      action: () => goTo(BEAT_T) },
+    { area: 'debate', title: 'The critic — with no AI',
+      text: 'A rules-only critic demotes the sanctioned Venezuelan Merey: too heavy and sour to run neat, an OFAC-flagged payment rail, and a 43-day voyage against a 12-day buffer. It cannot hallucinate — it contains no model.',
+      action: () => { goTo(BEAT_T); window.setTimeout(() => { const m = store.getState().options.find((o) => o.grade === 'gr:merey-16' && o.target_refinery === 'ref:jamnagar'); if (m) setSel({ kind: 'route', id: m.id }); }, 450); } },
+    { area: 'rules', title: 'Change one rule',
+      text: 'Raise the security floor from 10 to 15 days of cover — and the plan re-decides itself. Six long-haul cargoes just failed, each flashing amber.',
+      action: () => { setSel(null); goTo(BEAT_T); window.setTimeout(() => void onCharterParam('A2', 15), 550); } },
+    { area: 'header', title: 'Ask a what-if',
+      text: 'Pose a hypothetical future — what if Hormuz AND the Red Sea close at once? The same engine re-scores a scenario that never happened.',
+      action: () => { void onCharterParam('A2', 10); void runScenario(TWO_STRAIT); } },
+    { area: 'rules', title: 'The proof',
+      text: 'Every step — propose, critique, arbitrate — is hash-chained and re-runs byte-identically, offline. That signed trace is what a regulator can audit.',
+      action: () => { exitSandbox(); goTo(BEAT_T); } },
+    { area: 'header', title: 'Six days to four minutes',
+      text: 'An AI that argues under rules you wrote, a machine that enforces them, and a decision on the record. That is TRINETRA.',
+      action: () => goTo(BEAT_T) },
+  ];
 
   useEffect(() => {
     if (!initialized.current) {
       initialized.current = true;
       loadBundle(DATA.bundle, CHARTER);
       void runAt(DEMO_START);
+      const q = new URLSearchParams(location.search);
+      if (q.get('tour') === '1' || q.get('judge') === '1') { setTourStep(0); if (q.get('tour') === '1') setTourPlaying(true); }
     }
     const onKey = (e: KeyboardEvent) => {
       if (e.code === 'Space') { e.preventDefault(); store.setState({ playing: !store.getState().playing }); }
@@ -212,6 +257,38 @@ export default function App() {
     const id = setInterval(tick, TICK_MS);
     return () => clearInterval(id);
   }, [playing]);
+
+  // flash the amber ring on any option whose status just changed (Beat 2 star moment)
+  useEffect(() => {
+    const prev = prevStatus.current;
+    const diff = options.filter((o) => prev[o.id] && prev[o.id] !== o.status).map((o) => o.id);
+    prevStatus.current = Object.fromEntries(options.map((o) => [o.id, o.status]));
+    if (diff.length === 0) return;
+    setChangedIds(new Set(diff));
+    const t = setTimeout(() => setChangedIds(new Set()), 2100);
+    return () => clearTimeout(t);
+  }, [options]);
+
+  // guided tour: run the step's action + spotlight its panel
+  useEffect(() => {
+    document.querySelectorAll('[data-tour]').forEach((el) => el.classList.remove('tour-focus'));
+    if (tourStep == null) return;
+    const step = TOUR[tourStep];
+    step.action?.();
+    const el = document.querySelector(`[data-tour="${step.area}"]`);
+    el?.classList.add('tour-focus');
+    return () => el?.classList.remove('tour-focus');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tourStep]);
+
+  // auto-advance while playing (hands-free for video capture)
+  useEffect(() => {
+    if (tourStep == null || !tourPlaying) return;
+    if (tourStep >= TOUR.length - 1) { setTourPlaying(false); return; }
+    const t = setTimeout(() => setTourStep((s) => (s ?? 0) + 1), 9500);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tourStep, tourPlaying]);
 
   const applied: ReplayEvent[] = DATA.bundle.events.slice(0, cursor + 1);
   const darkVessels: DarkVessel[] = applied
@@ -258,9 +335,10 @@ export default function App() {
 
   return (
     <div className="app-grid">
-      <header className="header">
+      <header className="header" data-tour="header">
         <div className="wordmark">TRIN<span className="eye">△</span>ETRA</div>
         <div className="cmdline">CRUDE DECISION <span className="go-key">GO</span></div>
+        <button className="tour-open-btn" onClick={() => { setTourStep(0); setTourPlaying(false); }}>▶ DEMO</button>
         <button className="scn-open-btn" onClick={() => setScenarioOpen(true)}>WHAT-IF ⌂</button>
         <div className="pitch">
           When Hormuz closed, India took <b>6 days</b> to reroute crude. TRINETRA does it in <b>4 minutes</b> —
@@ -305,7 +383,7 @@ export default function App() {
       <div className="panel" style={{ gridArea: 'taxonomy' }}>
         <TaxonomyCard shock={scenario?.shocks_active.join(' · ') || undefined} analogs={analogs} />
       </div>
-      <div className="panel" style={{ gridArea: 'map', padding: 0 }}>
+      <div className="panel" style={{ gridArea: 'map', padding: 0 }} data-tour="map">
         <MapView
           nodes={DATA.graph.nodes}
           edges={DATA.graph.edges}
@@ -319,17 +397,17 @@ export default function App() {
           onReset={() => setSel(null)}
         />
       </div>
-      <div className="panel" style={{ gridArea: 'charter' }}>
+      <div className="panel" style={{ gridArea: 'charter' }} data-tour="rules">
         <CharterPanel charter={charter} onParamChange={(id, v) => void onCharterParam(id, v)} />
         <div style={{ marginTop: 16 }}>
           <AuditTrace entries={audit.slice(-8)} verified={verifyChain(audit)} />
         </div>
       </div>
-      <div className="panel" style={{ gridArea: 'debate' }}>
+      <div className="panel" style={{ gridArea: 'debate' }} data-tour="debate">
         <DebatePanel options={options} objections={objections} />
       </div>
-      <div className="panel" style={{ gridArea: 'options' }}>
-        <OptionCards options={options} selectedId={sel?.kind === 'route' ? sel.id : undefined} onSelect={(id) => setSel({ kind: 'route', id })} />
+      <div className="panel" style={{ gridArea: 'options' }} data-tour="plan">
+        <OptionCards options={options} selectedId={sel?.kind === 'route' ? sel.id : undefined} changedIds={changedIds} onSelect={(id) => setSel({ kind: 'route', id })} />
       </div>
       <div className="panel" style={{ gridArea: 'waterfall' }}>
         <Waterfall gap_kbd={scenario?.gap_kbd ?? 0} contributions={contributions} />
@@ -342,6 +420,29 @@ export default function App() {
           onClose={() => setScenarioOpen(false)}
           onRun={(sc) => { setScenarioOpen(false); setSel(null); void runScenario(sc); }}
         />
+      )}
+
+      {tourStep != null && (
+        <div className="tour-card">
+          <div className="tour-head">
+            <span>▶ Guided demo · TRINETRA</span>
+            <span className="tour-step">STEP {tourStep + 1} / {TOUR.length}</span>
+          </div>
+          <div className="tour-body">
+            <div className="tour-title">{TOUR[tourStep].title}</div>
+            <div className="tour-text">{TOUR[tourStep].text}</div>
+          </div>
+          <div className="tour-ctrl">
+            <div className="tour-dots">{TOUR.map((_, i) => <span key={i} className={`tour-dot${i === tourStep ? ' on' : ''}`} />)}</div>
+            <div className="spacer" />
+            <button className="tour-btn" onClick={() => setTourStep((s) => Math.max(0, (s ?? 0) - 1))} disabled={tourStep === 0}>◀ PREV</button>
+            <button className="tour-btn" onClick={() => setTourPlaying((p) => !p)}>{tourPlaying ? '❚❚ PAUSE' : '▶ AUTO-PLAY'}</button>
+            {tourStep < TOUR.length - 1
+              ? <button className="tour-btn primary" onClick={() => setTourStep((s) => (s ?? 0) + 1)}>NEXT ▶</button>
+              : <button className="tour-btn primary" onClick={() => { setTourStep(null); setTourPlaying(false); }}>FINISH</button>}
+            <button className="tour-btn" onClick={() => { setTourStep(null); setTourPlaying(false); }} title="End tour">✕</button>
+          </div>
+        </div>
       )}
     </div>
   );

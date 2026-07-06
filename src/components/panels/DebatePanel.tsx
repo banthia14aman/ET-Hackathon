@@ -1,9 +1,10 @@
 import type { Objection, OptionCard } from '../../contracts/types';
 import { articleName, leverPlain, optionLabel, prettify, STATUS_LABEL, STATUS_PILL } from '../../lib/labels';
 
-function ObjectionChip({ o }: { o: Objection }) {
+function ObjectionChip({ o, i }: { o: Objection; i: number }) {
+  // stagger the reveal so the critic visibly "computes" one objection at a time
   return (
-    <div className={`objection${o.severity === 'block' ? ' objection-block' : ''}`}>
+    <div className={`objection${o.severity === 'block' ? ' objection-block' : ''}`} style={{ animationDelay: `${Math.min(i, 8) * 0.14}s` }}>
       <div className="objection-article">{articleName(o.rule_id)}</div>
       <div className="objection-msg">{o.message}</div>
       <div className="objection-cite mono" title={`${o.rule_id} · ${o.validator}`}>
@@ -41,7 +42,7 @@ export default function DebatePanel({ options, objections }: { options: OptionCa
           <div className="debate-group-label">Critic <span className="debate-role">— {objections.length} rule objections, computed with zero AI</span></div>
           {objections.length === 0
             ? <div className="debate-empty">No rule violations.</div>
-            : objections.map((o) => <ObjectionChip key={o.id} o={o} />)}
+            : objections.map((o, i) => <ObjectionChip key={o.id} o={o} i={i} />)}
 
           <div className="debate-group-label">Arbiter <span className="debate-role">— the verdict on each move</span></div>
           {options.map((o) => (

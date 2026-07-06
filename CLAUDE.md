@@ -46,9 +46,15 @@ Decision Charter (proposer → zero-LLM critic → arbiter) → hash-chained aud
   chips, and a "no AI in that decision" framing. Simulated judge panel: 55%→78% weighted.
 - Added our OWN trained model (`refinery_model.ts` + `train-refinery-model.mjs`) — answers "why
   only one LLM": rules for the veto, our model for the numbers, LLM only for prose. `docs/ml-architecture.md`.
-- Engines + data + UI integrated; `npm run check` 70/70; `npm run build` verified clean (Node 22).
-- Still to do (lower priority): enlarge the MapView; the plan's FLIP re-sort / staged-cascade
-  animations (plan.md §8 moments); optional calibration-regression model (docs/ml-architecture.md upgrade path).
+- Bloomberg-terminal restyle (true black, amber, dense mono, square, header bars) + interactive
+  map camera (auto-frames affected straits; click a cargo to fly to + highlight its route; 50m geometry).
+- What-if sandbox (`WHAT-IF` button → ScenarioBuilder → pipeline.computeScenario); clearly labeled SANDBOX.
+- Beat choreography: staggered critic objections + Beat-2 amber ring on status change.
+- Guided demo/tour (`▶ DEMO` button, `?tour=1` auto-play, `?judge=1` manual) — drives the real app,
+  spotlights panels, captions double as the video script (docs/demo-tour.md).
+- Engines + data + UI integrated; `npm run check` 73/73; `npm run build` verified clean (Node 22).
+- Still to do (lower priority, non-code): the deck, the 3-min video, the signed audit-trace PDF prop
+  (plan.md §7). Optional code: calibration-regression model (docs/ml-architecture.md upgrade path).
 - Known-issue backlog cleared: LLM cache covers all top-3 cards (kochi:0/1, demand_side,
   floating_storage added; stale keys rekeyed), duplicate option/proposer rows collapse to ×N,
   and the Nayara buyer override now fires via `evt:ukmto-2026-04-08-bab-el-mandeb`

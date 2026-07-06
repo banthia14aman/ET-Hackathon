@@ -123,7 +123,8 @@ body.projector { font-size: 14px; }
 .debate-empty { color: var(--dim); font-size: 13px; padding: 8px 0; }
 .debate-row { font-size: 13px; padding: 3px 0; display: flex; align-items: center; gap: 8px; }
 .debate-row .dr-name { flex: 1; }
-.objection { border-left: 3px solid var(--warn); padding: 6px 10px; margin: 6px 0; background: var(--panel-2); }
+.objection { border-left: 3px solid var(--warn); padding: 6px 10px; margin: 6px 0; background: var(--panel-2); animation: obj-in 340ms ease both; }
+@keyframes obj-in { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
 .objection-block { border-left-color: var(--red); }
 .objection-article { font-size: 12px; font-weight: 700; color: var(--warn); }
 .objection-block .objection-article { color: var(--red); }
@@ -228,5 +229,34 @@ body.projector { font-size: 14px; }
 .sandbox-tag { background: var(--amber); color: #000; font-weight: 700; font-size: 11px; padding: 1px 7px; letter-spacing: 0.05em; }
 .sandbox-txt { flex: 1; font-size: 14px; color: var(--text); }
 .sandbox-txt b { color: var(--amber); }
+
+/* Beat 2: a card/row that just changed status flashes a 2s amber ring */
+.just-changed { animation: ring 2s ease; position: relative; z-index: 1; }
+@keyframes ring {
+  0% { box-shadow: 0 0 0 0 rgba(255,160,40,0.9); background: rgba(255,160,40,0.14); }
+  60% { box-shadow: 0 0 0 3px rgba(255,160,40,0.35); }
+  100% { box-shadow: 0 0 0 0 rgba(255,160,40,0); }
+}
+
+/* ---------- guided tour / demo ---------- */
+.tour-focus { outline: 2px solid var(--amber) !important; outline-offset: -1px; z-index: 5; animation: tour-pulse 1.7s ease-in-out infinite; }
+@keyframes tour-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,160,40,0.55); } 50% { box-shadow: 0 0 0 5px rgba(255,160,40,0.12); } }
+.tour-card { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); width: 760px; max-width: 94vw; background: #000; border: 1px solid var(--amber); z-index: 60; box-shadow: 0 0 40px rgba(0,0,0,0.8); }
+.tour-head { background: var(--amber); color: #000; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 12px; display: flex; align-items: center; justify-content: space-between; }
+.tour-step { font-size: 11px; }
+.tour-body { padding: 10px 14px; }
+.tour-title { font-size: 16px; font-weight: 700; color: var(--amber); margin-bottom: 4px; }
+.tour-text { font-size: 14px; color: var(--text); line-height: 1.45; }
+.tour-ctrl { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-top: 1px solid var(--border); }
+.tour-ctrl .spacer { flex: 1; }
+.tour-btn { background: #000; color: var(--text); border: 1px solid var(--border-2); font: inherit; font-weight: 700; font-size: 12px; padding: 4px 12px; cursor: pointer; }
+.tour-btn:hover:not(:disabled) { border-color: var(--amber); color: var(--amber); }
+.tour-btn:disabled { opacity: 0.35; cursor: default; }
+.tour-btn.primary { background: var(--amber); color: #000; border-color: var(--amber); }
+.tour-dots { display: flex; gap: 4px; }
+.tour-dot { width: 7px; height: 7px; background: var(--border-2); }
+.tour-dot.on { background: var(--amber); }
+.tour-open-btn { background: #000; border: 1px solid var(--accent); color: var(--accent); font: inherit; font-weight: 700; font-size: 11px; padding: 2px 9px; cursor: pointer; letter-spacing: 0.04em; }
+.tour-open-btn:hover { background: var(--accent); color: #000; }
 
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
