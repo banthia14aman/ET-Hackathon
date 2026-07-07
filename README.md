@@ -40,7 +40,7 @@ src/lib/                store, canonical JSON + sha256, fmt, geo projection,
                         pipeline (engine composition — the only place engines meet)
 src/components/         MapView (hand-authored SVG map) + panels/*
 src/cache/              build-time LLM cache (the ONLY source of LLM text)
-scripts/check.mjs       the check suite (70 checks)
+scripts/check.mjs       the check suite (75 checks)
 docs/                   plan, beats spec (+ observed-behavior appendix), provenance
 ```
 
@@ -72,6 +72,6 @@ generated the cache.
 This repo was assembled in an environment where the npm registry is blocked, so
 `node_modules/` was never installed and `dist/` was never built here. On any normal
 machine, `npm install && npm run build` produces `dist/` in one step; `npm run check`
-already passes (70/70) with plain Node and is the source of truth for engine
+already passes (75/75) with plain Node and is the source of truth for engine
 correctness. `npm install && npm run build` has since been verified clean on a
 normal machine (Node 22, zero type errors) and `dist/` builds in one step.

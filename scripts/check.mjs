@@ -183,6 +183,23 @@ check('whatif: hypothetical two-strait crisis produces options + a wider gap tha
   `gap ${w1.scenario.gap_kbd.toFixed(0)} vs ${r1.scenario.gap_kbd.toFixed(0)}`);
 check('whatif: audit chain verifies from GENESIS', verifyChain(w1.audit) && w1.audit[0].prev_hash === 'GENESIS');
 
+// (h) scale is config, not code — the same engine runs a different graph, deterministically
+const miniGraph = {
+  nodes: [
+    { id: 'sup:x', type: 'supplier', name: 'X', lat: 0, lon: 0, status: 'ok', prov: 'S', source: 's', as_of: '2026-01-01T00:00:00Z' },
+    { id: 'ck:z', type: 'chokepoint', name: 'Z', lat: 0, lon: 0, status: 'ok', prov: 'S', source: 's', as_of: '2026-01-01T00:00:00Z' },
+    { id: 'ref:m', type: 'refinery', name: 'M', lat: 0, lon: 0, status: 'ok', capacity_kbd: 200, cover_days: 12, assay_env: { api: [20, 45], sulfur: [0, 3], tan: [0, 1.5], ni_v: [0, 200], resid: [0, 50], pour: [-30, 30] }, prov: 'S', source: 's', as_of: '2026-01-01T00:00:00Z' },
+  ],
+  edges: [{ id: 'e:x', from: 'sup:x', to: 'ref:m', mode: 'suezmax', via_chokepoints: ['ck:z'], transit_days: 6, volume_kbd: 200, cost_usd_bbl: 2, status: 'open' }],
+};
+const miniData = { graph: miniGraph, grades: [{ id: 'gr:x', name: 'X', origin_country: 'Xland', api: 34, sulfur: 0.5, tan: 0.1, ni_v: 5, resid: 15, pour: -20, prov: 'S', source: 's', as_of: '2026-01-01T00:00:00Z' }], sanctions: { Xland: { rail: 'GREEN', note: 'ok' } }, spot: [{ id: 'sc:x', grade_id: 'gr:x', origin_country: 'Xland', volume_kb: 500, loading_port: 'sup:x', avail_from_day: 1, prov: 'S', source: 's' }], calibration: {} };
+const miniShocks = { t_sim: '2026-07-07T00:00:00Z', shocks_active: ['shock:z-severe'], brent_usd: 90 };
+const s1 = await computeScenario(miniData, miniShocks, charter);
+const s2 = await computeScenario(miniData, miniShocks, charter);
+check('scale: same engine runs a different graph and produces judged options', s1.options.length > 0,
+  s1.options.map((o) => `${o.lever}=${o.status}`).join(','));
+check('scale: new-config run is deterministic (canonicalJson)', canonicalJson(s1) === canonicalJson(s2));
+
 // ---------- report ----------
 let failed = 0;
 for (const r of results) {
