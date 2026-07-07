@@ -56,6 +56,8 @@ export default function MapView({
   const vbRef = useRef<Box>(WORLD_BOX);
   const rafRef = useRef<number>(0);
   const svgRef = useRef<SVGSVGElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isFs, setIsFs] = useState(false);
   const dragRef = useRef<{ x: number; y: number; vb: Box; moved: boolean } | null>(null);
   const draggedRef = useRef(false);
   const setBox = (b: Box) => { vbRef.current = b; setVb(b); };
@@ -134,13 +136,32 @@ export default function MapView({
     try { e.currentTarget.releasePointerCapture(e.pointerId); } catch { /* ignore */ }
   };
 
+  // fullscreen (native Fullscreen API on the map container; Esc exits)
+  useEffect(() => {
+    const onChange = () => {
+      const el = document.fullscreenElement ?? (document as unknown as { webkitFullscreenElement?: Element }).webkitFullscreenElement ?? null;
+      setIsFs(el === containerRef.current);
+    };
+    document.addEventListener('fullscreenchange', onChange);
+    document.addEventListener('webkitfullscreenchange', onChange);
+    return () => { document.removeEventListener('fullscreenchange', onChange); document.removeEventListener('webkitfullscreenchange', onChange); };
+  }, []);
+  const toggleFs = () => {
+    const el = containerRef.current as (HTMLDivElement & { webkitRequestFullscreen?: () => void }) | null;
+    const doc = document as Document & { webkitExitFullscreen?: () => void; webkitFullscreenElement?: Element };
+    const r = (document.fullscreenElement || doc.webkitFullscreenElement)
+      ? (document.exitFullscreen ?? doc.webkitExitFullscreen)?.call(document)
+      : el && (el.requestFullscreen ?? el.webkitRequestFullscreen)?.call(el);
+    if (r && typeof (r as Promise<void>).catch === 'function') (r as Promise<void>).catch(() => { /* blocked — ignore */ });
+  };
+
   const z = VIEW_W / vb.w; // zoom factor — keep glyphs/labels constant screen size
   const s = (px: number): number => px / z;
   const hiFrom = highlight?.from; const hiTo = highlight?.to;
   const dimOthers = !!highlight;
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+    <div ref={containerRef} className="map-container" style={{ position: 'relative', width: '100%', height: '100%', background: '#000' }}>
       <svg ref={svgRef} viewBox={`${vb.x} ${vb.y} ${vb.w} ${vb.h}`}
         style={{ width: '100%', height: '100%', display: 'block', cursor: 'grab', touchAction: 'none' }}
         className="map-svg" xmlns="http://www.w3.org/2000/svg"
@@ -218,6 +239,7 @@ export default function MapView({
         <button className="map-hud-btn" title="Zoom in" onClick={() => zoomAt(vbRef.current.x + vbRef.current.w / 2, vbRef.current.y + vbRef.current.h / 2, 0.7)}>+</button>
         <button className="map-hud-btn" title="Zoom out" onClick={() => zoomAt(vbRef.current.x + vbRef.current.w / 2, vbRef.current.y + vbRef.current.h / 2, 1.43)}>−</button>
         <button className="map-hud-btn" title="Fit / reset view" onClick={() => { animateTo(focus ?? WORLD_BOX); onReset?.(); }}>WORLD ⤢</button>
+        <button className="map-hud-btn" title={isFs ? 'Exit full screen' : 'Full screen'} onClick={toggleFs}>{isFs ? '⤡ EXIT' : '⛶ FULL'}</button>
       </div>
 
       {/* legend (HTML overlay — unaffected by zoom) */}
