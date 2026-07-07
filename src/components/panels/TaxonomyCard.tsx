@@ -4,6 +4,10 @@ const SHOCK_PLAIN: Record<string, string> = {
   'shock:hormuz-severe': 'Hormuz severely disrupted',
   'shock:hormuz-closure-declared': 'Hormuz closure declared',
   'shock:bab-el-mandeb-partial': 'Bab el-Mandeb (Red Sea) disrupted',
+  'shock:bosphorus-severe': 'Bosphorus Strait severely disrupted',
+  'shock:bosphorus-partial': 'Bosphorus Strait disrupted',
+  'shock:gibraltar-severe': 'Strait of Gibraltar disrupted',
+  'shock:suez-severe': 'Suez Canal disrupted',
 };
 
 function plainShock(shock?: string): { headline: string; detail: string } {
