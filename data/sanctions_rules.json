@@ -7,8 +7,8 @@
   "UAE": { "rail": "GREEN", "note": "USD LC. Snapshot 2026-03-01." },
   "Kuwait": { "rail": "GREEN", "note": "USD LC. Snapshot 2026-03-01." },
   "Iraq": { "rail": "GREEN", "note": "USD LC. Snapshot 2026-03-01." },
-  "Russia": { "rail": "AMBER", "note": "Dirham/yuan rail; US waiver branch for pre-cutoff loadings valid to 2026-04-03 (evt:milestone-2026-03-06-ofac-waiver). Snapshot 2026-03-06." },
-  "Venezuela": { "rail": "AMBER", "note": "OFAC comfort letter required per cargo. Snapshot 2026-03-01." },
+  "Russia": { "rail": "AMBER", "note": "EU/G7 price-cap attestation required; dynamic cap $44.10/bbl eff. 2026-02-01 (15% discount to 22-wk Urals avg; EU 18th package cut it from $60 to $47.60 on 2025-09-03, European Commission). Snapshot 2026-03-01." },
+  "Venezuela": { "rail": "AMBER", "note": "OFAC-licensed only: GL 50A (13 Feb 2026) authorizes named majors + PdVSA dealings; per-cargo comfort letter. Snapshot 2026-03-01." },
   "Iran": { "rail": "RED", "note": "Comprehensive US/EU sanctions; no compliant rail. Snapshot 2026-03-01." },
-  "buyer:Nayara": { "rail": "RED", "note": "Buyer override — Nayara Energy designated under EU 18th package (Jul 2025); overrides origin-country rail for cargoes destined ref:vadinar. Snapshot 2026-03-01." }
+  "buyer:Nayara": { "rail": "RED", "note": "Buyer override — Nayara Energy (49.13% Rosneft) designated under EU 18th package, Reg (EU) 2025/1494, 18 Jul 2025; overrides origin rail for cargoes to ref:vadinar. Snapshot 2026-03-01." }
 }

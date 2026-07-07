@@ -114,7 +114,8 @@ body.projector { font-size: 14px; }
 /* ---------- taxonomy ---------- */
 .taxonomy-shock { font-size: 22px; font-weight: 700; margin: 4px 0 2px; line-height: 1.1; color: var(--warn); }
 .taxonomy-shock-plain { font-size: 12px; color: var(--dim); margin-bottom: 8px; }
-.taxonomy-analog { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 4px 0; border-bottom: 1px solid var(--border); }
+.taxonomy-analog { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 4px 0; border-bottom: 1px solid var(--border); gap: 8px; }
+.analog-fact { font-size: 11px; color: var(--dim); }
 
 /* ---------- debate ---------- */
 .debate-group-label { font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--blue);
@@ -164,6 +165,7 @@ body.projector { font-size: 14px; }
 /* ---------- waterfall ---------- */
 .waterfall { display: flex; gap: 26px; align-items: center; height: 100%; }
 .waterfall-hero { display: flex; flex-direction: column; min-width: 210px; }
+.waterfall-cost { min-width: 190px; border-left: 1px solid var(--border); padding-left: 22px; }
 .waterfall-hero .hero-num { transition: color 300ms; }
 .waterfall-frame { font-size: 12px; color: var(--dim); margin-top: 3px; }
 .waterfall-frame b { color: var(--text); font-weight: 700; }

@@ -20,6 +20,7 @@ import {
   AuditTrace, CharterPanel, DebatePanel, OptionCards, Stopwatch, TaxonomyCard, Ticker, Waterfall,
 } from './components/panels';
 import ProvenanceChip from './components/panels/ProvenanceChip';
+import { rankAnalogs } from './lib/analogs';
 import bundleJson from '../data/hormuz2026_events.json' with { type: 'json' };
 import nodesJson from '../data/graph_nodes.json' with { type: 'json' };
 import edgesJson from '../data/graph_edges.json' with { type: 'json' };
@@ -123,15 +124,9 @@ function nationalCover(scenario: ScenarioState | null, nodes: GraphNode[]): numb
   return den > 0 ? num / den : null;
 }
 
-function analogsFor(shocks: string[]): { name: string; score: number }[] {
-  const has = (k: string) => shocks.some((s) => s.includes(k));
-  const all = [
-    { name: 'Iran–Iraq Tanker War (1984–88)', score: has('hormuz') ? 0.86 : 0.3 },
-    { name: 'Abqaiq strike (2019)', score: has('hormuz') ? 0.74 : 0.4 },
-    { name: 'Red Sea / Houthi crisis (2023–24)', score: has('bab-el-mandeb') ? 0.9 : 0.55 },
-    { name: 'Ever Given / Suez block (2021)', score: has('bab-el-mandeb') ? 0.62 : 0.35 },
-  ];
-  return all.sort((a, b) => b.score - a.score).slice(0, 3);
+/** Active shocked-chokepoint keys from the shock ids ('shock:hormuz-severe' → 'hormuz'). */
+function shockedChokepointKeys(shocks: string[]): string[] {
+  return [...new Set(shocks.map((s) => s.replace(/^shock:/, '').replace(/-(partial|severe|closure-declared)$/, '')))];
 }
 
 function guideFor(scenario: ScenarioState | null, options: OptionCard[], cover: number | null, safe: number) {
@@ -303,9 +298,20 @@ export default function App() {
     }))
     .filter((c) => c.kbd > 0);
 
+  // Cost of decision lag — computed live from the scenario's Brent, not a hardcoded number.
+  // spot-exposed barrels × 6-day lag × average excess over the ramp (½ of peak excess).
+  const SPOT_EXPOSED_KBD = 1500; // ~30% of India's ~4.9 mb/d imports (PPAC-derived; directional, prov E)
+  const BASELINE_BRENT = 71;     // pre-crisis Brent, Feb 2026 (prov E)
+  const LAG_DAYS = 6;            // India's reported decision lag when Hormuz shut
+  const priceExcess = Math.max(0, (scenario?.brent_usd ?? BASELINE_BRENT) - BASELINE_BRENT);
+  const costOfDelayUsd = SPOT_EXPOSED_KBD * 1000 * LAG_DAYS * priceExcess * 0.5;
+  const costTitle = `1.5 mb/d spot-exposed × ${LAG_DAYS}-day lag × ½ of the $${priceExcess.toFixed(0)}/bbl excess over $${BASELINE_BRENT} pre-crisis Brent. Spot share directional (E); Brent is the scenario's.`;
+
   const safeLine = charter.find((a) => a.id === 'A2')?.param_value ?? 15;
   const cover = nationalCover(scenario, DATA.graph.nodes);
-  const analogs = scenario ? analogsFor(scenario.shocks_active) : [];
+  const analogs = scenario
+    ? rankAnalogs(shockedChokepointKeys(scenario.shocks_active), scenario.gap_kbd / 1000, priceExcess / BASELINE_BRENT * 100).slice(0, 3)
+    : [];
   const guide = guideFor(scenario, options, cover, safeLine);
   const coverBelow = cover !== null && cover < safeLine;
 
@@ -410,7 +416,7 @@ export default function App() {
         <OptionCards options={options} selectedId={sel?.kind === 'route' ? sel.id : undefined} changedIds={changedIds} onSelect={(id) => setSel({ kind: 'route', id })} />
       </div>
       <div className="panel" style={{ gridArea: 'waterfall' }}>
-        <Waterfall gap_kbd={scenario?.gap_kbd ?? 0} contributions={contributions} />
+        <Waterfall gap_kbd={scenario?.gap_kbd ?? 0} contributions={contributions} costOfDelayUsd={costOfDelayUsd} costTitle={costTitle} />
       </div>
 
       {scenarioOpen && (

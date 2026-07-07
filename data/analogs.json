@@ -1,0 +1,77 @@
+{
+  "_doc": "Historical oil-supply disruptions used as analogs. Every figure is real and cited (prov R). The on-screen 'similarity' is a COMPUTED metric (see src/lib/analogs.ts), never a measured or invented percentage — it weighs chokepoint overlap, disrupted volume, and price move against the current scenario.",
+  "analogs": [
+    {
+      "id": "tanker-war-1984",
+      "name": "Iran–Iraq Tanker War",
+      "years": "1984–88",
+      "chokepoint": "hormuz",
+      "oil_disrupted_mbd": 0.5,
+      "duration_days": 1461,
+      "brent_move_pct": 3,
+      "reroute_days": 0,
+      "resolution": "Ended with the Iran–Iraq War ceasefire (UN Res. 598, Aug 1988); US Navy reflagged/escorted Kuwaiti tankers (Operation Earnest Will).",
+      "confidence": "medium",
+      "prov": "R",
+      "note": "Persistent attacks on Gulf/Hormuz shipping (451 attacks, ~239 tankers hit) but at peak disrupted <2% of Gulf traffic; oil flow was not significantly cut and prices fell through the 1980s.",
+      "sources": [
+        { "org": "Wikipedia — Tanker War (primary refs)", "url": "https://en.wikipedia.org/wiki/Tanker_war" },
+        { "org": "Britannica — Tanker War", "url": "https://www.britannica.com/event/Tanker-War" }
+      ]
+    },
+    {
+      "id": "abqaiq-2019",
+      "name": "Abqaiq–Khurais attack",
+      "years": "2019",
+      "chokepoint": "facility",
+      "oil_disrupted_mbd": 5.7,
+      "duration_days": 15,
+      "brent_move_pct": 11.7,
+      "reroute_days": 0,
+      "resolution": "Aramco drew on inventories and other fields; output restored in ~2 weeks and prices fell back below pre-attack levels.",
+      "confidence": "high",
+      "prov": "R",
+      "note": "Drone/missile strike knocked out 5.7 mb/d (~5% of world supply). Brent spot 61.25 → 68.42 (+11.7%), the largest single-day gain in a decade.",
+      "sources": [
+        { "org": "EIA — Today in Energy #41413", "url": "https://www.eia.gov/todayinenergy/detail.php?id=41413" },
+        { "org": "EIA — Brent RBRTE daily", "url": "https://www.eia.gov/dnav/pet/hist/rbrted.htm" }
+      ]
+    },
+    {
+      "id": "ever-given-2021",
+      "name": "Ever Given / Suez blockage",
+      "years": "2021",
+      "chokepoint": "suez",
+      "oil_disrupted_mbd": 4,
+      "duration_days": 6,
+      "brent_move_pct": 6.4,
+      "reroute_days": 12,
+      "resolution": "Refloated on the 6th day (Mar 29 2021) by 14 tugs plus dredging and a spring tide; traffic backlog cleared within ~2 weeks.",
+      "confidence": "high",
+      "prov": "R",
+      "note": "A single grounding shut the Suez Canal for 6 days (~$9bn/day of goods; ~3–5 mb/d of seaborne oil delayed). Brent spot low 59.96 → 63.77 (+6.4%).",
+      "sources": [
+        { "org": "Wikipedia — 2021 Suez Canal obstruction", "url": "https://en.wikipedia.org/wiki/2021_Suez_Canal_obstruction" },
+        { "org": "EIA — Brent RBRTE daily", "url": "https://www.eia.gov/dnav/pet/hist/rbrted.htm" }
+      ]
+    },
+    {
+      "id": "red-sea-2023",
+      "name": "Red Sea / Houthi crisis",
+      "years": "2023–24",
+      "chokepoint": "bab-el-mandeb",
+      "oil_disrupted_mbd": 4.7,
+      "duration_days": 300,
+      "brent_move_pct": 14,
+      "reroute_days": 13,
+      "resolution": "Not fully resolved in period; mitigated by rerouting around the Cape of Good Hope (+10–16 days) and naval escorts (Operation Prosperity Guardian).",
+      "confidence": "high",
+      "prov": "R",
+      "note": "Bab el-Mandeb oil transit fell from 8.7 mb/d (2023) to 4.0 mb/d (2024). Diversions round the Cape add ~10–16 days; Brent trough 74.21 → 84.57 (+14%). The closest analog to a two-strait scenario.",
+      "sources": [
+        { "org": "EIA — Today in Energy #63446", "url": "https://www.eia.gov/todayinenergy/detail.php?id=63446" },
+        { "org": "EIA — Today in Energy #61363", "url": "https://www.eia.gov/todayinenergy/detail.php?id=61363" }
+      ]
+    }
+  ]
+}

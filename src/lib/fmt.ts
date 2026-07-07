@@ -18,6 +18,14 @@ export function fmtDays(v: number): string {
   return `${Math.round(v)} d`;
 }
 
+/** Large USD → compact: 184_000_000 -> '$184M', 1_240_000_000 -> '$1.24B'. */
+export function fmtUsdBig(v: number): string {
+  if (v >= 1e9) return `$${(v / 1e9).toFixed(2)}B`;
+  if (v >= 1e6) return `$${Math.round(v / 1e6)}M`;
+  if (v >= 1e3) return `$${Math.round(v / 1e3)}k`;
+  return `$${Math.round(v)}`;
+}
+
 const pad2 = (n: number): string => String(n).padStart(2, '0');
 
 /** '2026-01-19T14:22:00Z' -> '14:22Z · 19:52 IST' (IST = UTC+05:30, deterministic, no locale). */

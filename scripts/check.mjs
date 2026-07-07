@@ -117,7 +117,9 @@ const merey = r1.options.find((o) => o.grade === 'gr:merey-16' && o.target_refin
 check('beat1: Merey→Jamnagar reroute card exists', !!merey, r1.options.map((o) => o.id).join('\n'));
 const mereyObjs = merey ? r1.objections.filter((o) => o.option_id === merey.id) : [];
 const ruleOf = (rule) => mereyObjs.find((o) => o.rule_id === rule);
-check('beat1: TAN objection (A5.assay_compat mentions tan)', /\btan\b/.test(ruleOf('A5.assay_compat')?.message ?? ''),
+// Merey's real assay (API 16, heavy) binds on API/blend, not TAN — the assay objection must fire and name the binding.
+check('beat1: assay objection (A5.assay_compat cites the real binding — api/heavy/blend)',
+  /\b(api|blend|resid|ni_v)\b/.test(ruleOf('A5.assay_compat')?.message ?? ''),
   ruleOf('A5.assay_compat')?.message);
 check('beat1: rail objection (A4.payment_rail AMBER/OFAC)', /AMBER/.test(ruleOf('A4.payment_rail')?.message ?? ''),
   ruleOf('A4.payment_rail')?.message);

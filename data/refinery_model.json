@@ -82,6 +82,6 @@
     "method": "softmax regression, 400 iters, seeded synthetic crudes labelled by the physical envelope screen",
     "prov": "E",
     "trained_by": "scripts/train-refinery-model.mjs",
-    "trained_at": "2026-07-05T21:15:38.497Z"
+    "trained_at": "2026-07-07T08:36:38.383Z"
   }
 }

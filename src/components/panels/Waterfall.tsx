@@ -1,4 +1,4 @@
-import { fmtKbd } from '../../lib/fmt';
+import { fmtKbd, fmtUsdBig } from '../../lib/fmt';
 import { leverPlain } from '../../lib/labels';
 
 // India's ~4,900 kb/d crude runs — the denominator behind "% of national runs" (public PPAC, est.).
@@ -8,9 +8,13 @@ const NATIONAL_RUNS_KBD = 4900;
 export default function Waterfall({
   gap_kbd,
   contributions,
+  costOfDelayUsd,
+  costTitle,
 }: {
   gap_kbd: number;
   contributions: { lever: string; kbd: number }[];
+  costOfDelayUsd?: number;
+  costTitle?: string;
 }) {
   const covered = contributions.reduce((s, c) => s + c.kbd, 0);
   const remaining = Math.max(0, gap_kbd - covered);
@@ -30,6 +34,13 @@ export default function Waterfall({
           {gap_kbd > 0 && <> · <b>{pctCovered}%</b> covered by {contributions.length} levers</>}
         </span>
       </div>
+      {costOfDelayUsd !== undefined && costOfDelayUsd > 0 && (
+        <div className="waterfall-hero waterfall-cost" title={costTitle}>
+          <span className="hero-num" style={{ color: 'var(--red)' }}>{fmtUsdBig(costOfDelayUsd)}</span>
+          <span className="label">Cost of a 6-day decision lag</span>
+          <span className="waterfall-frame">at the current price excess · <b>every day the desk waits</b></span>
+        </div>
+      )}
       <div className="waterfall-bars">
         <div className="waterfall-lane">
           <span className="waterfall-label">

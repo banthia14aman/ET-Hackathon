@@ -182,7 +182,10 @@ supersede the [PROPOSED] figures above where they differ (LEAD rulings D1–D6).
 - **Beat 1 objections on the hero card (exactly 3 flags, 0 blocks → `conditional`):**
   1. `A2.voyage_vs_buffer` flag — `43 d voyage vs 12.2 d cover buffer — Article A2`
   2. `A4.payment_rail` flag — `payment rail AMBER — OFAC comfort letter required per cargo. Snapshot 2026-03-01. — Article A4`
-  3. `A5.assay_compat` flag — `grade gr:merey-16 needs BLEND at ref:jamnagar: api 16 < min 18/max_blend_ratio 0.43/tan 3.3 > max 2 binding — Article A5`
+  3. `A5.assay_compat` flag — `grade gr:merey-16 needs BLEND at ref:jamnagar: api 16 < min 18/max_blend_ratio 0.87 binding — Article A5`
+     (updated 2026-07-07: Merey's assay is now real — API 16 / S 2.45 (corroborated), TAN 0.69, V 262 ppm. The binding
+     constraint is that it is **too heavy** (API 16 < envelope min 18), not a high TAN. The earlier `tan 3.3` was a
+     fabricated value and has been removed; the beat still demotes Merey, now for the honest reason.)
   Conditions = the 3 flag messages, sorted (frozen lattice). Rule ids are SWE5's
   (`A2.voyage_vs_buffer`, `A4.payment_rail`, `A5.assay_compat`), not the [PROPOSED]
   `A2.assay_env`/`A4.sanctions` names (D3).

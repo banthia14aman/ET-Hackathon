@@ -15,7 +15,9 @@ function plainShock(shock?: string): { headline: string; detail: string } {
   return { headline, detail };
 }
 
-export default function TaxonomyCard({ shock, analogs }: { shock?: string; analogs?: { name: string; score: number }[] }) {
+import type { ScoredAnalog } from '../../lib/analogs';
+
+export default function TaxonomyCard({ shock, analogs }: { shock?: string; analogs?: ScoredAnalog[] }) {
   const { headline, detail } = plainShock(shock);
   return (
     <div>
@@ -25,11 +27,16 @@ export default function TaxonomyCard({ shock, analogs }: { shock?: string; analo
       <div className="taxonomy-shock-plain">{detail}</div>
       {analogs && analogs.length > 0 && (
         <>
-          <div className="label" style={{ marginTop: 14 }}>Closest past crises</div>
-          {analogs.map((a) => (
-            <div key={a.name} className="taxonomy-analog">
-              <span style={{ flex: 1 }}>{a.name}</span>
-              <span className="mono" style={{ color: 'var(--muted)' }}>{Math.round(a.score * 100)}% match</span>
+          <div className="label" style={{ marginTop: 14 }}>
+            Closest past crises <span style={{ textTransform: 'none', letterSpacing: 0 }}>· similarity computed from real facts</span>
+          </div>
+          {analogs.map(({ analog: a, score }) => (
+            <div key={a.id} className="taxonomy-analog" title={`${a.note}\n\nSource: ${a.sources.map((s) => s.org).join('; ')}`}>
+              <span style={{ flex: 1 }}>
+                {a.name} <span style={{ color: 'var(--dim)' }}>{a.years}</span>
+                <span className="analog-fact"> · {a.oil_disrupted_mbd} mb/d, Brent +{a.brent_move_pct}%</span>
+              </span>
+              <span className="mono" style={{ color: 'var(--accent)' }}>{Math.round(score * 100)}%</span>
             </div>
           ))}
         </>

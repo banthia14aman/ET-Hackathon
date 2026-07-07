@@ -2,127 +2,127 @@
   {
     "key": "opt:reroute:gr:merey-16:ref:jamnagar:8",
     "kind": "rationale",
-    "text": "Merey 16 (27 Mb, Day 55 arrival) extends Jamnagar cover from 15 to 22 days, buying critical runtime during Hormuz closure. Cost: heavy discount offset by $4.20/bbl premium for OFAC Amber-rail compliance and high-conversion processing (55% resid, Ni+V 450 ppm). Binding constraint is the OFAC comfort letter; without it, cargo freezes. Timing reality: Day 55 delivery creates a 10-day supply gap before arrival, requiring drawdowns. This option trades sanctions risk for volume certainty, utilizing RIL's coker capacity to upgrade cheap Venezuelan heavy crude. Reversibility is low once sanctions waivers are invoked; traceability requires full blockchain audit per Article A7. Essential for bridging the deficit if alternative Middle East flows remain blocked beyond Day 45.",
-    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-05T20:12:31.858Z",
+    "text": "Merey 16 (27 Mbbl) secures 22 days cover for Jamnagar (1240 kbd), extending baseline from 15 to 37 days. Heavy slate (55% resid, 262 ppm Ni+V) maximizes RIL's coker yield but demands $4.2/bbl desulfurization premium. Binding constraint: OFAC GL 50A compliance; payment via AMBER rail requires per-cargo comfort letter by Day 40. Cargo arrives Day 55, creating a 10-day supply gap requiring strategic drawdown. Cost is elevated freight ($18/bbl) due to long-haul reroute. This option buys critical runtime continuity against Hormuz closure but locks capital in high-risk Venezuelan paper until sanctions clarity confirms at Day 45. Reversibility is zero post-loading; traceability mandates full chain-of-custody audit under Article A7.",
+    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-07T08:39:07.373Z",
     "model": "qwen/qwen3.5-397b-a17b"
   },
   {
     "key": "opt:reroute:gr:merey-16:ref:jamnagar:8",
     "kind": "memo",
-    "text": "MEMO — Merey 16 Reroute. Approve CONDITIONAL: 1) Secure OFAC comfort letter prior to loading; 2) Cap exposure at 15% of Jamnagar baseline cover; 3) Verify chain-of-custody via AMBER rail before payment release. Heavy sour specs (API 16, 2.45% S) align with Jamnagar complex yield optimization; 27,000 kb volume fits within 18,600 kb safety buffer. Sanctions risk mitigated by explicit A4 transparency and A6 reversibility clauses. Netback positive assuming $3.50/bbl discount to Brent.",
-    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-05T20:14:18.655Z",
+    "text": "MEMO — Merey 16 to Jamnagar. Approve CONDITIONAL: 1) Secure GL 50A comfort letter pre-loading; 2) Cap exposure at 15% of 15-day baseline (277 kb); 3) Confirm A7 traceability via independent inspector. Heavy sour (16° API, 2.45% S) fits Jamnagar complex yield; Ni+V 262 ppm within catalyst tolerance. Payment via AMBER rail only. Freight premium estimated $1.80/bbl vs. Basrah given voyage length and insurance.",
+    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-07T08:39:32.756Z",
     "model": "qwen/qwen3.5-397b-a17b"
   },
   {
     "key": "opt:reroute:gr:girassol:ref:jamnagar:2",
     "kind": "rationale",
-    "text": "Girassol (API 30, S 0.33%) secures 1.3 days of Jamnagar coverage (1240 kbd), extending runway to Day 16.3 against the Day 35 arrival gap. Cost: Premium freight via Cape of Good Hope (+21 days transit) plus USD LC liquidity strain. Binding constraint is not volume but timing; this single 16 Mbbl cargo cannot bridge the 19-day supply void alone. It serves as a critical security floor (A2) to prevent unit shutdowns while diplomatic channels reopen Hormuz. Execution requires immediate A4 sanctions clearance and A7 traceability validation. Reversibility (A6) is low once chartered; this is a stopgap, not a solution. We buy time, not energy security.",
-    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-05T20:15:04.854Z",
+    "text": "Girassol (API 30.2, S 0.343%) secures 16 Mb for Jamnagar (1,240 kbd), extending cover from 15 to 26 days. Arrival Day 35 bridges the Hormuz gap. Cost: Premium freight + USD LC liquidity strain. Binding constraint: 49.4% resid yield demands coker throughput; TAN 0.39 limits blending ratios. Timing reality: Cargo availability lags immediate burn rate by five weeks, creating a critical inventory drawdown window. This option buys volume certainty against Angola's stable export rail but locks capital in a single-origin basket, testing Concentration Cap (A3). Reversibility is low post-loading; traceability remains high under USD settlement. Execute only if coker margins sustain heavy sour processing.",
+    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-07T08:39:49.644Z",
     "model": "qwen/qwen3.5-397b-a17b"
   },
   {
     "key": "opt:reroute:gr:girassol:ref:jamnagar:2",
     "kind": "memo",
-    "text": "MEMO — Girassol to Jamnagar. Approve CONDITIONAL:\n1. Verify A4 sanctions transparency on Angolan loading port clearance within 48h.\n2. Confirm A6 reversibility clause for cargo diversion if DTA/SEZ status shifts pre-arrival.\n3. Validate A2 security floor against $85/bbl Brent volatility spike.\n\nJamnagar absorbs 1.6M bbl (1.3d cover) at $74.20/bbl landed; $0.45/bbl premium vs. Basrah justified by low sulfur (0.33%) and high resid yield (20%) matching complex configuration.",
-    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-05T20:15:33.101Z",
+    "text": "MEMO — Girassol to Jamnagar. Approve CONDITIONAL:\n1. Verify A4 sanctions clearance on Angolan sup chain within 48h.\n2. Confirm A6 reversibility clause for cargo diversion if TAN >0.45 upon loading.\n3. Secure A2 security floor insurance for Gulf of Guinea transit leg.\n\nHigh-resid (49.43%) fits Jamnagar coker capacity; low sulfur (0.343%) maximizes DTA margin. 16k bbl covers 1.3 days baseline; deploy against 15-day cover target. USD LC greenlit.\n\nSizing: 16,000 kb @ $3.20/bbl freight premium vs. WTI; total landed cost $74.50/bbl.",
+    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-07T08:40:05.299Z",
     "model": "qwen/qwen3.5-397b-a17b"
   },
   {
     "key": "opt:reroute:gr:wti-midland:ref:jamnagar:7",
     "kind": "rationale",
-    "text": "**Proposal: WTI Midland → Jamnagar (45 Mb cargo, ETA D+25).**\n**Value:** Adds 3.6 days cover (total 18.6d). High API (42°) and low sulfur (0.2%) maximize distillate yield, offsetting Hormuz light-sour deficit.\n**Cost:** Premium freight +$4.2/bbl; USD LC liquidity strain.\n**Constraint:** A3 Concentration Cap. USGC now represents 22% of intake; further diversion breaches risk limits without sovereign waiver.\n**Timing Reality:** Cargo availability (D+20) + 5-day transit misses the critical D+14 depletion window. This is a bridge, not a rescue.\n**Verdict:** Execute only if A6 Reversibility clause allows immediate lay-up should Strait reopen by D+22. Otherwise, reject for faster African alternatives.",
-    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-05T20:15:56.253Z",
+    "text": "**Proposal:** Divert 45 Mb WTI Midland (API 44.5, S 0.32%) USGC→Jamnagar. ETA Day 38.\n**Value:** Adds +36 days cover (total 51d); maximizes high-yield diesel/jet from DTA/SEZ units. Light sweet feed offsets heavy sour deficit.\n**Cost:** Premium freight +$4.2/bbl; USD LC liquidity strain.\n**Constraint:** A3 Concentration Cap. Single-cargo reliance breaches diversification thresholds unless paired with African slate.\n**Timing:** Critical gap Days 20–38. Cargo availability aligns with inventory drawdown cliff.\n**Risk:** A5 Uncertainty—Hormuz closure persists; reroute viability hinges on USGC loading window stability.\n**Action:** Execute spot fix subject to A4 Sanctions clearance. Immediate LC issuance required to secure berth priority. This buys time, not a solution.",
+    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-07T08:40:45.239Z",
     "model": "qwen/qwen3.5-397b-a17b"
   },
   {
     "key": "opt:reroute:gr:wti-midland:ref:jamnagar:7",
     "kind": "memo",
-    "text": "MEMO — WTI Midland to Jamnagar. Approve CONDITIONAL:\n1. Confirm A4 sanctions transparency on USGC supplier chain by T-48h.\n2. Secure A6 reversibility clause for cargo diversion if India import duties shift >5%.\n3. Validate A3 concentration cap: this 45k bbl lot must not exceed 3% of Jamnagar's 15-day baseline cover.\n\nSizing/Cost: 45kb lot covers 0.9 days runtime; est. freight $2.10/bbl via VLCC parcel, netback positive at $78/bbl Brent equivalent.",
-    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-05T20:16:23.499Z",
+    "text": "MEMO — WTI Midland to Jamnagar. Approve CONDITIONAL: 1) Verify A4 sanctions clearance on USGC supplier within 24h; 2) Confirm A6 reversal clause for cargo diversion if Jamnagar intake exceeds 90% capacity by Day 25. WTI specs (44.5° API, 0.32% S) align perfectly with RIL complex yield optimization. 45,000 kb covers 3.6 days of 1,240 kbd throughput, lifting inventory from 15 to 18.6 days. USD LC rail active. Freight delta vs. Brent benchmark estimated at -$1.80/bbl netback gain. Execution window tight: load Day 20, arrive Jamnagar Day 35.",
+    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-07T08:41:15.946Z",
     "model": "qwen/qwen3.5-397b-a17b"
   },
   {
     "key": "opt:reroute:gr:urals:ref:jamnagar:3",
     "kind": "rationale",
-    "text": "Offer: 2.0Mb Urals (API 31.7, S 1.7%) to Jamnagar, D64 arrival. Cost: $4.2/bbl discount vs. Brent; Payment via CNY/AED rail under OFAC Waiver Branch (valid thru 03-Apr).\n\nValue: Extends 15-day baseline cover by 1.6 days; utilizes 16% of SEZ capacity without breaching A3 concentration caps. Binding constraint: Waiver expiry (28 days); cargo must load before 03-Apr or revert to stranded assets. Timing reality: D64 delivery bridges the critical April-May gap post-Hormuz closure.\n\nRisk: A4 transparency requires full chain-of-custody disclosure to US Treasury within 48h of loading. Reversibility (A6) limited once vessel enters Indian EEZ. This secures immediate feedstock for high-conversion units while legal windows remain open.",
-    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-05T20:16:39.953Z",
+    "text": "Urals (API 31.8, S 1.35%) fits Jamnagar's complex yield slate perfectly; 30 Mb covers 24 days, extending runway to Day 39. Cost: capped at $44.10/bbl via AMBER rail, saving ~$12/bbl vs. Middle East sour alternatives. Binding constraint: EU/G7 price-cap attestation required before loading; failure triggers total embargo. Timing reality: Cargo available Day 64, but India's 15-day baseline expires Day 15. This gap is fatal without interim bridging. Option survives only if we secure short-term charters to hold cargo offshore or accelerate discharge logistics. Without immediate waiver validation, this volume is stranded inventory, not supply relief. Action: Validate attestation chain within 48 hours or reject.",
+    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-07T08:41:45.541Z",
     "model": "qwen/qwen3.5-397b-a17b"
   },
   {
     "key": "opt:reroute:gr:urals:ref:jamnagar:3",
     "kind": "memo",
-    "text": "MEMO — Urals reroute to Jamnagar. Approve CONDITIONAL: 1) Confirm A4 sanctions transparency via yuan/Dirham settlement proof pre-loading; 2) Enforce A3 concentration cap ensuring post-delivery cover ≤22 days; 3) Validate A6 reversibility with exit clause triggered by 2026-04-03 waiver expiry. Cargo fits DTA/SEZ specs (API 31.7, S 1.7%); Ni+V 40 ppm within hydrotreater limits. 30,000 kb lifts baseline cover from 15 to 24 days, optimizing 1,240 kbd throughput without breaching security floors. Cost delta neutral vs. Middle East sour given freight arbitrage and waiver validity.",
-    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-05T20:16:49.931Z",
+    "text": "MEMO — Urals-to-Jamnagar Waiver. Approve CONDITIONAL:\n1. Supplier attests price ≤$44.10/bbl per EU 18th Package; docs uploaded to AMBER rail pre-loading.\n2. Cargo capped at 15% of Jamnagar baseline cover (4.5M bbl) to satisfy A3 Concentration.\n3. Full Ni+V (71 ppm) and resid (47%) yield modeling confirmed for DTA tax optimization.\n4. Reversibility clause active if G7 cap drops below $40.00 before day 64.\nNet landed cost est. $46.80/bbl; 30M bbl volume secures 24-day extension to baseline cover.",
+    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-07T08:42:37.640Z",
     "model": "qwen/qwen3.5-397b-a17b"
   },
   {
     "key": "opt:stock_draw:-:-:0",
     "kind": "rationale",
-    "text": "Draw 8.5 Mbbl from India's SPR to feed Jamnagar (1,240 kbd), extending cover from 15 to 22 days. This secures 70% of national diesel exports and prevents SEZ shutdown. Cost: $680M at $85/bbl spot replacement plus $12M logistics. Binding constraint: A3 Concentration Cap limits single-hub allocation to 40% of total draw; we are at 38%. Timing reality: Pipeline injection takes 96 hours; market impact is immediate upon announcement. Reversibility (A6) requires replenishment within 180 days post-crisis. Sanctions transparency (A4) confirms zero Iranian crude exposure in this tranche. Uncertainty (A5): Hormuz reopening window unknown; draw rate adjustable weekly. Traceability (A7) maintained via digital ledger for sovereign audit.",
-    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-05T20:17:06.438Z",
+    "text": "Draw 18.6 MMbbl from Jamnagar SPR (15-day baseline) to sustain 1,240 kbd throughput for 15 days. Cost: $1.4B at $75/bbl replacement; opportunity loss of $900M vs. spot arbitrage. Binding constraint: A3 Concentration Cap limits single-site draw to 40% of total national reserve, capping extension at 6 days without violating security floors. Timing: Logistics lag requires T+24h authorization to hit pumps by T+48h; full depletion occurs Day 16. This option buys immediate grid stability and prevents DTA/SEZ shutdown but exhausts local buffers before alternative sea-lanes open. Irreversible once pipeline pressure drops below 80%. Traceability logs confirm sovereign custody under A7.",
+    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-07T08:43:30.110Z",
     "model": "qwen/qwen3.5-397b-a17b"
   },
   {
     "key": "opt:stock_draw:-:-:0",
     "kind": "memo",
-    "text": "MEMO — Strategic Reserve Draw (Jamnagar). Approve CONDITIONAL:\n1. Verify A2 Security Floor: Maintain minimum 12-day cover post-draw against geopolitical escalation.\n2. Enforce A3 Concentration Cap: Limit single-batch release to 150 kbd to prevent market distortion.\n3. Satisfy A4/A7: Publish real-time cargo manifests and end-user certification within 4 hours of lifting.\n\nRelease 45 kbd average over 10 days; estimated logistics cost $0.85/bbl.",
-    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-05T20:17:27.144Z",
+    "text": "MEMO — Strategic Reserve Draw. Approve CONDITIONAL: 1) Cap release at 220 kbd to respect A3 concentration limits; 2) Mandate real-time A7 traceability tags on all barrels entering SEZ; 3) Enforce A6 reversibility clause triggering automatic refill if Brent dips below $75. Draw 18.6 Mb total (15-day baseline gap) over 21 days. Estimated logistics premium: $0.45/bbl.",
+    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-07T08:43:56.770Z",
     "model": "qwen/qwen3.5-397b-a17b"
   },
   {
     "key": "opt:demand_side:-:-:0",
     "kind": "rationale",
-    "text": "Execute 300 kb/d demand cut paired with product-import swap for 30 days. Net deficit coverage: 9 MMbbl. Cost: $420M premium + $1.2B GDP drag from refinery throughput reduction. Binding constraint: A3 Concentration Cap limits alternative sourcing to 150 kb/d from non-Gulf suppliers, necessitating the demand shock. Timing reality: Physical cargo arrival lag is 21 days; this swap bridges the immediate inventory drawdown window. A6 Reversibility is locked: cuts expire T+30 automatically. A4 Sanctions transparency confirmed; no Iranian/Russian barrels involved. A7 Traceability maintained via digital bills of lading. This option buys time for diplomatic de-escalation while preventing strategic reserve breach (A2 Security Floor). Uncertainty (A5): Global freight rates may spike 40% during execution.",
-    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-05T20:17:44.317Z",
+    "text": "Execute 300 kb/d demand cut paired with product-import swap for 30 days. Net relief: 180 kb/d diesel equivalent. Cost: $420M premium + 0.4% GDP drag. Binding constraint: Gulf Coast/Europe surplus capacity caps swap volume at 250 kb/d; remainder requires domestic refinery run-slashing. Timing: T+72 hours for tender, T+14 days for first cargo arrival. This option buys immediate inventory stabilization without breaching A3 concentration caps or A4 sanctions lines. Reversibility (A6) is high post-crisis; traceability (A7) remains intact via digital bills of lading. Uncertainty (A5): Freight rates may spike 40%. Security floor (A2) holds as strategic reserves remain untouched. Completeness (A1) achieved by covering 60% of the supply gap immediately.",
+    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-07T08:44:35.114Z",
     "model": "qwen/qwen3.5-397b-a17b"
   },
   {
     "key": "opt:demand_side:-:-:0",
     "kind": "memo",
-    "text": "MEMO — Demand-side run-cut / product-import swap, 300 kb/d for 30 days. Approve CONDITIONAL: 1) Verify A4 sanctions clearance on source cargo within 4 hours; 2) Cap counterparty exposure at 15% per A3; 3) Embed A6 auto-reversion clause if inventory dips below security floor. Net displacement: 9.0 MMbbl over tenure. Estimated arbitrage cost: $0.45/bbl premium vs. spot.",
-    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-05T20:17:50.789Z",
+    "text": "MEMO — Demand-side run-cut / product-import swap, 300 kb/d for 30 days. Approve CONDITIONAL: 1) Verify A4 sanctions clearance on source cargo within 4 hours; 2) Cap counterparty exposure at 15% per A3; 3) Embed A6 auto-reversion trigger if inventory dips below security floor. Net supply impact: +9.0 MMbbl over tenure. Estimated swap premium: $0.45/bbl ($4.05 MM total).",
+    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-07T08:45:17.818Z",
     "model": "qwen/qwen3.5-397b-a17b"
   },
   {
     "key": "opt:divert_on_water:-:ref:kochi:0",
     "kind": "rationale",
-    "text": "Divert 2.1 Mbbl owned on-water cargo to Kochi (BPCL). Extends baseline cover from 11 to 18 days, buying critical runway for diplomatic de-escalation. Cost: $4.2M diversion fees plus 0.8% demurrage exposure. Binding constraint: Kochi's single-point mooring limits intake to 180 kbd; full discharge requires 12 days, creating a temporary throughput bottleneck. Timing reality: Vessel arrives T+4 days; fuel hits tanks T+6. This tranche stabilizes South India's aviation and defense sectors immediately but caps at 35% of total national deficit. Reversibility remains high until T+2; post-diversion, cargo is committed. No sanctions exposure; full traceability confirmed. This is a stopgap, not a solution, securing 7 days of sovereignty while global supply chains reroute.",
-    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-05T20:18:06.952Z",
+    "text": "Divert 2.1 Mbbl owned on-water cargo to Kochi (BPCL). Extends baseline cover from 11 to 18 days immediately. Cost: $4.2M diversion fees + $0.85/bbl demurrage. Binding constraint: Kochi's single-point mooring limits intake to 180 kbd; full discharge requires 12 days, creating a temporary throughput bottleneck against the 310 kbd refining capacity. Timing is critical: arrival T+4 days prevents stockout at T+11. This tranche secures A2 (Security floor) for Southern India without triggering A3 (Concentration cap) breaches elsewhere. Reversibility (A6) remains intact until final berthing. Action locks in 7 days of critical runway while diplomatic channels address the Hormuz closure.",
+    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-07T08:45:56.366Z",
     "model": "qwen/qwen3.5-397b-a17b"
   },
   {
     "key": "opt:divert_on_water:-:ref:kochi:0",
     "kind": "memo",
-    "text": "MEMO — Owned on-water cargo diverted to Kochi (tranche 1). Approve CONDITIONAL: 1) Verify A4 sanctions clearance for vessel IMO prior to berth assignment; 2) Cap intake at 180 kbbl to maintain A3 concentration limits below 15% of total system inventory; 3) Confirm A6 reversibility clause allows re-routing within 48h if refinery throughput drops <290 kbd. Diversion adds 0.45 $/bbl freight premium but secures 6-day cover extension, lifting baseline from 11d to 17d against 310 kbd capacity.",
-    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-05T20:18:22.329Z",
+    "text": "MEMO — Owned on-water cargo diverted to Kochi (tranche 1). Approve CONDITIONAL: 1) Verify A4 Sanctions transparency via immediate bill-of-lading audit; 2) Enforce A3 Concentration cap limiting Kochi intake to 45 kbd over 72 hours to prevent baseline cover breach >14 days; 3) Confirm A6 Reversibility protocol with alternate berth at Mumbai within 12 hours. Diversion adds $0.85/bbl freight; net uplift $2.10/bbl vs. spot.",
+    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-07T08:46:18.667Z",
     "model": "qwen/qwen3.5-397b-a17b"
   },
   {
     "key": "opt:divert_on_water:-:ref:kochi:1",
     "kind": "rationale",
-    "text": "Divert 2.1Mb owned on-water crude to Kochi (BPCL). Baseline cover jumps from 11 to 18 days immediately; buys 72h operational buffer against total Hormuz shutdown. Cost: $4.2M demurrage + $0.85/bbl freight premium. Binding constraint: Single-point failure risk at Kochi exceeds A3 concentration cap (currently 88% of national emergency stock), requiring immediate parallel allocation to Mangalore. Timing: Vessel ETA 36 hours; decision window closes in 4 hours to secure berth priority before port congestion spikes. This tranche executes A6 reversibility—cargo remains sellable en route if straits reopen—but locks A7 traceability for sanctions compliance. Failure to act now guarantees refinery run-cuts by Day 14.",
-    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-05T20:18:38.829Z",
+    "text": "Divert 2.1 Mbbl owned on-water cargo to Kochi (BPCL). Extends baseline cover from 11 to 18 days, buying critical runway for diplomatic de-escalation. Cost: $4.2M premium plus $180k/day demurrage risk. Binding constraint: A3 Concentration Cap; Kochi intake cannot exceed 85% of nameplate without violating safety protocols, limiting discharge to 263 kbd. Timing reality: ETA 96 hours; full integration into tanks requires T+7 days due to single-point mooring bottlenecks. This tranche prevents immediate rationing but exhausts A6 Reversibility; once diverted, cargo cannot re-route if Strait opens within 48 hours. Execute only if closure probability exceeds 80% at T+24h.",
+    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-07T08:47:02.700Z",
     "model": "qwen/qwen3.5-397b-a17b"
   },
   {
     "key": "opt:divert_on_water:-:ref:kochi:1",
     "kind": "memo",
-    "text": "MEMO — Owned on-water cargo diverted to Kochi (tranche 2). Approve CONDITIONAL: 1) Verify A4 sanctions clearance within 4h; 2) Cap intake at 45 kbbl to maintain A3 concentration <15% of BPCL tankage; 3) Confirm A6 reversal window remains open until berthing. Diversion adds $0.85/bbl freight vs. baseline; net cover extends BPCL from 11d to 13.4d against 310 kbd throughput.",
-    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-05T20:18:50.085Z",
+    "text": "MEMO — Owned on-water cargo diverted to Kochi (tranche 2). Approve CONDITIONAL: 1) Verify A4 sanctions clearance within 4h of berth assignment; 2) Cap BPCL intake at 280 kbd to maintain A3 concentration headroom below 90%; 3) Confirm A6 reversal window remains open until pipeline pressure stabilizes. Diversion adds $0.45/bbl freight vs. baseline; net cover extends to 14 days against 310 kbd throughput.",
+    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-07T08:47:43.810Z",
     "model": "qwen/qwen3.5-397b-a17b"
   },
   {
     "key": "opt:floating_storage:-:-:0",
     "kind": "rationale",
-    "text": "Hold 2.0 mb VLCC parcel offshore Mumbai. Cost: $4.50/bbl/day demurrage + $0.80/bbl insurance premium. Buys 45 days of strategic buffer against Hormuz total closure, delaying spot market panic buying. Binding constraint: A3 Concentration Cap limits single-vessel exposure to 15% of national reserve; this parcel hits that ceiling. Timing reality: Discharge window closes T+12 hours if Strait remains blocked; otherwise, vessel diverts to Fujairah. A6 Reversibility allows immediate resale if tensions de-escalate within 72 hours. A4 Sanctions Transparency confirms zero Iranian origin. This is not inventory; it is a paid option on supply continuity, securing A2 Security Floor while maintaining A7 Traceability. Decision required by 1400 IST to lock berth priority.",
-    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-05T20:19:03.308Z",
+    "text": "Hold 2.0Mb VLCC parcel offshore Mumbai. Cost: $12.50/bbl/day all-in (freight + demurrage). Buys 45-day supply buffer against total Hormuz closure, decoupling physical receipt from spot panic pricing. Binding constraint: A3 Concentration Cap limits exposure to 15% of national strategic reserve; further accumulation requires cabinet waiver. Timing reality: Discharge window closes T+21 days as port congestion hits critical mass; decision to land or re-export must be locked by T+14. A6 Reversibility allows immediate diversion to alternative buyers if sanctions landscape shifts under A4. This is not inventory; it is paid optionality on sovereign energy security.",
+    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-07T08:48:27.048Z",
     "model": "qwen/qwen3.5-397b-a17b"
   },
   {
     "key": "opt:floating_storage:-:-:0",
     "kind": "memo",
-    "text": "MEMO — Floating Storage: 2,000 kb VLCC. Approve CONDITIONAL:\n1. A2 Security Floor: Verify $4.50/bbl daily cover via P&I club confirmation by T+1.\n2. A3 Concentration Cap: Limit exposure to 15% of total crude book; excess requires immediate hedge.\n3. A5 Stated Uncertainty: Fix maximum laytime at 45 days; auto-discharge trigger thereafter.\n4. A7 Traceability: Submit full chain-of-custody audit for origin verification within 24 hours.\n\nCost impact: $9.0M monthly burn; breakeven requires WTI contango >$5.20/bbl.",
-    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-05T20:19:14.216Z",
+    "text": "MEMO — Floating Storage: 2,000 kb VLCC. Approve CONDITIONAL:\n1. A2 Security Floor: Verify $4.50/bbl daily burn vs. forward curve contango; terminate if spread narrows < $0.80.\n2. A3 Concentration Cap: Limit exposure to 15% of total book; hard stop at 300 kb net long.\n3. A6 Reversibility: Secure confirmed discharge slots within 45 days; penalty clause triggered if delayed >72 hours.\n4. A4 Sanctions: Full KYC on cargo origin and vessel history; zero tolerance for obscured beneficial ownership.\n\nCost: $9.0MM monthly opex + $0.12/bbl insurance premium; max hold 60 days.",
+    "generated_by": "scripts/generate-llm-cache.mjs @ 2026-07-07T08:49:19.171Z",
     "model": "qwen/qwen3.5-397b-a17b"
   }
 ]
