@@ -200,16 +200,6 @@ check('scale: same engine runs a different graph and produces judged options', s
   s1.options.map((o) => `${o.lever}=${o.status}`).join(','));
 check('scale: new-config run is deterministic (canonicalJson)', canonicalJson(s1) === canonicalJson(s2));
 
-// the shipped alternate theatre (Europe) runs the same engine deterministically + produces a plan
-const { ALT_THEATRES } = await mod('../src/lib/theatres.ts');
-const eu = ALT_THEATRES[0];
-const t1 = await computeScenario(eu.data, eu.shock, eu.charter);
-const t2 = await computeScenario(eu.data, eu.shock, eu.charter);
-check('theatre: Europe theatre runs the same engine deterministically', canonicalJson(t1) === canonicalJson(t2));
-check('theatre: Europe theatre stresses Bosphorus-dependent refineries + generates reroutes',
-  t1.scenario.node_status['ck:bosphorus'] === 'critical' && t1.options.some((o) => o.lever === 'reroute'),
-  `${Object.entries(t1.scenario.node_status).filter(([, v]) => v !== 'ok').map(([k]) => k).join(',')} | reroutes ${t1.options.filter((o) => o.lever === 'reroute').length}`);
-
 // ---------- report ----------
 let failed = 0;
 for (const r of results) {

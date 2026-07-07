@@ -1,6 +1,6 @@
-// Validates that drawn sea routes stay in water. For every edge in BOTH theatres it computes the
-// route, samples the smoothed curve, and flags runs of on-land points — excluding the immediate
-// vicinity of transit straits (which legitimately thread narrow passages). Run:
+// Validates that drawn sea routes stay in water. For every crude edge it computes the route, samples
+// the smoothed curve, and flags runs of on-land points — excluding the immediate vicinity of transit
+// straits (which legitimately thread narrow passages). Run:
 //   node --experimental-strip-types scripts/check-sea-routes.mjs
 
 import { readFileSync } from 'node:fs';
@@ -15,7 +15,6 @@ const mod = (p) => import(new URL(p, import.meta.url).href);
 const loadJson = (f) => JSON.parse(readFileSync(path.join(ROOT, 'data', f), 'utf8'));
 
 const { seaRoute } = await mod('../src/lib/searoutes.ts');
-const { ALT_THEATRES } = await mod('../src/lib/theatres.ts');
 const land = JSON.parse(readFileSync(path.join(ROOT, 'src', 'assets', 'world-land.geo.json'), 'utf8'));
 
 // coastline polygons for point-in-polygon
@@ -94,7 +93,6 @@ function checkTheatre(name, nodes, edges) {
 
 console.log('Checking sea routes for land crossings…');
 const crude = { nodes: loadJson('graph_nodes.json'), edges: loadJson('graph_edges.json') };
-let bad = checkTheatre('India', crude.nodes, crude.edges);
-for (const t of ALT_THEATRES) bad += checkTheatre(t.name, t.data.graph.nodes, t.data.graph.edges);
+const bad = checkTheatre('India', crude.nodes, crude.edges);
 console.log(bad === 0 ? '\n✓ all routes stay in water (strait transits excepted)' : `\n✗ ${bad} route(s) cross land`);
 process.exit(bad === 0 ? 0 : 1);

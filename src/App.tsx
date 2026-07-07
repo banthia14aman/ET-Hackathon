@@ -22,7 +22,6 @@ import {
 } from './components/panels';
 import ProvenanceChip from './components/panels/ProvenanceChip';
 import { rankAnalogs } from './lib/analogs';
-import { ALT_THEATRES, type Theatre } from './lib/theatres';
 import bundleJson from '../data/hormuz2026_events.json' with { type: 'json' };
 import nodesJson from '../data/graph_nodes.json' with { type: 'json' };
 import edgesJson from '../data/graph_edges.json' with { type: 'json' };
@@ -54,8 +53,6 @@ if (new URLSearchParams(location.search).get('projector') === '1') document.body
 let simTime = DEMO_START;
 let running = false;
 let queued: string | null = null;
-// non-null when an ALTERNATE theatre (e.g. Europe) is loaded — the SAME engine, different config.
-let currentTheatre: Theatre | null = null;
 
 async function runAt(t_sim: string): Promise<void> {
   if (running) { queued = t_sim; return; }
@@ -72,18 +69,7 @@ async function runAt(t_sim: string): Promise<void> {
   }
 }
 
-/** Load an alternate theatre: run the SAME engine over a different data bundle. */
-async function runTheatre(t: Theatre): Promise<void> {
-  currentTheatre = t;
-  const r = await computeScenario(t.data, t.shock, t.charter);
-  store.setState({ sandbox: false, playing: false, charter: t.charter, cursor: r.cursor, scenario: r.scenario, options: r.options, objections: r.objections, audit: r.audit });
-}
-
-/** Back to the primary India-crude replay. */
-function leaveTheatre(): void { currentTheatre = null; store.setState({ charter: CHARTER }); void runAt(simTime); }
-
 function tick(): void {
-  if (currentTheatre) return; // seek/play are primary-replay controls
   const s = store.getState();
   const end = DATA.bundle.events[DATA.bundle.events.length - 1]?.t ?? DEMO_START;
   if (simTime >= end) { store.setState({ playing: false }); return; }
@@ -92,7 +78,6 @@ function tick(): void {
 }
 
 function seekBy(delta: number): void {
-  if (currentTheatre) return;
   const events = DATA.bundle.events;
   const cur = events.reduce((n, e, i) => (e.t <= simTime ? i : n), -1);
   const target = Math.max(-1, Math.min(events.length - 1, cur + delta));
@@ -133,7 +118,7 @@ async function onCharterParam(id: string, value: number): Promise<void> {
   setCharterParam(id as ArticleId, value);
   const s = store.getState();
   if (!s.scenario) return;
-  const r = await rerunWithCharter(currentTheatre?.data ?? DATA, s.scenario, s.charter, s.audit, `${before} -> ${value}`, id);
+  const r = await rerunWithCharter(DATA, s.scenario, s.charter, s.audit, `${before} -> ${value}`, id);
   store.setState({ options: r.options, objections: r.objections, audit: r.audit });
 }
 
@@ -225,7 +210,6 @@ export default function App() {
   const [sel, setSel] = useState<{ kind: 'route' | 'node'; id: string } | null>(null);
   const [scenarioOpen, setScenarioOpen] = useState(false);
   const [backtestOpen, setBacktestOpen] = useState(false);
-  const [theatreIdx, setTheatreIdx] = useState(0); // 0 = India crude (primary); 1+ = ALT_THEATRES
   // Beat-2 amber ring: option ids whose status just changed
   const [changedIds, setChangedIds] = useState<Set<string>>(new Set());
   const prevStatus = useRef<Record<string, string>>({});
@@ -330,16 +314,6 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tourStep, tourPlaying]);
 
-  // ---- theatre: the SAME engine over a different data bundle (scale = config, not code) ----
-  const altTheatre = theatreIdx > 0 ? ALT_THEATRES[theatreIdx - 1] : null;
-  const activeNodes = altTheatre ? altTheatre.data.graph.nodes : DATA.graph.nodes;
-  const activeEdges = altTheatre ? altTheatre.data.graph.edges : DATA.graph.edges;
-  const switchTheatre = (idx: number) => {
-    if (idx === theatreIdx) return;
-    setSel(null); setTheatreIdx(idx);
-    if (idx === 0) leaveTheatre(); else void runTheatre(ALT_THEATRES[idx - 1]);
-  };
-
   const applied: ReplayEvent[] = DATA.bundle.events.slice(0, cursor + 1);
   const darkVessels: DarkVessel[] = applied
     .filter((e) => e.geo && typeof e.payload.dark_count === 'number')
@@ -365,24 +339,23 @@ export default function App() {
   const costTitle = `1.5 mb/d spot-exposed × ${LAG_DAYS}-day lag × ½ of the $${priceExcess.toFixed(0)}/bbl excess over $${BASELINE_BRENT} pre-crisis Brent (order-of-magnitude). Spot share directional (E); Brent is the scenario's.`;
 
   const safeLine = charter.find((a) => a.id === 'A2')?.param_value ?? 15;
-  const cover = nationalCover(scenario, activeNodes);
-  // analogs + cost-of-delay are India-crude specific — only in the primary theatre
+  const cover = nationalCover(scenario, DATA.graph.nodes);
   const priceRisePct = (priceExcess / BASELINE_BRENT) * 100;
-  const analogs = !altTheatre && scenario && scenario.shocks_active.length > 0
+  const analogs = scenario && scenario.shocks_active.length > 0
     ? rankAnalogs(shockedChokepointKeys(scenario.shocks_active), scenario.gap_kbd / 1000, priceRisePct).slice(0, 3)
     : [];
   const guide = guideFor(scenario, options, cover, safeLine);
   const coverBelow = cover !== null && cover < safeLine;
 
   // ---- map camera: selected route/node wins; else auto-frame the affected straits ----
-  const nodeById = (id: string) => activeNodes.find((n) => n.id === id);
+  const nodeById = (id: string) => DATA.graph.nodes.find((n) => n.id === id);
   let mapFocus: Box | null = null;
   let focusLabel = 'WORLD';
   let highlight: { from: string; to: string } | null = null;
   const selOption = sel?.kind === 'route' ? options.find((o) => o.id === sel.id) : undefined;
   if (selOption) {
     const ref = selOption.target_refinery ? nodeById(selOption.target_refinery) : undefined;
-    const sup = supplierFor(selOption, activeNodes);
+    const sup = supplierFor(selOption, DATA.graph.nodes);
     const pts = [ref, sup].filter(Boolean) as GraphNode[];
     if (pts.length) {
       const lons = pts.map((n) => n.lon); const lats = pts.map((n) => n.lat);
@@ -393,10 +366,8 @@ export default function App() {
   } else if (sel?.kind === 'node') {
     const n = nodeById(sel.id);
     if (n) { mapFocus = boxAround(n.lat, n.lon, 26); focusLabel = n.name.split(/[(—/]/)[0].trim().toUpperCase(); }
-  } else if (altTheatre) {
-    mapFocus = boxFromLonLat(altTheatre.focus); focusLabel = altTheatre.name.toUpperCase();
   } else {
-    const aff = affectedBox(scenario, activeNodes);
+    const aff = affectedBox(scenario, DATA.graph.nodes);
     if (aff) { mapFocus = aff.box; focusLabel = aff.label; }
   }
 
@@ -408,13 +379,6 @@ export default function App() {
         <button className="tour-open-btn" onClick={() => { setTourStep(0); setTourPlaying(false); }}>▶ DEMO</button>
         <button className="scn-open-btn" onClick={() => setScenarioOpen(true)}>WHAT-IF ⌂</button>
         <button className="scn-open-btn" onClick={() => setBacktestOpen(true)}>BACKTEST ✓</button>
-        <div className="theatre-sel" title="Same engine, different data bundle — scale is config, not code">
-          <span className="theatre-lbl">THEATRE</span>
-          <button className={theatreIdx === 0 ? 'on' : ''} onClick={() => switchTheatre(0)}>India · Crude</button>
-          {ALT_THEATRES.map((t, i) => (
-            <button key={t.id} className={theatreIdx === i + 1 ? 'on' : ''} onClick={() => switchTheatre(i + 1)}>{t.name}</button>
-          ))}
-        </div>
         <div className="pitch">
           When Hormuz closed, India took <b>6 days</b> to reroute crude. TRINETRA does it in <b>4 minutes</b> —
           and every rejection is a machine-checked rule, not an AI guess.
@@ -428,18 +392,7 @@ export default function App() {
         <Stopwatch ts_sim={scenario?.t_sim ?? DATA.bundle.t0} elapsed_label={simElapsedLabel(scenario?.t_sim ?? DATA.bundle.t0)} />
       </header>
 
-      {altTheatre && scenario ? (
-        <div className="sandbox">
-          <span className="sandbox-tag" style={{ background: 'var(--accent)' }}>THEATRE</span>
-          <div className="sandbox-txt">
-            <b>{altTheatre.name}</b> — {altTheatre.sub}. This is the <b>same engine, code unchanged</b> — only
-            the data bundle differs. It re-scored a completely different supply chain and ran the same
-            zero-LLM critic. <span style={{ color: 'var(--accent)' }}>Scale is config, not code.</span>
-            <span style={{ color: 'var(--synth)' }}> · illustrative dataset (SYNTH)</span>
-          </div>
-          <button className="btn-ghost" onClick={() => switchTheatre(0)}>← BACK TO INDIA</button>
-        </div>
-      ) : sandbox && scenario ? (
+      {sandbox && scenario ? (
         <div className="sandbox">
           <span className="sandbox-tag">SANDBOX</span>
           <div className="sandbox-txt">
@@ -471,8 +424,8 @@ export default function App() {
       </div>
       <div className="panel" style={{ gridArea: 'map', padding: 0 }} data-tour="map">
         <MapView
-          nodes={activeNodes}
-          edges={activeEdges}
+          nodes={DATA.graph.nodes}
+          edges={DATA.graph.edges}
           nodeStatus={(scenario?.node_status ?? {}) as Record<string, NodeStatus>}
           edgeStatus={scenario?.edge_status ?? {}}
           darkVessels={darkVessels}
@@ -496,7 +449,7 @@ export default function App() {
         <OptionCards options={options} selectedId={sel?.kind === 'route' ? sel.id : undefined} changedIds={changedIds} onSelect={(id) => setSel({ kind: 'route', id })} />
       </div>
       <div className="panel" style={{ gridArea: 'waterfall' }}>
-        <Waterfall gap_kbd={scenario?.gap_kbd ?? 0} contributions={contributions} costOfDelayUsd={altTheatre ? 0 : costOfDelayUsd} costTitle={costTitle} />
+        <Waterfall gap_kbd={scenario?.gap_kbd ?? 0} contributions={contributions} costOfDelayUsd={costOfDelayUsd} costTitle={costTitle} />
       </div>
 
       {scenarioOpen && (
