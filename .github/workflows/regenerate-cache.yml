@@ -1,0 +1,44 @@
+name: Regenerate LLM narration cache
+
+# Manual only. Uses the NVIDIA_API_KEY repo secret to re-generate the proposer/arbiter
+# narration, then commits the updated src/cache/llm-cache.json — which triggers the deploy.
+# The KEY is never in the code or the bundle; it exists only as an encrypted GitHub secret,
+# used at build time. The runtime site stays 100% offline (reads the committed cache).
+
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: 'NVIDIA model id'
+        required: false
+        default: 'qwen/qwen3.5-397b-a17b'
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Regenerate cache (build-time LLM call)
+        env:
+          NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+          NVIDIA_MODEL: ${{ inputs.model }}
+        run: node scripts/generate-llm-cache.mjs
+      - name: Commit updated cache if it changed
+        env:
+          NVIDIA_MODEL: ${{ inputs.model }}
+        run: |
+          if git diff --quiet -- src/cache/llm-cache.json; then
+            echo "cache unchanged — nothing to commit"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add src/cache/llm-cache.json
+            git commit -m "Regenerate LLM narration cache (NVIDIA ${NVIDIA_MODEL})"
+            git push
+          fi
