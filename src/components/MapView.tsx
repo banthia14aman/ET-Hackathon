@@ -3,9 +3,10 @@
 // viewBox (presentation-only; never touches derivation) to frame a strait when a shock hits,
 // or a route when a cargo is selected.
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { EdgeStatus, GraphEdge, GraphNode, NodeStatus } from '../contracts/types';
-import { VIEW_H, VIEW_W, WORLD_BOX, greatCircleArc, landPath, project, type Box } from '../lib/geo';
+import { VIEW_H, VIEW_W, WORLD_BOX, greatCircleArc, landPath, project, routePath, type Box } from '../lib/geo';
+import { seaRoute } from '../lib/searoutes';
 import worldGeo from '../assets/world-land.geo.json' with { type: 'json' };
 
 export interface DarkVessel { id: string; lat: number; lon: number; count?: number; }
@@ -39,6 +40,17 @@ export default function MapView({
   const byId = new Map(nodes.map((n) => [n.id, n]));
   const nStatus = (n: GraphNode): NodeStatus => nodeStatus[n.id] ?? n.status;
   const labelled = new Set(['supplier', 'chokepoint', 'refinery']);
+
+  // Sea-lane path for each edge (through its via_chokepoints). Pure of zoom, so compute once —
+  // the SVG viewBox scales the drawn geometry; the path 'd' never changes.
+  const routes = useMemo(() => {
+    const map = new Map(nodes.map((n) => [n.id, n]));
+    return edges.flatMap((e) => {
+      const from = map.get(e.from); const to = map.get(e.to);
+      if (!from || !to) return [];
+      return [{ id: e.id, from: e.from, to: e.to, status: e.status, d: routePath(seaRoute(e, from, to, (id) => map.get(id))) }];
+    });
+  }, [edges, nodes]);
 
   const [vb, setVb] = useState<Box>(WORLD_BOX);
   const fromRef = useRef<Box>(WORLD_BOX);
@@ -84,21 +96,20 @@ export default function MapView({
 
         <path d={LAND_D} fill="#0a0a0a" stroke="#333" strokeWidth={s(0.6)} fillRule="evenodd" />
 
-        {edges.map((e) => {
-          const from = byId.get(e.from); const to = byId.get(e.to);
-          if (!from || !to) return null;
-          const isHi = hiFrom === e.from && hiTo === e.to;
-          const st = EDGE_STYLE[edgeStatus[e.id] ?? e.status];
+        {routes.map((rt) => {
+          const isHi = hiFrom === rt.from && hiTo === rt.to;
+          const st = EDGE_STYLE[edgeStatus[rt.id] ?? rt.status];
           return (
-            <path key={e.id} d={greatCircleArc([from.lat, from.lon], [to.lat, to.lon], e.mode === 'pipeline' ? 0 : 0.14)}
-              fill="none" stroke={isHi ? 'var(--amber)' : st.stroke} strokeWidth={s(isHi ? 3 : st.width)}
+            <path key={rt.id} d={rt.d} fill="none"
+              stroke={isHi ? 'var(--amber)' : st.stroke} strokeWidth={s(isHi ? 3 : st.width)}
               strokeDasharray={st.dash ? `${s(5)} ${s(4)}` : undefined}
-              opacity={isHi ? 1 : dimOthers ? 0.14 : st.opacity ?? 0.7} />
+              opacity={isHi ? 1 : dimOthers ? 0.12 : st.opacity ?? 0.7} />
           );
         })}
 
-        {/* explicit highlighted route arc between the selected origin and refinery */}
-        {highlight && (() => {
+        {/* highlighted route not backed by a graph edge (e.g. an owned-cargo divert): draw a
+            plain arc so the selection still shows */}
+        {highlight && !routes.some((rt) => rt.from === highlight.from && rt.to === highlight.to) && (() => {
           const a = byId.get(highlight.from); const b = byId.get(highlight.to);
           if (!a || !b) return null;
           return <path d={greatCircleArc([a.lat, a.lon], [b.lat, b.lon], 0.16)} fill="none" stroke="var(--amber)" strokeWidth={s(3)} opacity={1} />;

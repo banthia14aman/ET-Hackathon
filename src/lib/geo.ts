@@ -65,6 +65,27 @@ export function greatCircleArc(from: [number, number], to: [number, number], ben
   return `M ${r1(a.x)} ${r1(a.y)} Q ${r1(cx)} ${r1(cy)} ${r1(b.x)} ${r1(b.y)}`;
 }
 
+/** Smooth path through a list of [lat, lon] waypoints (Catmull-Rom → cubic bezier), for drawing
+    a maritime route that flows along its sea lane. 2 points falls back to the gentle arc. */
+export function routePath(pts: [number, number][]): string {
+  if (pts.length < 2) return '';
+  if (pts.length === 2) return greatCircleArc(pts[0], pts[1], 0.14);
+  const P = pts.map(([la, lo]) => project(la, lo));
+  let d = `M ${r1(P[0].x)} ${r1(P[0].y)}`;
+  for (let i = 0; i < P.length - 1; i += 1) {
+    const p0 = P[i - 1] ?? P[i];
+    const p1 = P[i];
+    const p2 = P[i + 1];
+    const p3 = P[i + 2] ?? p2;
+    const c1x = p1.x + (p2.x - p0.x) / 6;
+    const c1y = p1.y + (p2.y - p0.y) / 6;
+    const c2x = p2.x - (p3.x - p1.x) / 6;
+    const c2y = p2.y - (p3.y - p1.y) / 6;
+    d += ` C ${r1(c1x)} ${r1(c1y)}, ${r1(c2x)} ${r1(c2y)}, ${r1(p2.x)} ${r1(p2.y)}`;
+  }
+  return d;
+}
+
 type Ring = [number, number][]; // [lon, lat] per GeoJSON order
 interface GeoFeature { geometry: { type: string; coordinates: unknown } }
 interface GeoJSON { features: GeoFeature[] }
