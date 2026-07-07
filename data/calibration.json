@@ -25,7 +25,7 @@
   },
   "insurance_repricing_lag_days": {
     "value": 1, "min": 0, "max": 2, "unit": "days",
-    "source_ref": "Abqaiq 2019 repricing; JWC Red Sea circulars 2024; anchors prov R", "prov": "R"
+    "source_ref": "derived assumption anchored to Abqaiq 2019 repricing + JWC Red Sea circulars 2024 (no primary source measures a 1-day lag)", "prov": "E"
   },
   "price_spike_pct_partial": {
     "value": 18, "min": 10, "max": 25, "unit": "%",

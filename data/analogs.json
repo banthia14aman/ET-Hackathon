@@ -31,10 +31,10 @@
       "resolution": "Aramco drew on inventories and other fields; output restored in ~2 weeks and prices fell back below pre-attack levels.",
       "confidence": "high",
       "prov": "R",
-      "note": "Drone/missile strike knocked out 5.7 mb/d (~5% of world supply). Brent spot 61.25 → 68.42 (+11.7%), the largest single-day gain in a decade.",
+      "note": "Drone/missile strike knocked out 5.7 mb/d (~5% of world supply; EIA #41413). Brent spot 61.25 → 68.42 (+11.7%; EIA RBRTE daily), the largest single-day gain in a decade.",
       "sources": [
-        { "org": "EIA — Today in Energy #41413", "url": "https://www.eia.gov/todayinenergy/detail.php?id=41413" },
-        { "org": "EIA — Brent RBRTE daily", "url": "https://www.eia.gov/dnav/pet/hist/rbrted.htm" }
+        { "org": "EIA #41413 (5.7 mb/d disruption, 'largest single-day gain in a decade')", "url": "https://www.eia.gov/todayinenergy/detail.php?id=41413" },
+        { "org": "EIA RBRTE daily (the 61.25→68.42 spot points)", "url": "https://www.eia.gov/dnav/pet/hist/rbrted.htm" }
       ]
     },
     {

@@ -266,6 +266,12 @@ export default function App() {
     return () => clearTimeout(t);
   }, [options]);
 
+  // drop a route selection whose option no longer exists (after a seek/rerun) so the map doesn't
+  // hold a stale "ROUTE ·" focus
+  useEffect(() => {
+    if (sel?.kind === 'route' && !options.some((o) => o.id === sel.id)) setSel(null);
+  }, [options, sel]);
+
   // guided tour: run the step's action + spotlight its panel
   useEffect(() => {
     document.querySelectorAll('[data-tour]').forEach((el) => el.classList.remove('tour-focus'));
@@ -306,13 +312,17 @@ export default function App() {
   const BASELINE_BRENT = 71;     // pre-crisis Brent, Feb 2026 (prov E)
   const LAG_DAYS = 6;            // India's reported decision lag when Hormuz shut
   const priceExcess = Math.max(0, (scenario?.brent_usd ?? BASELINE_BRENT) - BASELINE_BRENT);
-  const costOfDelayUsd = SPOT_EXPOSED_KBD * 1000 * LAG_DAYS * priceExcess * 0.5;
-  const costTitle = `1.5 mb/d spot-exposed × ${LAG_DAYS}-day lag × ½ of the $${priceExcess.toFixed(0)}/bbl excess over $${BASELINE_BRENT} pre-crisis Brent. Spot share directional (E); Brent is the scenario's.`;
+  // round to 2 significant figures so the display doesn't imply more precision than the inputs support
+  const costRaw = SPOT_EXPOSED_KBD * 1000 * LAG_DAYS * priceExcess * 0.5;
+  const costOfDelayUsd = costRaw > 0 ? Number(costRaw.toPrecision(2)) : 0;
+  const costTitle = `1.5 mb/d spot-exposed × ${LAG_DAYS}-day lag × ½ of the $${priceExcess.toFixed(0)}/bbl excess over $${BASELINE_BRENT} pre-crisis Brent (order-of-magnitude). Spot share directional (E); Brent is the scenario's.`;
 
   const safeLine = charter.find((a) => a.id === 'A2')?.param_value ?? 15;
   const cover = nationalCover(scenario, DATA.graph.nodes);
-  const analogs = scenario
-    ? rankAnalogs(shockedChokepointKeys(scenario.shocks_active), scenario.gap_kbd / 1000, priceExcess / BASELINE_BRENT * 100).slice(0, 3)
+  // only rank analogs when a shock is actually active (else the "no active shock" headline contradicts the list)
+  const priceRisePct = (priceExcess / BASELINE_BRENT) * 100;
+  const analogs = scenario && scenario.shocks_active.length > 0
+    ? rankAnalogs(shockedChokepointKeys(scenario.shocks_active), scenario.gap_kbd / 1000, priceRisePct).slice(0, 3)
     : [];
   const guide = guideFor(scenario, options, cover, safeLine);
   const coverBelow = cover !== null && cover < safeLine;
