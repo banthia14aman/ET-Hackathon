@@ -15,6 +15,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   regenerate:
@@ -42,3 +43,8 @@ jobs:
             git commit -m "Regenerate LLM narration cache (NVIDIA ${NVIDIA_MODEL})"
             git push
           fi
+      # A workflow's own commit doesn't auto-trigger Deploy, so dispatch it explicitly.
+      - name: Trigger deploy
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml -R "$GITHUB_REPOSITORY"
