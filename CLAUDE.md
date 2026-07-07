@@ -37,7 +37,7 @@ Decision Charter (proposer → zero-LLM critic → arbiter) → hash-chained aud
 - `docs/brainstorm-brief.md` — why every decision was made (30 problems, 7 solution workstreams).
 - `docs/credibility-slide.md` — sourced public quotes (Puri "60-60-60") + market-as-validator framing.
 - Judging: Innovation 25%, Business Impact 25%, Technical Excellence 20%, Scalability 15%, UX 15%.
-- Demo beats: (1) critic demotes Venezuelan Merey (TAN + OFAC + voyage-vs-buffer), (2) charter edit days-of-cover 10→15 with visible rule traces. Both must be deterministic.
+- Demo beats: (1) critic demotes Venezuelan Merey (too-heavy: API 16 < Jamnagar min 18 + OFAC AMBER + voyage-vs-buffer), (2) charter edit days-of-cover 10→15 with visible rule traces. Both must be deterministic.
 
 ## Current status / next steps
 - UI REVAMPED (2026-07-06, from a 21-agent diagnosis+design workflow): plain-language everywhere

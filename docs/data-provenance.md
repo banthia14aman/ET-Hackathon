@@ -41,7 +41,7 @@ Dominant prov per file; individual leaves still carry their own.
 | `graph_edges.json` | **E** | Real corridor geometry and transit-day ranges; volumes split country→grade from Kpler-citing press (landmine 2 — labeled E, said out loud). |
 | `grades.json` | **R** | One canonical producer assay per grade (Equinor/ExxonMobil/ADNOC, Platts APAG); alternates in `alt_values`, never averaged. |
 | `charter.json` | **S** (by nature) | The 7 articles are our product content — user-authored rules, not world data. |
-| `sanctions_rules.json` | **R, snapshot-dated** | OFAC SDN XML + EU sanctions map. Every entry carries the snapshot date (e.g. `2026-07-01`); an undated sanctions claim is a bug, not a style issue (Article A4). |
+| `sanctions_rules.json` | **R, snapshot-dated** | OFAC SDN XML + EU sanctions map. Every entry carries the snapshot date (e.g. `2026-03-01`); an undated sanctions claim is a bug, not a style issue (Article A4). |
 | `calibration.json` | **R ranges / E values** | Pre-2024 events only (Abqaiq #41413 etc.). Stored as `{value, min, max, source_ref}` — ranges with provenance, per the uncertainty display rules. |
 | `spot_availability.json` | **E** | JODI + EIA STEO 3-month averages. |
 | `ais_snapshot.json` | **S** | ~30 synthetic vessels on real corridor geometry — the canonical SYNTH-chip example. |
@@ -55,9 +55,10 @@ Dominant prov per file; individual leaves still carry their own.
    press, labeled E; say so in the demo (reads as honesty).
 3. **Paywalls/unstable URLs** → download every PDF NOW into `/sources/` with SHA-named
    copies + free-mirror backup URLs.
-4. **Venezuela number discrepancy:** the "292 kb/d" figure in the earlier brief does NOT
-   match live sources (283–285 Apr / 427 May, agency-dependent). Store value+month+agency;
-   display ranges. **Fix before any slide ships.**
+4. **Venezuela number discrepancy — RESOLVED:** the "292 kb/d" figure did NOT match live
+   sources (283–285 Apr / 427 May, agency-dependent). `hormuz2026_events.json` now stores
+   `venezuela_kbd: 284` for 2026-04 with the note "292 kb/d figure debunked" — display 284
+   (or the 283–285 range) with its month + agency; never a bare 292.
 5. **2018-frozen-KB contamination** (Basrah Medium didn't exist until 2021!) → two-layer
    store: `kb_2018/` vs `feed_live/`; CI check below. **This check is the one test the
    dataset needs.**

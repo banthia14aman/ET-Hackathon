@@ -21,7 +21,7 @@ Clicks are named by panel + element. Speaker lines are **verbatim — do not par
 
 ### t=0:00–0:40 — Stakes (deck slide 2 on screen, app behind)
 
-- t=0:00 — slide 2 up ("In June 2026, India needed six days to answer one question.").
+- t=0:00 — slide 2 up ("In March 2026, India needed six days to answer one question.").
 - SAY (the lead, verbatim):
   > "When Hormuz closed, India took six days to reroute crude; TRINETRA does it in four minutes — and shows you the argument, under rules you wrote."
 - SAY (minister anchor, verbatim, plan.md §11):
@@ -55,9 +55,9 @@ Clicks are named by panel + element. Speaker lines are **verbatim — do not par
 - t=2:25 — press `SPACE` to pause replay (stopwatch keeps running — it measures the
   pipeline, and the pipeline already ran; pausing only stops new events).
 - t=2:30 — critic chips fire automatically, 700 ms apart (the sequence IS the theater):
-  1. `A2.assay_env` — TAN 3.3 vs limit 1.5
-  2. `A4.sanctions` — OFAC AMBER, snapshot 2026-07-01
-  3. `A2.voyage_buffer` — 38-day voyage vs 12-day cover
+  1. `A5.assay_compat` — API 16 < Jamnagar min 18 (too heavy; blend only)
+  2. `A4.payment_rail` — OFAC AMBER, snapshot 2026-03-01
+  3. `A2.voyage_vs_buffer` — 43-day voyage vs 12.2-day cover
   (exact expected values: docs/beats.md Beat 1 tables)
 - t=2:50 — arbiter verdict renders: **CONDITIONAL**, three named conditions printed.
 - SAY (verbatim, plan.md §2.6 beat line):
