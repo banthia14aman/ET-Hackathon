@@ -3,7 +3,7 @@
 // viewBox (presentation-only; never touches derivation) to frame a strait when a shock hits,
 // or a route when a cargo is selected.
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { EdgeStatus, GraphEdge, GraphNode, NodeStatus } from '../contracts/types';
 import { VIEW_H, VIEW_W, WORLD_BOX, greatCircleArc, landPath, project, routePath, type Box } from '../lib/geo';
 import { seaRoute } from '../lib/searoutes';
@@ -53,32 +53,86 @@ export default function MapView({
   }, [edges, nodes]);
 
   const [vb, setVb] = useState<Box>(WORLD_BOX);
-  const fromRef = useRef<Box>(WORLD_BOX);
+  const vbRef = useRef<Box>(WORLD_BOX);
   const rafRef = useRef<number>(0);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const dragRef = useRef<{ x: number; y: number; vb: Box; moved: boolean } | null>(null);
+  const draggedRef = useRef(false);
+  const setBox = (b: Box) => { vbRef.current = b; setVb(b); };
 
-  useEffect(() => {
-    const target = focus ?? WORLD_BOX;
-    const from = fromRef.current;
-    if (reduceMotion) { fromRef.current = target; setVb(target); return; }
+  /** Animate the camera to a target viewBox (used by auto-focus + zoom-to-fit). */
+  const animateTo = useCallback((target: Box) => {
+    cancelAnimationFrame(rafRef.current);
+    const from = vbRef.current;
+    if (reduceMotion) { setBox(target); return; }
     const t0 = performance.now();
-    const DUR = 720;
+    const DUR = 640;
     const step = (now: number) => {
       const k = easeOut(Math.min(1, (now - t0) / DUR));
-      const cur: Box = {
-        x: from.x + (target.x - from.x) * k,
-        y: from.y + (target.y - from.y) * k,
-        w: from.w + (target.w - from.w) * k,
-        h: from.h + (target.h - from.h) * k,
-      };
-      setVb(cur);
-      fromRef.current = cur;
+      setBox({
+        x: from.x + (target.x - from.x) * k, y: from.y + (target.y - from.y) * k,
+        w: from.w + (target.w - from.w) * k, h: from.h + (target.h - from.h) * k,
+      });
       if (k < 1) rafRef.current = requestAnimationFrame(step);
     };
-    cancelAnimationFrame(rafRef.current);
     rafRef.current = requestAnimationFrame(step);
+  }, []);
+
+  // auto-camera: fly to the focused strait/route when it changes
+  useEffect(() => {
+    animateTo(focus ?? WORLD_BOX);
     return () => cancelAnimationFrame(rafRef.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focus?.x, focus?.y, focus?.w, focus?.h]);
+
+  // keep vb within the world and aspect-correct
+  const clamp = (b: Box): Box => {
+    const w = Math.max(55, Math.min(VIEW_W, b.w));
+    const h = w * (VIEW_H / VIEW_W);
+    return { w, h, x: Math.max(0, Math.min(VIEW_W - w, b.x)), y: Math.max(0, Math.min(VIEW_H - h, b.y)) };
+  };
+  const zoomAt = (cx: number, cy: number, factor: number) => {
+    cancelAnimationFrame(rafRef.current);
+    const cur = vbRef.current;
+    const w = Math.max(55, Math.min(VIEW_W, cur.w * factor));
+    const scale = w / cur.w;
+    setBox(clamp({ x: cx - (cx - cur.x) * scale, y: cy - (cy - cur.y) * scale, w, h: w * (VIEW_H / VIEW_W) }));
+  };
+  // wheel-zoom centred on the cursor (native listener so we can preventDefault the page scroll)
+  useEffect(() => {
+    const el = svgRef.current; if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const r = el.getBoundingClientRect();
+      const cur = vbRef.current;
+      const cx = cur.x + ((e.clientX - r.left) / r.width) * cur.w;
+      const cy = cur.y + ((e.clientY - r.top) / r.height) * cur.h;
+      zoomAt(cx, cy, e.deltaY > 0 ? 1.15 : 0.87);
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onPointerDown = (e: React.PointerEvent<SVGSVGElement>) => {
+    if (e.button !== 0) return;
+    cancelAnimationFrame(rafRef.current);
+    dragRef.current = { x: e.clientX, y: e.clientY, vb: vbRef.current, moved: false };
+    draggedRef.current = false;
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+  const onPointerMove = (e: React.PointerEvent<SVGSVGElement>) => {
+    const d = dragRef.current; if (!d) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    if (Math.abs(e.clientX - d.x) + Math.abs(e.clientY - d.y) > 3) { d.moved = true; draggedRef.current = true; }
+    const dx = ((e.clientX - d.x) / r.width) * d.vb.w;
+    const dy = ((e.clientY - d.y) / r.height) * d.vb.h;
+    setBox(clamp({ x: d.vb.x - dx, y: d.vb.y - dy, w: d.vb.w, h: d.vb.h }));
+  };
+  const onPointerUp = (e: React.PointerEvent<SVGSVGElement>) => {
+    dragRef.current = null;
+    try { e.currentTarget.releasePointerCapture(e.pointerId); } catch { /* ignore */ }
+  };
 
   const z = VIEW_W / vb.w; // zoom factor — keep glyphs/labels constant screen size
   const s = (px: number): number => px / z;
@@ -87,11 +141,15 @@ export default function MapView({
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-      <svg viewBox={`${vb.x} ${vb.y} ${vb.w} ${vb.h}`} style={{ width: '100%', height: '100%', display: 'block' }} xmlns="http://www.w3.org/2000/svg">
+      <svg ref={svgRef} viewBox={`${vb.x} ${vb.y} ${vb.w} ${vb.h}`}
+        style={{ width: '100%', height: '100%', display: 'block', cursor: 'grab', touchAction: 'none' }}
+        className="map-svg" xmlns="http://www.w3.org/2000/svg"
+        onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}>
         <defs><style>{`
           @keyframes trinetra-pulse { 0% { opacity: 1; } 50% { opacity: 0.35; } 100% { opacity: 1; } }
           .map-critical { animation: trinetra-pulse 1.5s ease-in-out infinite; }
           .map-node { cursor: pointer; }
+          .map-svg:active { cursor: grabbing; }
         `}</style></defs>
 
         <path d={LAND_D} fill="#0a0a0a" stroke="#333" strokeWidth={s(0.6)} fillRule="evenodd" />
@@ -123,7 +181,7 @@ export default function MapView({
           const hot = hiFrom === n.id || hiTo === n.id;
           const faded = dimOthers && !hot ? 0.35 : 1;
           return (
-            <g key={n.id} className="map-node" opacity={faded} onClick={() => onSelectNode?.(n.id)}>
+            <g key={n.id} className="map-node" opacity={faded} onClick={() => { if (draggedRef.current) return; onSelectNode?.(n.id); }}>
               {n.type === 'refinery' && (
                 <circle className={nStatus(n) === 'critical' ? 'map-critical' : undefined} cx={p.x} cy={p.y} r={s(5.5)} fill={color} stroke="#000" strokeWidth={s(1)} />
               )}
@@ -154,10 +212,12 @@ export default function MapView({
         })}
       </svg>
 
-      {/* HUD: current camera focus + reset */}
+      {/* HUD: current camera focus + zoom controls */}
       <div className="map-hud">
         <span className="map-hud-label">◎ {focusLabel}</span>
-        {focusLabel !== 'WORLD' && <button className="map-hud-btn" onClick={() => onReset?.()}>WORLD ⤢</button>}
+        <button className="map-hud-btn" title="Zoom in" onClick={() => zoomAt(vbRef.current.x + vbRef.current.w / 2, vbRef.current.y + vbRef.current.h / 2, 0.7)}>+</button>
+        <button className="map-hud-btn" title="Zoom out" onClick={() => zoomAt(vbRef.current.x + vbRef.current.w / 2, vbRef.current.y + vbRef.current.h / 2, 1.43)}>−</button>
+        <button className="map-hud-btn" title="Fit / reset view" onClick={() => { animateTo(focus ?? WORLD_BOX); onReset?.(); }}>WORLD ⤢</button>
       </div>
 
       {/* legend (HTML overlay — unaffected by zoom) */}
@@ -166,7 +226,7 @@ export default function MapView({
         <span><i className="lg-dia" style={{ background: 'var(--accent)' }} />chokepoint</span>
         <span><i className="lg-dot" style={{ background: '#888' }} />supplier</span>
         <span><i className="lg-x">✕</i>dark vessels</span>
-        <span style={{ color: '#667' }}>click a node or cargo to zoom</span>
+        <span style={{ color: '#667' }}>scroll to zoom · drag to pan · click a cargo to trace</span>
       </div>
     </div>
   );
