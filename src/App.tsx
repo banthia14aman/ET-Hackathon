@@ -96,6 +96,23 @@ function exitSandbox(): void { void runAt(simTime); }
 /** Jump the replay to an absolute sim time (used by the guided tour). */
 function goTo(iso: string): void { simTime = iso; void runAt(iso); }
 
+/** Place the tour caption card just outside the spotlit panel (below → above → beside), clamped
+    to the viewport, so it points at what it's describing without covering it. */
+function placeCard(r: DOMRect): { top: number; left: number } {
+  const W = 480, H = 200, m = 14;
+  const vw = window.innerWidth, vh = window.innerHeight;
+  const cx = r.left + r.width / 2;
+  let top: number, left: number;
+  if (r.bottom + m + H <= vh) { top = r.bottom + m; left = cx - W / 2; }
+  else if (r.top - m - H >= 0) { top = r.top - m - H; left = cx - W / 2; }
+  else if (r.right + m + W <= vw) { left = r.right + m; top = r.top; }
+  else if (r.left - m - W >= 0) { left = r.left - m - W; top = r.top; }
+  else { top = vh - H - m; left = cx - W / 2; }
+  left = Math.max(m, Math.min(vw - W - m, left));
+  top = Math.max(m, Math.min(vh - H - m, top));
+  return { top, left };
+}
+
 async function onCharterParam(id: string, value: number): Promise<void> {
   const before = store.getState().charter.find((a) => a.id === id)?.param_value;
   setCharterParam(id as ArticleId, value);
@@ -199,6 +216,7 @@ export default function App() {
   // guided tour / demo
   const [tourStep, setTourStep] = useState<number | null>(null);
   const [tourPlaying, setTourPlaying] = useState(false);
+  const [cardPos, setCardPos] = useState<{ top: number; left: number } | null>(null);
 
   // The guided-demo script. Each caption doubles as the video voiceover; each action drives the
   // real app (seek the replay, select a route, edit a rule, run a what-if) — nothing is faked.
@@ -272,14 +290,17 @@ export default function App() {
     if (sel?.kind === 'route' && !options.some((o) => o.id === sel.id)) setSel(null);
   }, [options, sel]);
 
-  // guided tour: run the step's action + spotlight its panel
+  // guided tour: run the step's action, spotlight its panel, and slide the card beside it
   useEffect(() => {
     document.querySelectorAll('[data-tour]').forEach((el) => el.classList.remove('tour-focus'));
-    if (tourStep == null) return;
+    if (tourStep == null) { setCardPos(null); return; }
     const step = TOUR[tourStep];
     step.action?.();
     const el = document.querySelector(`[data-tour="${step.area}"]`);
-    el?.classList.add('tour-focus');
+    if (el) {
+      el.classList.add('tour-focus');
+      setCardPos(placeCard(el.getBoundingClientRect()));
+    }
     return () => el?.classList.remove('tour-focus');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tourStep]);
@@ -443,8 +464,10 @@ export default function App() {
 
       {backtestOpen && <BacktestScorecard onClose={() => setBacktestOpen(false)} />}
 
+      {tourStep != null && <div className="tour-dim" />}
+
       {tourStep != null && (
-        <div className="tour-card">
+        <div className="tour-card" style={cardPos ? { top: cardPos.top, left: cardPos.left, bottom: 'auto', transform: 'none' } : undefined}>
           <div className="tour-head">
             <span>▶ Guided demo · TRINETRA</span>
             <span className="tour-step">STEP {tourStep + 1} / {TOUR.length}</span>
