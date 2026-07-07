@@ -226,6 +226,16 @@ body.projector { font-size: 14px; }
 .scn-open-btn { background: #000; border: 1px solid var(--amber); color: var(--amber); font: inherit; font-weight: 700; font-size: 11px; padding: 2px 9px; cursor: pointer; letter-spacing: 0.04em; }
 .scn-open-btn:hover { background: var(--amber); color: #000; }
 
+/* backtest scorecard */
+.bt-case { border: 1px solid var(--border); border-left: 3px solid var(--border-2); padding: 8px 10px; margin: 8px 0; background: var(--panel-2); }
+.bt-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.bt-name { flex: 1; font-size: 14px; font-weight: 700; }
+.bt-lead { font-size: 11px; font-weight: 700; color: var(--accent); border: 1px solid var(--accent); padding: 0 6px; }
+.bt-row { display: grid; grid-template-columns: 110px 1fr; gap: 10px; font-size: 12px; padding: 2px 0; align-items: baseline; }
+.bt-k { color: var(--blue); font-weight: 700; font-size: 11px; letter-spacing: 0.03em; }
+.bt-date { color: var(--dim); }
+.bt-row a { color: var(--accent); text-decoration: none; font-size: 11px; }
+
 /* sandbox mode banner (replaces the guide band while a what-if is active) */
 .sandbox { grid-area: guide; display: flex; align-items: center; gap: 16px; background: #1a1206; border: 1px solid var(--amber); padding: 6px 12px; }
 .sandbox-tag { background: var(--amber); color: #000; font-weight: 700; font-size: 11px; padding: 1px 7px; letter-spacing: 0.05em; }

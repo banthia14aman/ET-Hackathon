@@ -16,6 +16,7 @@ import { computeAt, computeScenario, rerunWithCharter, type StaticData } from '.
 import { loadBundle, setCharterParam, store, useStore } from './lib/store';
 import MapView, { type DarkVessel } from './components/MapView';
 import ScenarioBuilder from './components/ScenarioBuilder';
+import BacktestScorecard from './components/BacktestScorecard';
 import {
   AuditTrace, CharterPanel, DebatePanel, OptionCards, Stopwatch, TaxonomyCard, Ticker, Waterfall,
 } from './components/panels';
@@ -191,6 +192,7 @@ export default function App() {
   // map camera selection (presentation-only): a chosen route/node overrides the shock auto-focus
   const [sel, setSel] = useState<{ kind: 'route' | 'node'; id: string } | null>(null);
   const [scenarioOpen, setScenarioOpen] = useState(false);
+  const [backtestOpen, setBacktestOpen] = useState(false);
   // Beat-2 amber ring: option ids whose status just changed
   const [changedIds, setChangedIds] = useState<Set<string>>(new Set());
   const prevStatus = useRef<Record<string, string>>({});
@@ -346,6 +348,7 @@ export default function App() {
         <div className="cmdline">CRUDE DECISION <span className="go-key">GO</span></div>
         <button className="tour-open-btn" onClick={() => { setTourStep(0); setTourPlaying(false); }}>▶ DEMO</button>
         <button className="scn-open-btn" onClick={() => setScenarioOpen(true)}>WHAT-IF ⌂</button>
+        <button className="scn-open-btn" onClick={() => setBacktestOpen(true)}>BACKTEST ✓</button>
         <div className="pitch">
           When Hormuz closed, India took <b>6 days</b> to reroute crude. TRINETRA does it in <b>4 minutes</b> —
           and every rejection is a machine-checked rule, not an AI guess.
@@ -427,6 +430,8 @@ export default function App() {
           onRun={(sc) => { setScenarioOpen(false); setSel(null); void runScenario(sc); }}
         />
       )}
+
+      {backtestOpen && <BacktestScorecard onClose={() => setBacktestOpen(false)} />}
 
       {tourStep != null && (
         <div className="tour-card">

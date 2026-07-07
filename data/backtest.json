@@ -1,0 +1,38 @@
+{
+  "_doc": "Backtest cases — real, cited disruptions used to grade TRINETRA's approach against what actually happened. Every fact carries a source. 'claim' is what TRINETRA asserts it would surface; 'caveat' states honestly what it does NOT claim. Misses are shown, not hidden.",
+  "cases": [
+    {
+      "id": "red-sea-2023",
+      "name": "Red Sea / Houthi crisis",
+      "years": "2023–24",
+      "signal": { "event": "First major Houthi attack — seizure of the Galaxy Leader", "date": "2023-11-19", "source_org": "Wilson Center timeline", "source_url": "https://www.wilsoncenter.org/article/timeline-houthi-attacks" },
+      "market_reaction": { "what": "Maersk, Hapag-Lloyd and others suspended Red Sea transit and diverted around the Cape of Good Hope from mid-December 2023 (+10–16 days per voyage); Bab el-Mandeb oil transit fell 8.7 → 4.0 mb/d.", "date": "2023-12-15", "brent_move": "Brent 74.21 (07 Dec) → 84.57 (29 Feb), +14%", "source_org": "EIA #63446 / #61363", "source_url": "https://www.eia.gov/todayinenergy/detail.php?id=63446" },
+      "lead_days": 26,
+      "claim": "A Bab el-Mandeb shock trigger on the November advisory would have surfaced Cape rerouting — the exact move shippers executed weeks later — and flagged the added transit days against days-of-cover.",
+      "caveat": "Crude price impact was muted; freight and insurance moved more. We claim reroute-option recall and detection lead, NOT a crude-price forecast.",
+      "verdict": "hit"
+    },
+    {
+      "id": "abqaiq-2019",
+      "name": "Abqaiq–Khurais attack",
+      "years": "2019",
+      "signal": { "event": "Drone/missile strike knocks out 5.7 mb/d (~5% of world supply)", "date": "2019-09-14", "source_org": "EIA #41413", "source_url": "https://www.eia.gov/todayinenergy/detail.php?id=41413" },
+      "market_reaction": { "what": "Brent posted its largest single-day gain in a decade; Aramco drew on inventories and restored output in ~2 weeks, and prices fell back below pre-attack levels.", "date": "2019-09-16", "brent_move": "Brent 61.25 → 68.42, +11.7%", "source_org": "EIA / NPR", "source_url": "https://www.eia.gov/dnav/pet/hist/rbrted.htm" },
+      "lead_days": 0,
+      "claim": "A 5.7 mb/d supply shock would immediately rank an SPR draw and alternative sourcing; the zero-LLM critic keeps sanctioned substitutes out of the plan.",
+      "caveat": "This was a single facility outage, not a chokepoint closure; recovery was fast. We do not claim we'd predict the 2-week restoration.",
+      "verdict": "partial"
+    },
+    {
+      "id": "hormuz-2026",
+      "name": "Strait of Hormuz closure",
+      "years": "2026",
+      "signal": { "event": "US/Israeli airstrikes on Iran begin; IRGC VHF 'no transit' warnings", "date": "2026-02-28", "source_org": "Al Jazeera", "source_url": "https://www.aljazeera.com/news/2026/3/1/how-us-israel-attacks-on-iran-threaten-the-strait-of-hormuz-oil-markets" },
+      "market_reaction": { "what": "Iran declared the Strait closed on 4 Mar 2026; ~150 tankers anchored; crude rose >50% during the conflict; a US–Iran de-escalation began reopening it mid-June 2026.", "date": "2026-03-04", "brent_move": "crude +50%+ during the conflict", "source_org": "Al Jazeera / Britannica / UK HoC Library CBP-10636", "source_url": "https://www.aljazeera.com/features/2026/4/28/when-will-strait-of-hormuz-be-safe-for-commercial-shipping-again" },
+      "lead_days": 4,
+      "claim": "This is the live case TRINETRA replays: the Feb-28 advisory fires the shock; the plan surfaces reroutes, SPR draw and demand cuts before the 4-Mar closure and the price spike.",
+      "caveat": "A documented real event (not a forecast). Per-refinery inventories and spot availability in the replay are modeled (prov S), not confidential real data.",
+      "verdict": "live"
+    }
+  ]
+}
