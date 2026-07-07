@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { EdgeStatus, GraphEdge, GraphNode, NodeStatus } from '../contracts/types';
 import { VIEW_H, VIEW_W, WORLD_BOX, greatCircleArc, landPath, project, routePath, type Box } from '../lib/geo';
-import { seaRoute } from '../lib/searoutes';
+import { pipelineTail, seaRoute } from '../lib/searoutes';
 import worldGeo from '../assets/world-land.geo.json' with { type: 'json' };
 
 export interface DarkVessel { id: string; lat: number; lon: number; count?: number; }
@@ -48,7 +48,9 @@ export default function MapView({
     return edges.flatMap((e) => {
       const from = map.get(e.from); const to = map.get(e.to);
       if (!from || !to) return [];
-      return [{ id: e.id, from: e.from, to: e.to, status: e.status, d: routePath(seaRoute(e, from, to, (id) => map.get(id))) }];
+      const tail = pipelineTail(to); // inland refinery → overland pipeline leg (drawn dashed)
+      const pipe = tail ? `M ${project(tail[0][0], tail[0][1]).x} ${project(tail[0][0], tail[0][1]).y} L ${project(tail[1][0], tail[1][1]).x} ${project(tail[1][0], tail[1][1]).y}` : undefined;
+      return [{ id: e.id, from: e.from, to: e.to, status: e.status, d: routePath(seaRoute(e, from, to, (id) => map.get(id))), pipe }];
     });
   }, [edges, nodes]);
 
@@ -178,11 +180,19 @@ export default function MapView({
         {routes.map((rt) => {
           const isHi = hiFrom === rt.from && hiTo === rt.to;
           const st = EDGE_STYLE[edgeStatus[rt.id] ?? rt.status];
+          const op = isHi ? 1 : dimOthers ? 0.12 : st.opacity ?? 0.7;
           return (
-            <path key={rt.id} d={rt.d} fill="none"
-              stroke={isHi ? 'var(--amber)' : st.stroke} strokeWidth={s(isHi ? 3 : st.width)}
-              strokeDasharray={st.dash ? `${s(5)} ${s(4)}` : undefined}
-              opacity={isHi ? 1 : dimOthers ? 0.12 : st.opacity ?? 0.7} />
+            <g key={rt.id}>
+              <path d={rt.d} fill="none"
+                stroke={isHi ? 'var(--amber)' : st.stroke} strokeWidth={s(isHi ? 3 : st.width)}
+                strokeDasharray={st.dash ? `${s(5)} ${s(4)}` : undefined} opacity={op} />
+              {rt.pipe && (
+                <path d={rt.pipe} fill="none" stroke={isHi ? 'var(--amber)' : 'var(--dim)'}
+                  strokeWidth={s(1.2)} strokeDasharray={`${s(2)} ${s(3)}`} opacity={op}>
+                  <title>Overland crude pipeline</title>
+                </path>
+              )}
+            </g>
           );
         })}
 

@@ -1,58 +1,73 @@
-// Maritime routing (presentation-only). Turns an edge into an ordered list of [lat,lon] waypoints
-// that follow real sea lanes: source → ocean waypoints + the strait(s) the edge actually transits
-// (edge.via_chokepoints) → destination. So the drawn line curves through Hormuz / the Red Sea /
-// around the Cape — you can SEE which strait a cargo passes through (and where the shock hits).
+// Maritime routing (presentation-only). Routes each edge as a shortest WATER path over a bundled
+// sea-lane network (data/sea-network.json — waypoints connected only where the segment stays in
+// water, plus real transit-strait portals). The route is stitched through the edge's mandatory
+// via_chokepoints, so it both follows the sea and passes through the strait it actually transits.
+// Built by scripts/build-sea-network.mjs; land-crossing verified by scripts/check-sea-routes.mjs.
 
 import type { GraphEdge, GraphNode } from '../contracts/types';
+import net from '../../data/sea-network.json' with { type: 'json' };
 
 export type LL = [number, number]; // [lat, lon]
 
-// Ocean waypoints, all in open water, that shape the major corridors.
-const WP = {
-  engApproach: [47, -8] as LL,   // Bay of Biscay (round western Europe)
-  gibraltar: [35.9, -6] as LL,
-  wMed: [37, 3] as LL,           // western Mediterranean
-  redSea: [20, 38] as LL,        // mid Red Sea (between Suez and Bab el-Mandeb)
-  gulfAden: [12.5, 49] as LL,    // Gulf of Aden (after Bab el-Mandeb)
-  arabianSea: [16, 62] as LL,    // Arabian Sea approach to India's west coast
-  canaries: [26, -18] as LL,     // off NW Africa (Atlantic descent)
-  sAtlantic: [-12, -22] as LL,   // mid South Atlantic (east of Brazil)
-  sIndian: [-24, 52] as LL,      // SW Indian Ocean (after the Cape)
+const PTS = (net as { pts: { lat: number; lon: number }[] }).pts;
+const ADJ = (net as unknown as { adj: [number, number][][] }).adj;
+
+// Inland refineries are fed by real crude pipelines from a coastal landing port. The *sea* route
+// therefore ends at the landing (coast); the overland leg is drawn separately as a pipeline.
+const INLAND_LANDING: Record<string, LL> = {
+  'ref:panipat': [22.74, 69.7], // Mundra SPM → Mundra–Panipat–Bathinda crude pipeline
+  'ref:koyali': [22.4, 69.7], // Vadinar SPM → Salaya–Koyali pipeline
 };
 
-/** Ordered [lat,lon] waypoints for an edge's maritime route. */
-export function seaRoute(edge: GraphEdge, from: GraphNode, to: GraphNode, node: (id: string) => GraphNode | undefined): LL[] {
-  const via = edge.via_chokepoints ?? [];
-  const has = (key: string) => via.some((v) => v.includes(key));
-  const cpt = (key: string): LL | null => {
-    const id = via.find((v) => v.includes(key));
-    const n = id ? node(id) : undefined;
-    return n ? [n.lat, n.lon] : null;
-  };
-  const P: LL[] = [[from.lat, from.lon]];
-  const northEurope = from.lat > 45;    // Russia / Baltic loads round Europe first
-  const americas = from.lon < -30;      // Atlantic-west loaders sweep the South Atlantic
-  const toIndia = to.lon > 58;          // the crude-India theatre uses the corridors below
+const d2 = (a: LL, p: { lat: number; lon: number }): number => (a[0] - p.lat) ** 2 + (a[1] - p.lon) ** 2;
+function nearest(a: LL): number {
+  let best = 0; let bd = Infinity;
+  for (let i = 0; i < PTS.length; i += 1) { const dd = d2(a, PTS[i]); if (dd < bd) { bd = dd; best = i; } }
+  return best;
+}
 
-  if (toIndia && has('hormuz')) {
-    const h = cpt('hormuz'); if (h) P.push(h);           // Gulf → Hormuz → India
-  } else if (toIndia && has('suez')) {
-    if (northEurope) P.push(WP.engApproach, WP.gibraltar, WP.wMed);
-    const s = cpt('suez'); if (s) P.push(s);
-    P.push(WP.redSea);
-    const b = cpt('bab'); if (b) P.push(b);
-    P.push(WP.gulfAden, WP.arabianSea);                  // Suez → Red Sea → Bab → Aden → Arabian Sea
-  } else if (toIndia && has('cape')) {
-    if (northEurope) P.push(WP.engApproach, WP.gibraltar, WP.canaries, WP.sAtlantic);
-    else if (americas) P.push(WP.sAtlantic);
-    const c = cpt('cape'); if (c) P.push(c);
-    P.push(WP.sIndian, WP.arabianSea);                   // Atlantic → around the Cape → Indian Ocean
-  } else if (toIndia && has('malacca')) {
-    const m = cpt('malacca'); if (m) P.push(m);
-  } else {
-    // any other theatre: route straight through each strait the edge transits, in order
-    for (const vid of via) { const n = node(vid); if (n) P.push([n.lat, n.lon]); }
+/** Dijkstra over the sea network (~70 nodes — simple O(V^2) is plenty). */
+function shortest(s: number, t: number): number[] {
+  const dist = new Array(PTS.length).fill(Infinity);
+  const prev = new Array(PTS.length).fill(-1);
+  const done = new Array(PTS.length).fill(false);
+  dist[s] = 0;
+  for (;;) {
+    let u = -1; let bd = Infinity;
+    for (let i = 0; i < PTS.length; i += 1) if (!done[i] && dist[i] < bd) { bd = dist[i]; u = i; }
+    if (u < 0 || u === t) break;
+    done[u] = true;
+    for (const [v, w] of ADJ[u]) if (dist[u] + w < dist[v]) { dist[v] = dist[u] + w; prev[v] = u; }
   }
-  P.push([to.lat, to.lon]);
-  return P;
+  const path: number[] = [];
+  for (let u = t; u >= 0; u = prev[u]) path.unshift(u);
+  return path[0] === s ? path : [s, t];
+}
+
+/** Water path between two arbitrary points: snap each to the network, route, return [a, …sea…, b]. */
+function waterLeg(a: LL, b: LL): LL[] {
+  const na = nearest(a); const nb = nearest(b);
+  const idx = na === nb ? [na] : shortest(na, nb);
+  return [a, ...idx.map((i) => [PTS[i].lat, PTS[i].lon] as LL), b];
+}
+
+/** Ordered [lat,lon] waypoints for an edge: source → (sea lanes through each strait it transits) → dest. */
+export function seaRoute(edge: GraphEdge, from: GraphNode, to: GraphNode, node: (id: string) => GraphNode | undefined): LL[] {
+  const mandatory: LL[] = [[from.lat, from.lon]];
+  for (const vid of edge.via_chokepoints ?? []) { const n = node(vid); if (n) mandatory.push([n.lat, n.lon]); }
+  mandatory.push(INLAND_LANDING[to.id] ?? [to.lat, to.lon]); // inland refinery → end at its coastal landing
+  const out: LL[] = [];
+  for (let i = 0; i < mandatory.length - 1; i += 1) {
+    for (const p of waterLeg(mandatory[i], mandatory[i + 1])) {
+      const last = out[out.length - 1];
+      if (!last || last[0] !== p[0] || last[1] !== p[1]) out.push(p);
+    }
+  }
+  return out;
+}
+
+/** Overland pipeline leg [landing, refinery] for an inland refinery; null for coastal ones. Drawn dashed. */
+export function pipelineTail(to: GraphNode): [LL, LL] | null {
+  const landing = INLAND_LANDING[to.id];
+  return landing ? [landing, [to.lat, to.lon]] : null;
 }

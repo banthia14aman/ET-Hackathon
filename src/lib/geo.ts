@@ -51,6 +51,13 @@ export function boxAround(lat: number, lon: number, spanLon: number): Box {
 
 const r1 = (n: number): number => Math.round(n * 10) / 10;
 
+/** Bezier handle = base + tangent, but tangent length capped at `cap` (tames Catmull-Rom overshoot). */
+function clampHandle(bx: number, by: number, tx: number, ty: number, cap: number): [number, number] {
+  const len = Math.hypot(tx, ty);
+  const s = len > cap && len > 0 ? cap / len : 1;
+  return [bx + tx * s, by + ty * s];
+}
+
 /** Quadratic-bezier arc between two [lat, lon] points.
     bend = perpendicular offset as a fraction of chord length (sign flips side). */
 export function greatCircleArc(from: [number, number], to: [number, number], bend = 0.12): string {
@@ -77,10 +84,12 @@ export function routePath(pts: [number, number][]): string {
     const p1 = P[i];
     const p2 = P[i + 1];
     const p3 = P[i + 2] ?? p2;
-    const c1x = p1.x + (p2.x - p0.x) / 6;
-    const c1y = p1.y + (p2.y - p0.y) / 6;
-    const c2x = p2.x - (p3.x - p1.x) / 6;
-    const c2y = p2.y - (p3.y - p1.y) / 6;
+    // Clamp each control handle to a third of the segment so the curve can't bulge past its
+    // endpoints on a sharp turn (which would push a sea lane onto a nearby coast). Keeps routes in water.
+    const seg = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+    const cap = seg / 3;
+    const [c1x, c1y] = clampHandle(p1.x, p1.y, (p2.x - p0.x) / 6, (p2.y - p0.y) / 6, cap);
+    const [c2x, c2y] = clampHandle(p2.x, p2.y, -(p3.x - p1.x) / 6, -(p3.y - p1.y) / 6, cap);
     d += ` C ${r1(c1x)} ${r1(c1y)}, ${r1(c2x)} ${r1(c2y)}, ${r1(p2.x)} ${r1(p2.y)}`;
   }
   return d;
