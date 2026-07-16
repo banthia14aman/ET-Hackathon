@@ -187,6 +187,7 @@ export type Calibration = Record<string, CalibrationParam>;
 export interface SanctionRule {
   rail: PaymentRail;
   note: string;
+  as_of?: string; // snapshot date (ISO) — Article A4: an undated sanctions claim is a bug
 }
 export type SanctionsRules = Record<string, SanctionRule>; // key: origin_country
 
@@ -199,6 +200,7 @@ export interface SpotCargo {
   avail_from_day: number; // sim-days after bundle t0
   prov: Prov;
   source: string;
+  as_of?: string; // availability snapshot date (ISO)
 }
 
 export interface LlmCacheEntry {

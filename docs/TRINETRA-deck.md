@@ -24,8 +24,9 @@ figure carries its provenance chip: **R** = real-sourced · **E** = estimated ·
 
 **Speaker note (15s):** "Everyone here will show you an AI that answers. We built an AI
 that argues — under a constitution you can edit — and hands you a signed record of the
-argument. Watch it reroute India's crude in four minutes." *(4:07 is the app's measured
-run time; the 6-day lag is a reported/estimated figure — labeled E.)*
+argument. Watch it reroute India's crude in four minutes." *(4:07 = the demo's measured
+wall time; the app now carries a real on-screen DECISION CLOCK — starts when the crisis
+opens, click to freeze at the decision. The 6-day lag is a reported/estimated figure — E.)*
 
 ---
 
@@ -225,8 +226,9 @@ on the record. That is TRINETRA." *(No thank-you slide.)*
 > "Fair — it's the first question we asked ourselves, and we built the firewall for it.
 > One: the knowledge base is frozen structural data, every record dated 2018 or earlier —
 > the system doesn't 'know about Angola,' Angola falls out of the graph. Two: all
-> calibration constants come from pre-2024 events only; Red Sea and Hormuz are pure
-> hold-outs. Three: we don't claim to predict outcomes — nobody predicts a 30-day US
+> every calibration constant is a stated, sensitivity-swept assumption anchored to earlier
+> crises — never fit to the Hormuz outcomes we replay; the crisis is a pure hold-out for
+> the engine's tuning. Three: we don't claim to predict outcomes — nobody predicts a 30-day US
 > waiver; that's an explicit branch. Our claim is narrower and testable: the options India
 > chose were in our top five, and our signal triggers fire weeks earlier on publicly
 > timestamped data. And it didn't score perfectly — the misses are on the slide."
@@ -246,4 +248,5 @@ These were reconciled across the whole repo; the deck above already uses the cor
    bought"; the market-as-validator point refers to the **pre-edit top-5 option set**.
 5. **Still label honestly (unchanged):** the **"6-day lag"** is a reported/estimated figure (E),
    and the **NVIDIA bake-off** scores are illustrative unless raw logs are attached. The measured
-   number is the app's own **4:07** stopwatch.
+   number is the app's real on-screen **DECISION CLOCK** (wall time since the crisis opened;
+   click to freeze at the decision) — record the video with it visible.

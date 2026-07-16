@@ -1,6 +1,6 @@
 import type { OptionCard, PaymentRail } from '../../contracts/types';
 import { fmtDays, fmtDelta } from '../../lib/fmt';
-import { optionLabel, STATUS_LABEL, STATUS_PILL } from '../../lib/labels';
+import { optionLabel, plainMessage, STATUS_LABEL, STATUS_PILL } from '../../lib/labels';
 
 const RAIL_LABEL: Record<PaymentRail, { text: string; color: string }> = {
   GREEN: { text: 'Payment clear', color: 'var(--green)' },
@@ -36,7 +36,7 @@ function Card({ o, selected, changed, onSelect }: { o: OptionCard; selected?: bo
         )}
       </div>
       {o.status === 'conditional' && o.conditions?.map((c) => (
-        <div key={c} className="option-condition">⚠ {c}</div>
+        <div key={c} className="option-condition">⚠ {plainMessage(c)}</div>
       ))}
       {rationale && !rationale.startsWith('[') && (
         <>

@@ -141,8 +141,9 @@ export const securityFloorValidator: ValidatorFn = (o, ctx) => {
   if (cover === undefined || cover >= min) return [];
   const after = cover + o.cover_days_gained;
   if (after >= min) return [];
+  const r1 = (n: number): number => Math.round(n * 10) / 10; // one decimal, like voyageVsBuffer
   return [objection('A2.security_floor', 'A2', 'securityFloorValidator', o, 'note',
-    `+${o.cover_days_gained} d gained lifts ${o.target_refinery} to ${after} d, still below Article A2 floor ${min} d`,
+    `+${r1(o.cover_days_gained)} d gained lifts ${o.target_refinery} to ${r1(after)} d, still below Article A2 floor ${min} d`,
     o.evidence)];
 };
 

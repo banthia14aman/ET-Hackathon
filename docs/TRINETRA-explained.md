@@ -248,12 +248,13 @@ Every data leaf is `{ value, prov, source, as_of }`:
 > every number shows exactly how certain it is."**
 
 **KB-freeze discipline** (the hindsight-bias firewall): structural knowledge cites only
-**pre-2019** sources (Basrah *Light*, not Medium — which didn't exist until 2021; Urals
-unsanctioned; "Angola" is not known, it *emerges* from a query). Calibration constants use
-**pre-2024 events only** — Red Sea 2023-24 and Hormuz 2026 are pure hold-outs. A CI check
-fails the build if any frozen record cites a post-2018 source. **May claim** on stage:
-replayed real feeds, frozen KB, top-5 recall with misses shown. **May never claim:** live
-feeds, prediction of outcomes, or R status for any synthetic number.
+**pre-2019** sources (Basrah *Light*, not Medium — which didn't exist until 2021 and has
+been removed from the dataset; Urals unsanctioned; "Angola" is not known, it *emerges* from
+a query). Calibration constants are **stated, sensitivity-swept assumptions** anchored to
+earlier crises (Abqaiq 2019, Suez 2021, Red Sea 2023-24) — **never fit to the Hormuz-2026
+outcomes the demo replays**. **May claim** on stage: replayed real feeds, frozen KB, top-5
+recall with misses shown. **May never claim:** live feeds, prediction of outcomes, or R
+status for any synthetic number.
 
 Real sources actually used include: EIA (RBRTE daily Brent; World Oil Transit
 Chokepoints; TIE disruption reports), PPAC / EY / ORF (import dependence, reserves,
@@ -318,7 +319,7 @@ fabricated "TAN 3.3" reason is gone everywhere — Merey demotes on **API 16 < m
 (d) the "West-African cards survive the floor-15 edit" claim is dropped — the engine demotes
 all six Jamnagar-targeting cards, and the market-as-validator claim now refers to the pre-edit
 top-5 option set. The Merey voyage/cover/snapshot values (**43 d / 12.2 d / 2026-03-01**) match
-the live engine, and `npm run check` is **75/75**.
+the live engine, and `npm run check` is **76/76**.
 
 ---
 

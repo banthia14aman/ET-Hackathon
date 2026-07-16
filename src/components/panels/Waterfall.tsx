@@ -4,7 +4,9 @@ import { leverPlain } from '../../lib/labels';
 // India's ~4,900 kb/d crude runs — the denominator behind "% of national runs" (public PPAC, est.).
 const NATIONAL_RUNS_KBD = 4900;
 
-/** Gap-closing waterfall. Hero = remaining shortfall, always framed against the starting gap. */
+/** Gap-closing waterfall. Hero = remaining shortfall after FIRM (approved) levers only;
+    demoted-with-conditions volume renders as a separate hatched "pending" segment so the
+    critic's demotions are never quietly counted as cover. */
 export default function Waterfall({
   gap_kbd,
   contributions,
@@ -12,15 +14,17 @@ export default function Waterfall({
   costTitle,
 }: {
   gap_kbd: number;
-  contributions: { lever: string; kbd: number }[];
+  contributions: { lever: string; kbd: number; pending?: number }[];
   costOfDelayUsd?: number;
   costTitle?: string;
 }) {
-  const covered = contributions.reduce((s, c) => s + c.kbd, 0);
-  const remaining = Math.max(0, gap_kbd - covered);
+  const firm = contributions.reduce((s, c) => s + c.kbd, 0);
+  const pending = contributions.reduce((s, c) => s + (c.pending ?? 0), 0);
+  const remaining = Math.max(0, gap_kbd - firm);
   const scale = gap_kbd > 0 ? 100 / gap_kbd : 0;
-  const pctCovered = gap_kbd > 0 ? Math.min(100, Math.round((covered / gap_kbd) * 100)) : 0;
+  const pctFirm = gap_kbd > 0 ? Math.min(100, Math.round((firm / gap_kbd) * 100)) : 0;
   const pctOfRuns = Math.round((gap_kbd / NATIONAL_RUNS_KBD) * 100);
+  const activeLevers = contributions.filter((c) => c.kbd > 0).length;
   return (
     <div className="waterfall">
       <div className="waterfall-hero">
@@ -31,7 +35,8 @@ export default function Waterfall({
         <span className="label">Remaining shortfall</span>
         <span className="waterfall-frame">
           Started at <b>{fmtKbd(gap_kbd)}</b>
-          {gap_kbd > 0 && <> · <b>{pctCovered}%</b> covered by {contributions.length} levers</>}
+          {gap_kbd > 0 && <> · <b>{pctFirm}%</b> firmly covered by {activeLevers} levers</>}
+          {pending > 0 && <> · <b>{fmtKbd(pending)}</b> more pending conditions</>}
         </span>
       </div>
       {costOfDelayUsd !== undefined && costOfDelayUsd > 0 && (
@@ -51,17 +56,25 @@ export default function Waterfall({
         </div>
         <div className="waterfall-lane">
           <span className="waterfall-label">
-            {contributions.map((c) => `${leverPlain(c.lever)} ${fmtKbd(c.kbd)}`).join(' · ') || 'no levers applied yet'}
+            {contributions.filter((c) => c.kbd > 0).map((c) => `${leverPlain(c.lever)} ${fmtKbd(c.kbd)}`).join(' · ') || 'no approved levers yet'}
+            {pending > 0 && <span style={{ color: 'var(--amber)' }}> · demoted pending conditions {fmtKbd(pending)}</span>}
           </span>
           <div className="waterfall-fills">
-            {contributions.map((c) => (
+            {contributions.filter((c) => c.kbd > 0).map((c) => (
               <div
                 key={c.lever}
                 className="waterfall-bar"
                 style={{ width: `${Math.min(100, c.kbd * scale)}%`, background: 'var(--green)' }}
-                title={`${leverPlain(c.lever)}: ${fmtKbd(c.kbd)}`}
+                title={`${leverPlain(c.lever)}: ${fmtKbd(c.kbd)} approved`}
               />
             ))}
+            {pending > 0 && (
+              <div
+                className="waterfall-bar waterfall-pending"
+                style={{ width: `${Math.min(100, pending * scale)}%` }}
+                title={`Demoted with conditions (not firm cover): ${fmtKbd(pending)}`}
+              />
+            )}
           </div>
         </div>
       </div>

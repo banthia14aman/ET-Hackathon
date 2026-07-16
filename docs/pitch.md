@@ -16,7 +16,7 @@ Consolidated verbatim from docs/plan.md §2 and §9. Do not rewrite; do not para
 
 ## The hindsight-bias answer (28 seconds — the most important Q&A answer)
 
-> "Fair — it's the first question we asked ourselves, and we built the firewall for it. Three parts. One: the knowledge base is frozen structural data, every record dated 2018 or earlier — the system doesn't 'know about Angola,' Angola falls out of the graph. Two: all calibration constants come from pre-2024 events only; Red Sea and Hormuz are pure hold-outs. Three: we don't claim to predict outcomes — nobody predicts a 30-day US waiver; that's an explicit branch. Our claim is narrower and testable: the options India eventually chose were in our top five, and our signal triggers fire weeks earlier on publicly timestamped data. And it didn't score perfectly — the misses are on the slide."
+> "Fair — it's the first question we asked ourselves, and we built the firewall for it. Three parts. One: the knowledge base is frozen structural data, every record dated 2018 or earlier — the system doesn't 'know about Angola,' Angola falls out of the graph. Two: every calibration constant is a stated, sensitivity-swept assumption anchored to earlier crises — never fit to the Hormuz outcomes we replay; the crisis is a pure hold-out for the engine's tuning. Three: we don't claim to predict outcomes — nobody predicts a 30-day US waiver; that's an explicit branch. Our claim is narrower and testable: the options India eventually chose were in our top five, and our signal triggers fire weeks earlier on publicly timestamped data. And it didn't score perfectly — the misses are on the slide."
 
 ## Q&A bank (12 — rehearse all; 20-second answers)
 

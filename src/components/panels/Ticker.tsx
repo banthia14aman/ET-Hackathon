@@ -5,7 +5,7 @@ import { fmtTs } from '../../lib/fmt';
 export default function Ticker({ events }: { events: ReplayEvent[] }) {
   const recent = events.slice(-8);
   if (recent.length === 0) {
-    return <div className="ticker"><span className="ticker-item" style={{ color: 'var(--muted)' }}>awaiting feed</span></div>;
+    return <div className="ticker"><span className="ticker-item" style={{ color: 'var(--dim)' }}>awaiting feed</span></div>;
   }
   return (
     <div className="ticker">

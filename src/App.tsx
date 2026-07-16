@@ -228,7 +228,7 @@ export default function App() {
       text: 'March 2026: the Strait of Hormuz is disrupted — roughly 40% of India’s crude transits here. The map flies to the affected straits automatically.',
       action: () => goTo(BEAT_T) },
     { area: 'header', title: 'The exposure',
-      text: 'Jamnagar’s days-of-cover falls below the safe line and a national shortfall opens — about 2,240 kb/d, a third of India’s daily crude runs.',
+      text: 'Jamnagar’s days-of-cover falls below the safe line and a national shortfall opens — about 1,660 kb/d, a third of India’s daily crude runs.',
       action: () => goTo(BEAT_T) },
     { area: 'plan', title: 'The options',
       text: 'The desk’s AI proposes substitute cargoes from around the world. Each carries a provenance chip and a prediction from our own trained compatibility model. Click any card to trace its route on the map.',
@@ -259,6 +259,9 @@ export default function App() {
       if (q.get('tour') === '1' || q.get('judge') === '1') { setTourStep(0); if (q.get('tour') === '1') setTourPlaying(true); }
     }
     const onKey = (e: KeyboardEvent) => {
+      // never hijack typing/caret keys while an input has focus (Beat-2 charter edit, What-if slider)
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
       if (e.code === 'Space') { e.preventDefault(); store.setState({ playing: !store.getState().playing }); }
       else if (e.code === 'ArrowRight') seekBy(1);
       else if (e.code === 'ArrowLeft') seekBy(-1);
@@ -318,14 +321,16 @@ export default function App() {
   const darkVessels: DarkVessel[] = applied
     .filter((e) => e.geo && typeof e.payload.dark_count === 'number')
     .map((e) => ({ id: e.id, lat: e.geo![0], lon: e.geo![1], count: e.payload.dark_count as number }));
+  // firm = arbiter-approved; pending = demoted-with-conditions (never counted as firm cover —
+  // the critic just demoted those, and the waterfall must not quietly re-admit them)
   const contributions = (['stock_draw', 'divert_on_water', 'floating_storage', 'reroute', 'demand_side'] as const)
-    .map((lever) => ({
-      lever,
-      kbd: options
-        .filter((o) => o.lever === lever && (o.status === 'validated' || o.status === 'conditional'))
-        .reduce((s, o) => s + o.volume_kb / 30, 0),
-    }))
-    .filter((c) => c.kbd > 0);
+    .map((lever) => {
+      const sum = (st: string) => options
+        .filter((o) => o.lever === lever && o.status === st)
+        .reduce((s, o) => s + o.volume_kb / 30, 0);
+      return { lever, kbd: sum('validated'), pending: sum('conditional') };
+    })
+    .filter((c) => c.kbd > 0 || c.pending > 0);
 
   // Cost of decision lag — computed live from the scenario's Brent, not a hardcoded number.
   // spot-exposed barrels × 6-day lag × average excess over the ramp (½ of peak excess).
@@ -389,7 +394,8 @@ export default function App() {
           </span>
           <span className="kpi-cap">National cover · safe line {safeLine} d</span>
         </div>
-        <Stopwatch ts_sim={scenario?.t_sim ?? DATA.bundle.t0} elapsed_label={simElapsedLabel(scenario?.t_sim ?? DATA.bundle.t0)} />
+        <Stopwatch ts_sim={scenario?.t_sim ?? DATA.bundle.t0} elapsed_label={simElapsedLabel(scenario?.t_sim ?? DATA.bundle.t0)}
+          crisisActive={!!scenario && scenario.shocks_active.length > 0} />
       </header>
 
       {sandbox && scenario ? (

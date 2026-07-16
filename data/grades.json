@@ -10,22 +10,8 @@
     "resid": 32.26,
     "pour": -9,
     "prov": "R",
-    "source": "TotalEnergies Trading & Shipping official Murban assay (api/sulfur/tan/Ni+V/resid>375C/pour all sourced)",
+    "source": "TotalEnergies Trading & Shipping official Murban assay (api/sulfur/tan/Ni+V/resid>375C/pour all sourced) (captured 2026-07-07; publisher assay-edition date not stated)",
     "as_of": "2026-07-07T00:00:00Z"
-  },
-  {
-    "id": "gr:basrah-medium",
-    "name": "Basrah Medium",
-    "origin_country": "Iraq",
-    "api": 27.9,
-    "sulfur": 3.0,
-    "tan": 0.2,
-    "ni_v": 90,
-    "resid": 30,
-    "pour": -15,
-    "prov": "R",
-    "source": "SOMO assay (api/sulfur confirmed; tan/ni_v/resid/pour typical-assay E)",
-    "as_of": "2026-01-01T00:00:00Z"
   },
   {
     "id": "gr:basrah-heavy",
@@ -33,12 +19,12 @@
     "origin_country": "Iraq",
     "api": 23.7,
     "sulfur": 4.12,
-    "tan": 0.30,
+    "tan": 0.3,
     "ni_v": 117,
     "resid": 36,
     "pour": -51,
     "prov": "R",
-    "source": "BP Basrah Heavy assay via Oil & Gas Journal (api/sulfur/tan/Ni 24+V 93/pour sourced; resid from vac-resid 35.93)",
+    "source": "BP Basrah Heavy assay via Oil & Gas Journal (api/sulfur/tan/Ni 24+V 93/pour sourced; resid from vac-resid 35.93) (captured 2026-07-07; publisher assay-edition date not stated)",
     "as_of": "2026-07-07T00:00:00Z"
   },
   {
@@ -52,7 +38,7 @@
     "resid": 22,
     "pour": -21,
     "prov": "E",
-    "source": "Environment Canada ESTS #523 + Arabian Light spec sheet (api/sulfur/pour/V sourced; tan/resid typical-assay E)",
+    "source": "Environment Canada ESTS #523 + Arabian Light spec sheet (api/sulfur/pour/V sourced; tan/resid typical-assay E) (captured 2026-07-07; publisher assay-edition date not stated)",
     "as_of": "2026-07-07T00:00:00Z"
   },
   {
@@ -66,7 +52,7 @@
     "resid": 10,
     "pour": -25,
     "prov": "R",
-    "source": "ExxonMobil WTI Light assay (api/sulfur/tan/Ni+V/pour sourced; api capped at pipeline-spec 44.5 vs assay 47.4; atmospheric resid E)",
+    "source": "ExxonMobil WTI Light assay (api/sulfur/tan/Ni+V/pour sourced; api capped at pipeline-spec 44.5 vs assay 47.4; atmospheric resid E) (captured 2026-07-07; publisher assay-edition date not stated)",
     "as_of": "2026-07-07T00:00:00Z"
   },
   {
@@ -80,21 +66,21 @@
     "resid": 47,
     "pour": -24,
     "prov": "E",
-    "source": "A Barrel Full crude-assay wiki (abarrelfull.wikidot.com/ural-crude-oil) + ThePetroSolutions cross-check. Single-assay of a blend; TAN 0.05 disputed vs typical 0.2-0.3, Ni/V single-source — illustrative, not a representative spec.",
+    "source": "A Barrel Full crude-assay wiki (abarrelfull.wikidot.com/ural-crude-oil) + ThePetroSolutions cross-check. Single-assay of a blend; TAN 0.05 disputed vs typical 0.2-0.3, Ni/V single-source — illustrative, not a representative spec. (captured 2026-07-07; publisher assay-edition date not stated)",
     "as_of": "2026-07-07T00:00:00Z"
   },
   {
     "id": "gr:merey-16",
     "name": "Merey 16",
     "origin_country": "Venezuela",
-    "api": 16.0,
+    "api": 16,
     "sulfur": 2.45,
     "tan": 0.69,
     "ni_v": 262,
     "resid": 55,
     "pour": -20,
     "prov": "E",
-    "source": "Broker spec sheet (tinglebr.wordpress.com/.../crude-oil-specifications.pdf, ~2008) + Energy Intelligence crude profile. API 16 / S 2.45 corroborated; TAN 0.69, V 262, pour -20 single-source (illustrative assay). Heavy + high-metal is the binding constraint, not TAN.",
+    "source": "Broker spec sheet (tinglebr.wordpress.com/.../crude-oil-specifications.pdf, ~2008) + Energy Intelligence crude profile. API 16 / S 2.45 corroborated; TAN 0.69, V 262, pour -20 single-source (illustrative assay). Heavy + high-metal is the binding constraint, not TAN. (captured 2026-07-07; publisher assay-edition date not stated)",
     "as_of": "2026-07-07T00:00:00Z"
   },
   {
@@ -136,7 +122,7 @@
     "resid": 53.88,
     "pour": -12,
     "prov": "E",
-    "source": "Iracema/Lula (Santos pre-salt) assay via Oil & Gas Journal (all dims sourced; resid from >375C atmospheric residue)",
+    "source": "Iracema/Lula (Santos pre-salt) assay via Oil & Gas Journal (all dims sourced; resid from >375C atmospheric residue) (captured 2026-07-07; publisher assay-edition date not stated)",
     "as_of": "2026-07-07T00:00:00Z"
   },
   {

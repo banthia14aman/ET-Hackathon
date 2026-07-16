@@ -42,7 +42,7 @@ Dominant prov per file; individual leaves still carry their own.
 | `grades.json` | **R** | One canonical producer assay per grade (Equinor/ExxonMobil/ADNOC, Platts APAG); alternates in `alt_values`, never averaged. |
 | `charter.json` | **S** (by nature) | The 7 articles are our product content — user-authored rules, not world data. |
 | `sanctions_rules.json` | **R, snapshot-dated** | OFAC SDN XML + EU sanctions map. Every entry carries the snapshot date (e.g. `2026-03-01`); an undated sanctions claim is a bug, not a style issue (Article A4). |
-| `calibration.json` | **R ranges / E values** | Pre-2024 events only (Abqaiq #41413 etc.). Stored as `{value, min, max, source_ref}` — ranges with provenance, per the uncertainty display rules. |
+| `calibration.json` | **E — stated, swept assumptions** | Every constant is a stated assumption with a `{value, min, max, source_ref}` range, anchored to earlier crises (Abqaiq 2019, Suez 2021, Red Sea 2023-24 — EIA-cited) where an anchor exists. **Never fit to Hormuz-2026 outcomes**; sensitivity to each constant is swept (rank-stability badge). |
 | `spot_availability.json` | **E** | JODI + EIA STEO 3-month averages. |
 | `ais_snapshot.json` | **S** | ~30 synthetic vessels on real corridor geometry — the canonical SYNTH-chip example. |
 | `replay_redsea2324_events.json` (video only) | **R** | Wikipedia timeline, JWLA-032, Suez Canal Authority stats. |
@@ -74,13 +74,15 @@ Two layers, never mixed (CLAUDE.md hard rule 6; brainstorm §2.2):
   mismatch = refuse to start. KB updates are explicit signed events.
 - **`feed_live/` — the replayed 2026 event stream.** Dated crisis events, prices,
   advisories. This is what the ticker plays back.
-- **Calibration sits between:** constants from **pre-2024 events only**; Red Sea 2023-24
-  and Hormuz 2026 are pure holdouts.
+- **Calibration sits between:** constants are **stated, sensitivity-swept assumptions**
+  anchored to earlier crises (Abqaiq 2019, Suez 2021, Red Sea 2023-24), never fit to
+  Hormuz-2026 outcomes — the replayed crisis is a pure holdout for the engine's tuning.
 
 **The CI check (10 lines, required):** fail the build if any `kb_2018/` record cites a
 source dated after 2018-12-31. This single test is what lets us say "frozen" on stage and
 survive the follow-up question.
 
-What we may claim on stage, exactly: replayed real feeds, frozen KB, pre-2024 calibration,
-top-5 recall with misses shown in red. What we may never claim: live feeds, prediction of
+What we may claim on stage, exactly: replayed real feeds, frozen KB, calibration that is
+stated + swept and never fit to the replayed crisis, top-5 recall with misses shown in red.
+What we may never claim: live feeds, prediction of
 outcomes (policy is a branch, not a forecast), or R status for any synthetic number.

@@ -78,7 +78,7 @@ export function generateOptions(
       const vol = e.volume_kbd * 3; // ponytail: 3 days of edge flow = "modest volume"
       drafts.push({ ...base, key: `div:${e.id}`, lever: 'divert_on_water',
         target_refinery: critical[0].id, volume_kb: vol, voyage_days: 3, eta_days: 3,
-        cover_days_gained: gapCover(vol), evidence: [`edge:${e.id}`] });
+        cover_days_gained: gapCover(vol), evidence: [e.id] }); // e.id already carries the 'edge:' prefix
     }
   }
 
@@ -119,7 +119,7 @@ export function generateOptions(
         port_ok: edge.mode === 'vlcc' && ref.port_limits ? ref.port_limits.spm : true,
         cost_delta_usd_bbl: costDelta(edge.transit_days, cargo.origin_country),
         cover_days_gained: ref.capacity_kbd ? vol / ref.capacity_kbd : gapCover(vol),
-        evidence: [`spot:${cargo.id}`, `edge:${edge.id}`, cargo.source] });
+        evidence: [cargo.id, edge.id, cargo.source] }); // ids already carry their 'sc:'/'edge:' prefixes
     }
   }
 

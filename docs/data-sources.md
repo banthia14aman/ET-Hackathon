@@ -18,7 +18,7 @@ The on-screen "similarity %" is **computed** (`src/lib/analogs.ts`), never measu
 - **Cabinda** (prov R) — [TotalEnergies official assay](https://trading.totalenergies.com/), 2020-01-23
 - **Merey 16** (prov E) — broker spec sheet (~2008) + Energy Intelligence crude profile. API 16 / S 2.45 corroborated; TAN 0.69 / V 262 single-source, illustrative. **The old `TAN 3.3` was fabricated and has been removed** — Merey binds because it is *too heavy* (API 16), not high-TAN.
 - **Urals** (prov E) — [A Barrel Full assay wiki](http://abarrelfull.wikidot.com/ural-crude-oil) + ThePetroSolutions. Single-assay of a blend; TAN disputed.
-- **Murban** (prov R) — ADNOC published assay. **Basrah Medium/Heavy** (prov R) — SOMO assay.
+- **Murban** (prov R) — ADNOC published assay. **Basrah Heavy** (prov R) — SOMO assay. *(Basrah Medium — a grade that didn't exist until 2021 — was removed from the dataset entirely: it was unused, and it was the exact contaminant the frozen-KB discipline names. See data-provenance.md §4.)*
 - WTI Midland, Arab Light, Tupi, Bonny Light (prov E) — re-sourcing in progress.
 
 More real assays (all producer/primary, added 2026-07-07): **WTI** (ExxonMobil WTI Light assay),

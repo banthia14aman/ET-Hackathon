@@ -76,6 +76,16 @@ export function articleName(rule_id: string): string {
   return ARTICLE[rule_id] ?? rule_id;
 }
 
+/** Presentation-only: humanize an engine message for display — map internal ids to names,
+    tame runaway float precision, and space slash-joined dim lists. The engine string itself
+    is NEVER changed (it feeds the hash chain); this runs at render time only. */
+export function plainMessage(msg: string): string {
+  return msg
+    .replace(/\b(?:gr|ref|sup|ck|cor):[a-z0-9_-]+/gi, (m) => prettify(m))
+    .replace(/\d+\.\d{3,}/g, (m) => String(Math.round(parseFloat(m) * 10) / 10))
+    .replace(/(\w)\/(\w)/g, '$1 · $2');
+}
+
 const LEVER_PLAIN: Record<string, string> = {
   reroute: 'reroute spot cargo',
   divert_on_water: 'divert on-water cargo',

@@ -1,12 +1,12 @@
 import type { Objection, OptionCard } from '../../contracts/types';
-import { articleName, leverPlain, optionLabel, prettify, STATUS_LABEL, STATUS_PILL } from '../../lib/labels';
+import { articleName, leverPlain, optionLabel, plainMessage, prettify, STATUS_LABEL, STATUS_PILL } from '../../lib/labels';
 
 function ObjectionChip({ o, i }: { o: Objection; i: number }) {
   // stagger the reveal so the critic visibly "computes" one objection at a time
   return (
     <div className={`objection${o.severity === 'block' ? ' objection-block' : ''}`} style={{ animationDelay: `${Math.min(i, 8) * 0.14}s` }}>
       <div className="objection-article">{articleName(o.rule_id)}</div>
-      <div className="objection-msg">{o.message}</div>
+      <div className="objection-msg">{plainMessage(o.message)}</div>
       <div className="objection-cite mono" title={`${o.rule_id} · ${o.validator}`}>
         {o.severity === 'block' ? 'BLOCKS' : 'FLAGS'} · cited: {o.evidence.slice(0, 2).join(', ') || o.validator}
       </div>

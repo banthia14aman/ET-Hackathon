@@ -169,7 +169,7 @@ export const ScenarioStateSchema: z.ZodType<ScenarioState> = z.object({
 // ---------- data-file schemas (what PM1 produces, what check.mjs validates) ----------
 
 export const SanctionsRulesSchema: z.ZodType<SanctionsRules> = z.record(
-  z.object({ rail: PaymentRailSchema, note: z.string() }),
+  z.object({ rail: PaymentRailSchema, note: z.string(), as_of: z.string().optional() }),
 );
 
 export const CalibrationSchema: z.ZodType<Calibration> = z.record(
@@ -192,6 +192,7 @@ export const SpotCargoSchema: z.ZodType<SpotCargo> = z.object({
   avail_from_day: z.number().nonnegative(),
   prov: ProvSchema,
   source: z.string().min(1),
+  as_of: z.string().optional(),
 });
 
 export const LlmCacheSchema: z.ZodType<LlmCache> = z.record(

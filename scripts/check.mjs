@@ -92,6 +92,14 @@ check('data: charter is exactly A1..A7 with A2 min_cover_days default 10',
   && charter.find((a) => a.id === 'A2')?.param_value === 10);
 const refBad = nodes.filter((n) => n.type === 'refinery' && !(n.assay_env && n.cover_days > 0 && n.capacity_kbd > 0));
 check('data: refineries carry assay_env + cover_days + capacity', refBad.length === 0, refBad.map((n) => n.id).join(','));
+// provenance is load-bearing (CLAUDE.md hard rule 4): every leaf carries prov + source + as_of
+const leafBad = [
+  ...grades.filter((g) => !(g.prov && g.source && g.as_of)).map((g) => `grade:${g.id}`),
+  ...spot.filter((s) => !(s.prov && s.source && s.as_of)).map((s) => `spot:${s.id}`),
+  ...Object.entries(sanctions).filter(([, r]) => !(r.rail && r.note && r.as_of)).map(([k]) => `sanction:${k}`),
+  ...Object.entries(calibration).filter(([, p]) => !(p.prov && p.source_ref)).map(([k]) => `cal:${k}`),
+];
+check('data: every grade/spot/sanction/calibration leaf carries prov + source + as_of', leafBad.length === 0, leafBad.join(','));
 
 // ---------- 4. integration checks over the real bundle ----------
 const { computeAt, rerunWithCharter } = await mod('../src/lib/pipeline.ts');

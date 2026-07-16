@@ -7,7 +7,8 @@
     "loading_port": "sup:angola",
     "avail_from_day": 35,
     "prov": "E",
-    "source": "JODI/EIA-derived: Angola ~350 kb/d spot-available over 3mo, split across grades"
+    "source": "JODI/EIA-derived: Angola ~350 kb/d spot-available over 3mo, split across grades",
+    "as_of": "2026-03-01T00:00:00Z"
   },
   {
     "id": "sc:angola-cabinda-q2",
@@ -17,7 +18,8 @@
     "loading_port": "sup:angola",
     "avail_from_day": 40,
     "prov": "E",
-    "source": "JODI/EIA-derived: Angola ~350 kb/d spot-available over 3mo, split across grades"
+    "source": "JODI/EIA-derived: Angola ~350 kb/d spot-available over 3mo, split across grades",
+    "as_of": "2026-03-01T00:00:00Z"
   },
   {
     "id": "sc:nigeria-bonny-q2",
@@ -27,7 +29,8 @@
     "loading_port": "sup:nigeria",
     "avail_from_day": 30,
     "prov": "E",
-    "source": "JODI/EIA-derived: Nigeria ~300 kb/d spot-available over 3mo"
+    "source": "JODI/EIA-derived: Nigeria ~300 kb/d spot-available over 3mo",
+    "as_of": "2026-03-01T00:00:00Z"
   },
   {
     "id": "sc:usa-wti-q2",
@@ -37,7 +40,8 @@
     "loading_port": "sup:usa-usgc",
     "avail_from_day": 20,
     "prov": "E",
-    "source": "EIA-derived: USGC ~500 kb/d spot-available over 3mo"
+    "source": "EIA-derived: USGC ~500 kb/d spot-available over 3mo",
+    "as_of": "2026-03-01T00:00:00Z"
   },
   {
     "id": "sc:brazil-tupi-q2",
@@ -47,7 +51,8 @@
     "loading_port": "sup:brazil",
     "avail_from_day": 45,
     "prov": "E",
-    "source": "ANP/JODI-derived: Brazil ~250 kb/d spot-available over 3mo"
+    "source": "ANP/JODI-derived: Brazil ~250 kb/d spot-available over 3mo",
+    "as_of": "2026-03-01T00:00:00Z"
   },
   {
     "id": "sc:venezuela-merey-q2",
@@ -57,7 +62,8 @@
     "loading_port": "sup:venezuela",
     "avail_from_day": 55,
     "prov": "E",
-    "source": "Tanker-tracking-derived: Venezuela ~300 kb/d over 3mo — rail-gated, OFAC comfort letter required"
+    "source": "Tanker-tracking-derived: Venezuela ~300 kb/d over 3mo — rail-gated, OFAC comfort letter required",
+    "as_of": "2026-03-01T00:00:00Z"
   },
   {
     "id": "sc:urals-onwater-waiver",
@@ -67,6 +73,7 @@
     "loading_port": "sup:russia-urals",
     "avail_from_day": 64,
     "prov": "R",
-    "source": "evt:milestone-2026-03-10-india-urals-buy — one-off 30M bbl stranded Urals, waiver branch to 2026-04-03"
+    "source": "evt:milestone-2026-03-10-india-urals-buy — one-off 30M bbl stranded Urals, waiver branch to 2026-04-03",
+    "as_of": "2026-03-01T00:00:00Z"
   }
 ]
