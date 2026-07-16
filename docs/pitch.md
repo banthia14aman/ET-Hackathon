@@ -6,6 +6,14 @@ Consolidated verbatim from docs/plan.md §2 and §9. Do not rewrite; do not para
 
 > "When Hormuz closed, India took six days to reroute crude; TRINETRA does it in four minutes — and shows you the argument, under rules you wrote."
 
+> **⚠ Provenance of "six days" (know this cold — it's the most-repeated number in the pitch and the one a judge will probe).**
+> It is **not** an independently cited statistic — treat it as **E / anchored**, not R. Its honest basis is two dated events in the replay we can point to:
+> - **4 Mar 2026** — Iran declared the Strait of Hormuz closed *(real, corroborated — Al Jazeera, UK HoC Library CBP-10636; see `data-sources.md`)*.
+> - **10 Mar 2026** — the first documented collective Indian reroute in the event stream: *"IOC / BPCL / HPCL / MRPL buy ~30M bbl of stranded on-water Urals"* (`hormuz2026_events.json`, `prov: R`).
+> - **10 − 4 = 6 days** = closure → India's first visible rerouting action.
+>
+> So say it **event-anchored**, not as a bare fact: *"Closure was declared March 4th; the first collective Indian reroute we can document is March 10th — six days."* If pressed, concede it's the gap between two timestamps, not a measured institutional statistic. It also drives the cost-of-delay figure (`LAG_DAYS = 6`), which the app already stamps **"order-of-magnitude"** with the spot share flagged directional. The paired **"four minutes / 4:07"** is now genuinely measured on-screen by the **DECISION CLOCK** (real wall time since the crisis opened; click to freeze).
+
 ## 30-second innovation pitch
 
 > "Everyone here will show you an AI that answers. TRINETRA is an AI that argues — under rules you wrote. The model proposes; a critic with zero LLM inside it, so it cannot hallucinate, strikes down anything that breaks sanctions law, refinery chemistry, or the physics of a tanker's voyage; and a constitution you can edit live decides the tie. We froze our knowledge base before the 2026 crises and let reality grade us — and we'll show you what we got wrong. Watch it reroute India's crude in four minutes, and show its work."
@@ -18,7 +26,7 @@ Consolidated verbatim from docs/plan.md §2 and §9. Do not rewrite; do not para
 
 > "Fair — it's the first question we asked ourselves, and we built the firewall for it. Three parts. One: the knowledge base is frozen structural data, every record dated 2018 or earlier — the system doesn't 'know about Angola,' Angola falls out of the graph. Two: every calibration constant is a stated, sensitivity-swept assumption anchored to earlier crises — never fit to the Hormuz outcomes we replay; the crisis is a pure hold-out for the engine's tuning. Three: we don't claim to predict outcomes — nobody predicts a 30-day US waiver; that's an explicit branch. Our claim is narrower and testable: the options India eventually chose were in our top five, and our signal triggers fire weeks earlier on publicly timestamped data. And it didn't score perfectly — the misses are on the slide."
 
-## Q&A bank (12 — rehearse all; 20-second answers)
+## Q&A bank (13 — rehearse all; 20-second answers)
 
 1. **"Isn't this hindsight bias?"** → the verbatim answer above.
 2. **"Where does tank-level data come from? Ours is confidential."** → "That's why every number wears a provenance chip — those are SYNTH, labeled, calibrated to public PPAC and port stats. The engine is data-source-agnostic: a refiner plugs in real inventories and the reasoning doesn't change. We sell the reasoning; they keep the data."
@@ -32,5 +40,6 @@ Consolidated verbatim from docs/plan.md §2 and §9. Do not rewrite; do not para
 10. **"SQLite/single process — real scale?"** → "The boundaries are drawn, not paid for: adapters are the same 3-method interface (going live = license key); every stage is a stateless function (scale = same functions behind a queue); the append-only log maps 1:1 onto Kafka+Postgres. And commodities are the cheapest axis: LNG is a new YAML against the identical engine."
 11. **"Who maintains 40 country graphs?"** → "Nobody maintains 40 — the world maintains one. Hormuz is the same node in India's and Japan's graphs. One global reference graph plus thin country overlays — and the overlay is exactly the artifact a sovereign customer wants to own. It's the Bloomberg model: shared reference data, client-owned configuration."
 12. **"LLM costs at scale?"** → "Near-flat — the LLM isn't in the data path. Deterministic code processes every event; the LLM narrates state changes: dozens of calls/day/desk, not per message. Cost scales with seats, which is the axis revenue scales with."
+13. **"Where does 'six days' come from — is that a real number?"** → "It's anchored, not asserted: the closure was declared March 4th, and the first collective Indian reroute we can document — the majors buying stranded on-water Urals — is March 10th. Six days, closure to first action, both dated events in the feed we replay. We don't claim it's a measured institutional statistic; it's the gap between two timestamps. The four-minute side, by contrast, is measured live — the decision clock on screen." *(Full basis + citations under the lead sentence above.)*
 
 *(If asked "did any practitioner review this?", the guard lives in docs/credibility-slide.md — deliver it verbatim.)*
