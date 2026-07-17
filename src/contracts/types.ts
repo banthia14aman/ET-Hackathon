@@ -13,7 +13,7 @@ export type PaymentRail = 'GREEN' | 'AMBER' | 'RED';
 export type OptionStatus = 'proposed' | 'validated' | 'conditional' | 'rejected';
 export type ArticleId = 'A1' | 'A2' | 'A3' | 'A4' | 'A5' | 'A6' | 'A7';
 export type Severity = 'block' | 'flag' | 'note';
-export type Actor = 'proposer' | 'critic' | 'arbiter' | 'user' | 'system';
+export type Actor = 'proposer' | 'critic' | 'arbiter' | 'user' | 'system' | 'ai_extractor' | 'ai_auditor';
 
 export interface ReplayEvent {
   id: string;
@@ -147,6 +147,63 @@ export interface AuditEntry {
   prev_hash: string; // output_hash of previous entry; 'GENESIS' for seq 0
   refs: string[];
   note?: string;
+}
+
+// ---------------------------------------------------------------------------
+// AI-assisted rules engine (constitutional guardrails). The LLM does SENSE-MAKING
+// (extract candidate facts from free text) and CONSTITUTIONAL AUDITING (advisory
+// notes on rule gaps) ONLY. It never sets a score: extracted facts are gated by
+// strict schemas + deterministic rules before use, and audit notes are read-only.
+// ---------------------------------------------------------------------------
+
+/** A shock the LLM claims it read in the text — a CANDIDATE, not yet trusted. */
+export interface CandidateShock { chokepoint: string; severity: 'partial' | 'severe'; }
+/** A spot cargo offer the LLM claims it read — CANDIDATE. */
+export interface CandidateCargo { grade?: string; origin?: string; volume_kb?: number; target_refinery?: string; }
+/** A charter override the LLM claims it read — CANDIDATE. */
+export interface CandidateCharter { article: ArticleId; value: number; }
+/** The full structured claim the LLM extracts. UNTRUSTED until validated. */
+export interface CandidateFacts {
+  shocks?: CandidateShock[];
+  brent_usd?: number;
+  cargoes?: CandidateCargo[];
+  charter?: CandidateCharter[];
+  summary?: string;
+}
+/** A field the deterministic validator refused (the guardrail, made visible). */
+export interface FieldRejection { field: string; value: string; reason: string; }
+/** Result of AI sense-making + the deterministic validation gate. */
+export interface ExtractionResult {
+  source_text: string;
+  candidates: CandidateFacts;   // raw LLM output after JSON-parse — untrusted
+  validated: CandidateFacts;    // survived strict schema + domain rules — the ONLY thing that reaches scoring
+  rejected: FieldRejection[];   // dropped candidate fields + why
+  model: string;                // model id, or the offline stand-in label
+  live: boolean;                // true = a live model was called; false = offline
+}
+
+/** AI constitutional-audit note. ADVISORY only — can NEVER change a score. */
+export type RuleAuditKind = 'rule_gap' | 'missing_data' | 'unsupported_assumption';
+export interface RuleAuditNote {
+  kind: RuleAuditKind;
+  message: string;
+  refs: string[];
+  severity: 'info' | 'warn';
+  by: string;                   // which model/detector produced it
+}
+
+/** Human-readable decision brief. Decisions are DETERMINISTIC; approval is a HUMAN act. */
+export interface BriefDecision { option: string; status: OptionStatus; conditions: string[]; }
+export interface DecisionBrief {
+  headline: string;
+  provenance_statement: string; // states scoring is deterministic + human approval required
+  validated_facts: CandidateFacts;
+  rejected_inputs: FieldRejection[];
+  decisions: BriefDecision[];
+  ai_observations: RuleAuditNote[];
+  approval_required: true;
+  approved_by?: string;
+  approved_ts_sim?: string;
 }
 
 export interface ScenarioState {

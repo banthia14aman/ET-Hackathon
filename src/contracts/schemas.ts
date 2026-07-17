@@ -204,3 +204,38 @@ export const GraphEdgesFileSchema = z.array(GraphEdgeSchema);
 export const GradesFileSchema = z.array(CrudeGradeSchema);
 export const CharterFileSchema = z.array(CharterArticleSchema).length(7);
 export const SpotAvailabilityFileSchema = z.array(SpotCargoSchema);
+
+// ---- AI-assisted intake: STRICT schemas for LLM-extracted candidate facts ----
+// `.strict()` rejects unknown keys — the first line of the guardrail: the LLM cannot
+// smuggle extra fields (e.g. a "score") past the schema. Bounds are deliberately tight;
+// anything a schema rejects never reaches the deterministic engine.
+export const CandidateShockSchema = z.object({
+  chokepoint: z.string().min(1).max(40),
+  severity: z.enum(['partial', 'severe']),
+}).strict();
+export const CandidateCargoSchema = z.object({
+  grade: z.string().min(1).max(60).optional(),
+  origin: z.string().min(1).max(60).optional(),
+  volume_kb: z.number().finite().positive().max(1e6).optional(),
+  target_refinery: z.string().min(1).max(60).optional(),
+}).strict();
+export const CandidateCharterSchema = z.object({
+  article: ArticleIdSchema,
+  value: z.number().finite(),
+}).strict();
+export const CandidateFactsSchema = z.object({
+  shocks: z.array(CandidateShockSchema).max(8).optional(),
+  brent_usd: z.number().finite().optional(),
+  cargoes: z.array(CandidateCargoSchema).max(8).optional(),
+  charter: z.array(CandidateCharterSchema).max(7).optional(),
+  summary: z.string().max(600).optional(),
+}).strict();
+
+export const RuleAuditNoteSchema = z.object({
+  kind: z.enum(['rule_gap', 'missing_data', 'unsupported_assumption']),
+  message: z.string().min(1).max(400),
+  refs: z.array(z.string().max(80)).max(12),
+  severity: z.enum(['info', 'warn']),
+  by: z.string().min(1).max(80),
+}).strict();
+export const RuleAuditSchema = z.array(RuleAuditNoteSchema).max(20);

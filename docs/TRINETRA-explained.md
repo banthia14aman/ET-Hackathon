@@ -319,7 +319,7 @@ fabricated "TAN 3.3" reason is gone everywhere — Merey demotes on **API 16 < m
 (d) the "West-African cards survive the floor-15 edit" claim is dropped — the engine demotes
 all six Jamnagar-targeting cards, and the market-as-validator claim now refers to the pre-edit
 top-5 option set. The Merey voyage/cover/snapshot values (**43 d / 12.2 d / 2026-03-01**) match
-the live engine, and `npm run check` is **76/76**.
+the live engine, and `npm run check` is **82/82**.
 
 ---
 

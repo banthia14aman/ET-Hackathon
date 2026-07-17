@@ -13,6 +13,12 @@ import { propose } from '../engine/charter/propose';
 import { criticize } from '../engine/charter/criticize';
 import { arbitrate } from '../engine/charter/arbitrate';
 import { appendEntry } from '../engine/charter/audit';
+import { sha256Hex } from './canonical';
+import { extractFacts, type ExtractOpts } from '../engine/ai/extract';
+import { validateFacts, factsToInputs } from '../engine/ai/validate';
+import { ruleAudit } from '../engine/ai/ruleAudit';
+import { buildDecisionBrief } from '../engine/ai/brief';
+import type { DecisionBrief, ExtractionResult, RuleAuditNote } from '../contracts/types';
 import { llmCache } from '../cache';
 
 export interface StaticData {
@@ -136,4 +142,71 @@ export async function rerunWithCharter(
     note,
   });
   return decide(data, scenario, charter, withUser);
+}
+
+// ---------------------------------------------------------------------------
+// AI-ASSISTED RULES ENGINE (constitutional guardrails)
+// unstructured text → [AI extract] → [DETERMINISTIC validate gate] → [DETERMINISTIC score]
+//                   → [AI constitutional audit, advisory] → decision brief → [HUMAN approval]
+// Every step is hash-chained. The LLM never sets a score; the audit never changes one.
+// ---------------------------------------------------------------------------
+
+export interface AiAssistResult extends PipelineState {
+  extraction: ExtractionResult;
+  notes: RuleAuditNote[];
+  brief: DecisionBrief;
+}
+
+const T0 = '2027-01-01T00:00:00Z'; // sim time for an operator-posed scenario (never wall clock)
+
+export async function computeFromText(
+  data: StaticData, text: string, baseCharter: CharterArticle[], opts: ExtractOpts = {},
+): Promise<AiAssistResult> {
+  // 1. AI SENSE-MAKING — candidate facts (untrusted)
+  const { candidates, model, live } = await extractFacts(text, opts);
+  // 2. DETERMINISTIC VALIDATION GATE — strict schema + domain rules
+  const { validated, rejected } = validateFacts(candidates, data);
+  const extraction: ExtractionResult = { source_text: text, candidates, validated, rejected, model, live };
+  // log the AI extraction + its validation outcome (text hashed, not stored raw beyond the ref)
+  let audit = await appendEntry([], {
+    ts_sim: T0, actor: 'ai_extractor', action: 'ai_extract',
+    input: { text_sha256: await sha256Hex(text) },
+    output: { validated, rejected, model, live },
+    refs: rejected.map((r) => r.field),
+    note: `AI extracted ${Object.keys(validated).length} validated field-group(s); ${rejected.length} rejected by rules`,
+  });
+
+  // 3. DETERMINISTIC SCORING — the LLM has no hand in this
+  const { shocks, charter, data: data2 } = factsToInputs(validated, baseCharter, data);
+  const scenario = rescore(data2.graph, shocks, data2.calibration);
+  const d = await decide(data2, scenario, charter, audit);
+  audit = d.audit;
+
+  // 4. AI CONSTITUTIONAL AUDIT — advisory, read-only, cannot change a score
+  const notes = await ruleAudit(scenario, d.options, d.objections, data2, opts);
+  audit = await appendEntry(audit, {
+    ts_sim: T0, actor: 'ai_auditor', action: 'ai_rule_audit',
+    input: { option_statuses: d.options.map((o) => ({ id: o.id, status: o.status })) },
+    output: notes,
+    refs: notes.map((n) => n.kind),
+    note: `AI flagged ${notes.length} advisory observation(s) — read-only, no score changed`,
+  });
+
+  // 5. DECISION BRIEF — deterministic; states provenance + human-approval requirement
+  const brief = buildDecisionBrief(extraction, scenario, d.options, d.objections, notes);
+  return { cursor: -1, applied: [], scenario, options: d.options, objections: d.objections, audit, extraction, notes, brief };
+}
+
+/** Human approval — the final, deliberate act. Appends a hash-chained user entry. */
+export async function approveDecision(
+  audit: AuditEntry[], approver: string, decision: DecisionBrief,
+): Promise<{ audit: AuditEntry[]; brief: DecisionBrief }> {
+  const nextAudit = await appendEntry(audit, {
+    ts_sim: T0, actor: 'user', action: 'approve_decision',
+    input: { headline: decision.headline, decisions: decision.decisions },
+    output: { approved_by: approver },
+    refs: ['human-approval'],
+    note: `Human ${approver} approved the deterministic decision`,
+  });
+  return { audit: nextAudit, brief: { ...decision, approved_by: approver, approved_ts_sim: T0 } };
 }

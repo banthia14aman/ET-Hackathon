@@ -181,7 +181,7 @@ Reverting to 10 and re-running MUST reproduce the Beat-1 end state hashes exactl
 
 ## APPENDIX — OBSERVED BEHAVIOR (integration run)
 
-Recorded by INTEGRATION from `npm run check` (76/76 passing) over the real
+Recorded by INTEGRATION from `npm run check` (82/82 passing) over the real
 `hormuz2026` bundle at sim time `2026-03-15T00:00:00Z` (post-Mar-11 attack wave;
 `shock:hormuz-partial` + `shock:hormuz-severe` active). These empirical values
 supersede the [PROPOSED] figures above where they differ (LEAD rulings D1–D6).

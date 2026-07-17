@@ -52,7 +52,7 @@ Decision Charter (proposer → zero-LLM critic → arbiter) → hash-chained aud
 - Beat choreography: staggered critic objections + Beat-2 amber ring on status change.
 - Guided demo/tour (`▶ DEMO` button, `?tour=1` auto-play, `?judge=1` manual) — drives the real app,
   spotlights panels, captions double as the video script (docs/demo-tour.md).
-- Engines + data + UI integrated; `npm run check` 76/76; `npm run build` verified clean (Node 22).
+- Engines + data + UI integrated; `npm run check` 82/82; `npm run build` verified clean (Node 22).
 - Still to do (lower priority, non-code): the deck, the 3-min video, the signed audit-trace PDF prop
   (plan.md §7). Optional code: calibration-regression model (docs/ml-architecture.md upgrade path).
 - Known-issue backlog cleared: LLM cache covers all top-3 cards (kochi:0/1, demand_side,

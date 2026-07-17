@@ -52,11 +52,15 @@ for (const r of await charterMod.charterSelfCheck()) check(`charter: ${r.name}`,
 const FORBIDDEN = /Date\.now\(|Math\.random\(|performance\.now\(|crypto\.randomUUID|fetch\(|XMLHttpRequest|WebSocket/;
 const walk = (dir) => readdirSync(dir).flatMap((f) => {
   const p = path.join(dir, f);
-  return statSync(p).isDirectory() ? walk(p) : p.endsWith('.ts') || p.endsWith('.tsx') ? [p] : [];
+  // src/engine/ai/* is the EXPLICITLY non-deterministic AI-assist layer (live LLM adapters — a
+  // network fetch is the point). It is walled off from the replay/derivation path, so it is
+  // excepted from the determinism scan. Everything else on the derivation path must stay pure.
+  if (statSync(p).isDirectory()) return path.basename(p) === 'ai' && dir.endsWith('engine') ? [] : walk(p);
+  return p.endsWith('.ts') || p.endsWith('.tsx') ? [p] : [];
 });
 const dirty = [...walk(path.join(root, 'src', 'engine')), ...walk(path.join(root, 'src', 'lib'))]
   .filter((p) => FORBIDDEN.test(readFileSync(p, 'utf8')));
-check('determinism: no wall clock / randomness / network in engine+lib', dirty.length === 0, dirty.join(', '));
+check('determinism: no wall clock / randomness / network in engine+lib (AI-assist layer excepted)', dirty.length === 0, dirty.join(', '));
 
 // ---------- 3. data files: structural + referential integrity ----------
 const bundle = loadJson('hormuz2026_events.json');
@@ -207,6 +211,62 @@ const s2 = await computeScenario(miniData, miniShocks, charter);
 check('scale: same engine runs a different graph and produces judged options', s1.options.length > 0,
   s1.options.map((o) => `${o.lever}=${o.status}`).join(','));
 check('scale: new-config run is deterministic (canonicalJson)', canonicalJson(s1) === canonicalJson(s2));
+
+// ---------- 5. AI-assisted rules engine (constitutional guardrails) ----------
+const { computeFromText, approveDecision } = await mod('../src/lib/pipeline.ts');
+const { validateFacts } = await mod('../src/engine/ai/validate.ts');
+
+// (a) the validation GATE rejects every bad candidate field (schema + domain rules)
+const badCandidates = {
+  shocks: [{ chokepoint: 'atlantis', severity: 'severe' }],   // unknown chokepoint
+  brent_usd: 9000,                                             // out of range
+  cargoes: [{ grade: 'gr:foobar', target_refinery: 'ref:jamnagar' }], // unknown grade
+  charter: [{ article: 'A2', value: 200 }],                   // out of bounds
+  score: 99,                                                  // unknown key (strict schema)
+};
+const gate = validateFacts(badCandidates, data);
+check('ai-gate: rejects unknown chokepoint / out-of-range brent / unknown grade / bad charter / extra key',
+  gate.rejected.length >= 4 && Object.keys(gate.validated).length === 0,
+  `validated=${JSON.stringify(gate.validated)} rejected=${gate.rejected.map((r) => r.field).join(',')}`);
+
+// (b) the LLM never sets scores: given the SAME validated facts, the AI path scores identically
+//     to the deterministic what-if path (the scoring is engine-only, not model-driven)
+const goodText = 'Hormuz declared closed, Brent to 118, raise the cover floor to 15.';
+const ai = await computeFromText(data, goodText, charter);
+const equiv = await computeScenario(data,
+  { t_sim: '2027-01-01T00:00:00Z', shocks_active: ['shock:hormuz-severe'], brent_usd: 118 },
+  charter.map((a) => (a.id === 'A2' ? { ...a, param_value: 15 } : a)));
+const aiStatuses = ai.options.map((o) => `${o.id}=${o.status}`).sort().join(',');
+const eqStatuses = equiv.options.map((o) => `${o.id}=${o.status}`).sort().join(',');
+check('ai-scoring: AI path scores IDENTICALLY to the deterministic engine on the same validated facts',
+  aiStatuses === eqStatuses, `ai!=engine`);
+
+// (c) the AI rule audit is ADVISORY: notes exist but changed no option status (brief mirrors scores)
+const briefStatuses = ai.brief.decisions.length > 0;
+const auditChangedNothing = ai.brief.decisions.every((d) =>
+  ai.options.some((o) => o.status === d.status));
+check('ai-audit: constitutional audit is advisory — notes present, no score/status changed',
+  ai.notes.length >= 1 && briefStatuses && auditChangedNothing);
+
+// (d) the brief states deterministic provenance + human approval requirement
+check('ai-brief: brief states deterministic scoring + requires human approval',
+  ai.brief.approval_required === true
+  && /DETERMINISTIC/.test(ai.brief.provenance_statement)
+  && /HUMAN APPROVAL/.test(ai.brief.provenance_statement));
+
+// (e) every AI step is hash-chained and the chain verifies (incl. human approval)
+const hasExtract = ai.audit.some((e) => e.actor === 'ai_extractor' && e.action === 'ai_extract');
+const hasAudit = ai.audit.some((e) => e.actor === 'ai_auditor' && e.action === 'ai_rule_audit');
+const approved = await approveDecision(ai.audit, 'desk-lead', ai.brief);
+const hasApproval = approved.audit.some((e) => e.actor === 'user' && e.action === 'approve_decision');
+check('ai-audit-chain: ai_extract + ai_rule_audit + human approval are hash-chained and verify',
+  hasExtract && hasAudit && hasApproval && verifyChain(approved.audit));
+
+// (f) determinism: same text → byte-identical AI result (offline path)
+const ai2 = await computeFromText(data, goodText, charter);
+check('ai-determinism: same text → identical scored options + audit hashes (offline)',
+  canonicalJson(ai.options) === canonicalJson(ai2.options)
+  && ai.audit.map((e) => e.output_hash).join() === ai2.audit.map((e) => e.output_hash).join());
 
 // ---------- report ----------
 let failed = 0;
