@@ -1,6 +1,9 @@
-# TRINETRA — Presentation (9 slides + speaker notes)
+# TRINETRA — Presentation (10 slides + speaker notes)
 
 *Governed crude-supply decisions at machine speed. ET AI Hackathon 2026.*
+
+> **Positioning line (say it once, early):** *TRINETRA uses AI for sense-making and
+> constitutional auditing, deterministic logic for scoring, and humans for final approval.*
 
 **Design system:** true-black background, saffron/amber accent, ≤20 words of body per
 slide, 10-pt source footnotes on every number, eye glyph (△) bottom-right. Every
@@ -24,9 +27,10 @@ figure carries its provenance chip: **R** = real-sourced · **E** = estimated ·
 
 **Speaker note (15s):** "Everyone here will show you an AI that answers. We built an AI
 that argues — under a constitution you can edit — and hands you a signed record of the
-argument. Watch it reroute India's crude in four minutes." *(4:07 = the demo's measured
-wall time; the app now carries a real on-screen DECISION CLOCK — starts when the crisis
-opens, click to freeze at the decision. The 6-day lag is a reported/estimated figure — E.)*
+argument. We use **AI for sense-making and auditing, deterministic logic for scoring, and a
+human for final approval.** Watch it reroute India's crude in four minutes." *(4:07 = the
+demo's measured wall time; the app now carries a real on-screen DECISION CLOCK — starts when
+the crisis opens, click to freeze at the decision. The 6-day lag is a reported/estimated figure — E.)*
 
 ---
 
@@ -179,6 +183,33 @@ number (byte-identical) · an LLM only for the sentence (cached, offline).
 **Speaker note:** "No `Date.now`, no `Math.random` on the derivation path. Two runs at the
 same sim-time are byte-identical, including every audit hash. **Run it again — byte-
 identical. Try that with a prompt.**"
+
+---
+
+## Slide 7B — AI-assisted, guardrailed (the constitutional-AI slide)
+
+# Now it reads messy operator text — and the gate throws out whatever it makes up.
+### AI for sense-making · rules for scoring · humans for approval.
+
+**Visual:** a 5-stage guardrailed flow, then a live capture of the validation gate.
+
+```
+① AI SENSE-MAKING ─▶ ② VALIDATION GATE ─▶ ③ DETERMINISTIC SCORING ─▶ ④ AI RULE AUDIT ─▶ ⑤ HUMAN APPROVAL
+   (advisory)          (authoritative)       (authoritative)            (advisory)          (logged)
+   reads free text     strict schema+rules    rescore·critic·arbiter     rule gaps·read-only  sign-off
+```
+
+The gate, live (from the app's "⚠ Hallucination test"): a validated `shock: hormuz severe`
+survives; a hallucinated **`Brent 9000`**, a **200-day floor**, and a **made-up grade** are
+struck through and dropped — *"rejected by the validation gate — they never reached scoring."*
+
+**Speaker note (20s):** "The LLM does two jobs it's actually good at — reading messy human
+text into structured facts, and afterwards flagging rule gaps. It does the job it's *bad* at —
+setting a number — **never**. Every field it extracts must pass a strict schema and our domain
+rules before it touches the engine; anything it invents is dropped with a reason. The audit is
+read-only. Scoring is deterministic. A human signs. And all of it — the extraction, every
+rejection, the scoring, the audit, the approval — is on the same hash chain, byte-identical,
+offline. That's the difference between *using* an LLM and *trusting* one."
 
 ---
 

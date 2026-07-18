@@ -5,6 +5,10 @@ Single-page, 100% client-side React app that deterministically replays the 2026
 Strait of Hormuz crisis: signals → exposure-graph re-score → option cards →
 Decision Charter (proposer → zero-LLM critic → arbiter) → hash-chained audit trace.
 
+**Positioning:** an *AI-assisted rules engine with constitutional-AI guardrails* —
+**AI for sense-making and constitutional auditing, deterministic logic for scoring,
+humans for final approval** (the `src/engine/ai/` layer; see README.md).
+
 ## Commands
 - `npm run dev` — Vite dev server
 - `npm run build` — typecheck + production bundle (`dist/`)
@@ -20,12 +24,13 @@ Decision Charter (proposer → zero-LLM critic → arbiter) → hash-chained aud
 - `src/engine/options.ts` — generateOptions(...) → OptionCard[] across 5 levers (stock_draw, divert_on_water, floating_storage, reroute, demand_side).
 - `src/engine/charter/` — propose (cached LLM text), criticize (PURE FUNCTIONS ONLY — no LLM, ever), arbitrate (severity lattice: block→rejected, flag→conditional, else validated; async for crypto.subtle), audit (hash-chained entries).
 - `src/engine/refinery_model.ts` — our OWN trained model (softmax regression, frozen weights in `data/refinery_model.json`, fit by `scripts/train-refinery-model.mjs`). Advisory crude-compatibility prediction (tier + confidence) on reroute cards; pure/deterministic inference. The zero-LLM critic stays the authority. See `docs/ml-architecture.md` for the "right tool per layer" story (rules for veto, our model for numbers, LLM only for prose).
+- `src/engine/ai/` — the AI-ASSIST layer (the ONLY non-deterministic, network-capable engine code; excepted from the determinism scan). `extract` = LLM sense-making (free text → candidate facts; live model when `VITE_AI_*` set, else deterministic offline stand-in), `validate` = the deterministic GATE (strict schema + domain rules; drops anything fabricated — the LLM sets no score), `ruleAudit` = read-only LLM constitutional audit (rule gaps; changes nothing), `brief` = deterministic human-approval brief. Composed in `src/lib/pipeline.ts` (`computeFromText`, `approveDecision`); UI is `src/components/AiAssistPanel.tsx`. Guarantee: given the validated facts, scoring + audit hashes are byte-identical.
 - `src/lib/labels.ts` — presentation-only jargon map: internal ids/rule-codes/status enums → plain English. Engine strings are NEVER renamed; mapped at render time only, so checks + audit JSON stay byte-identical.
 - `src/components/` — MapView (SVG, no tiles/tokens), panels/* (ticker, options, critic chips, charter, waterfall, stopwatch, provenance chips).
 - `data/*.json` — all real-world data. Every leaf carries `prov: R|E|S` (Real-sourced / Estimated / Synthetic) + `source` + `as_of`. UI renders these as LIVE/CACHED/SYNTH chips.
 
 ## Hard rules (breaking these breaks the product's core claims)
-1. **No network calls at runtime.** The demo must run in airplane mode. LLM text comes from `src/cache/`.
+1. **No network calls at runtime.** The demo must run in airplane mode. LLM text comes from `src/cache/`. (Sole exception: `src/engine/ai/` may call a live model when `VITE_AI_*` env is set — it is the explicit AI-assist layer, off the replay path, and falls back to a deterministic offline stand-in so the demo still runs in airplane mode.)
 2. **No `Date.now()` / `Math.random()` in any derivation path.** Sim time (`ts_sim`) only. Byte-identical replay is a judged claim.
 3. **The critic contains zero LLM.** Objections are computed facts `{article, evidence, severity}`; LLM only narrates elsewhere.
 4. **Provenance is load-bearing.** Never ship a number without `prov/source/as_of`. Never upgrade S→R.
@@ -40,6 +45,14 @@ Decision Charter (proposer → zero-LLM critic → arbiter) → hash-chained aud
 - Demo beats: (1) critic demotes Venezuelan Merey (too-heavy: API 16 < Jamnagar min 18 + OFAC AMBER + voyage-vs-buffer), (2) charter edit days-of-cover 10→15 with visible rule traces. Both must be deterministic.
 
 ## Current status / next steps
+- AI-ASSISTED RULES ENGINE (2026-07-18): added `src/engine/ai/` (extract → validate GATE →
+  deterministic scoring → read-only rule audit → human-approval brief), the `AI ASSIST ✦` header
+  panel, contracts/schemas for candidate facts + rule-audit + brief, and 6 new checks (ai-gate,
+  ai-scoring, ai-audit, ai-brief, ai-audit-chain, ai-determinism). README rewritten to the new
+  positioning. Deck: added slide 7B (AI-assisted, guardrailed) using `ai_gate.png` + updated slide-1
+  positioning; rebuilt both themes (11 slides) → `TRINETRA_Deck_{Light,Soft}.{pptx,pdf}`. Demo/pitch
+  docs carry the AI-assist beat + Q&A #14. Positioning line: "AI for sense-making and constitutional
+  auditing, deterministic logic for scoring, humans for final approval."
 - UI REVAMPED (2026-07-06, from a 21-agent diagnosis+design workflow): plain-language everywhere
   (no raw ids on screen — see `src/lib/labels.ts`), sans type scale, a header with the national
   cover KPI + pitch, a plain-English guide band that narrates what's happening and why, provenance

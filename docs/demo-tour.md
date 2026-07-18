@@ -27,6 +27,18 @@ Nothing is faked — the numbers, the critic's objections, and the audit hashes 
 8. **The proof** — "Every step — propose, critique, arbitrate — is hash-chained and re-runs byte-identically, offline. That signed trace is what a regulator can audit." *(spotlights THE PROOF / VERIFIED seal)*
 9. **Six days to four minutes** — "An AI that argues under rules you wrote, a machine that enforces them, and a decision on the record. That is TRINETRA."
 
+## Bonus beat — AI ASSIST ✦ (not in the auto-tour; show it by hand)
+
+The header's **`AI ASSIST ✦`** button opens the AI-assisted decision flow — the proof behind the
+positioning line *"AI for sense-making, deterministic scoring, human approval."* It's a manual
+beat (the auto-tour doesn't drive it), ideal for Q&A or a longer cut of the video:
+
+> "Free operator text goes in. The LLM reads it into candidate facts — then a **validation gate**
+> throws out whatever it makes up: a hallucinated Brent of 9000, a 200-day floor, a made-up
+> grade, all struck through before scoring. Only the survivors reach the same deterministic
+> engine. The LLM then audits the result read-only, and a human signs. Every step is on the
+> same hash chain." *(Use the "⚠ Hallucination test" example → ▶ Extract → validate → score → audit.)*
+
 ## Recording tips
 
 - Run **airplane mode** during capture — proves the no-network claim and avoids a stray request.

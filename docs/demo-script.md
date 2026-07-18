@@ -90,14 +90,34 @@ Clicks are named by panel + element. Speaker lines are **verbatim — do not par
 
 ### t=4:20–5:00 — Architecture + close
 
-- t=4:20 — `Cmd+Tab` to deck, slide 7 (architecture: "Deterministic Core, LLM at the Edges").
+- t=4:20 — `Cmd+Tab` to deck, slide 7 (architecture: "Deterministic Core, LLM at the Edges"),
+  then slide 7B (AI-assisted, guardrailed).
 - SAY: "Solid arrows are deterministic flow. Dashed arrows are the LLM. Nothing inside the
-  bright border ever calls a model."
+  bright border ever calls a model. We use **AI for sense-making and auditing, deterministic
+  logic for scoring, and a human for approval** — and the validation gate throws out anything
+  the model makes up before it can touch a number."
 - t=4:40 — slide 9. **Hand the printed, pen-signed audit PDF to the nearest judge. Pause
   2 seconds.**
 - SAY (the lead again, verbatim, closing):
   > "When Hormuz closed, India took six days to reroute crude; TRINETRA does it in four minutes — and shows you the argument, under rules you wrote."
 - Stop. No thank-you slide.
+
+## Optional live beat — AI ASSIST ✦ (show if a judge asks "how do you use the LLM?")
+
+Not in the timed 5:00 run — a 40-second insert for Q&A or a longer slot. It is the proof for
+the positioning line "AI for sense-making, deterministic scoring, human approval."
+
+- Click **`AI ASSIST ✦`** in the header → the modal opens.
+- Pick the **"⚠ Hallucination test"** example → click **▶ Extract → validate → score → audit**.
+- SAY: "This is free operator text. The LLM reads it into candidate facts — that's the one
+  thing it's good at. Watch the gate." Point at stage ①: the real shock validates green; the
+  hallucinated **Brent 9000**, a **200-day floor**, and a **made-up grade** strike through red —
+  *"rejected by the validation gate; they never reached scoring."*
+- SAY: "Only the survivors are scored — by the same deterministic engine as the live replay.
+  Then the LLM audits the result read-only, flagging rule gaps it can't change. And a human
+  signs." Point at stage ④ (advisory notes) and ⑤ (the APPROVE button).
+- SAY (closer): "Every step is on the same hash chain. The model never sets a number — the
+  gate is what makes it safe to use at all."
 
 ## Fallback ladder (plan.md §10, brainstorm §2.5 — rehearse all three tiers)
 
