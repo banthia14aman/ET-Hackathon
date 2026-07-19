@@ -18,6 +18,7 @@ import MapView, { type DarkVessel } from './components/MapView';
 import ScenarioBuilder from './components/ScenarioBuilder';
 import BacktestScorecard from './components/BacktestScorecard';
 import AiAssistPanel from './components/AiAssistPanel';
+import DecisionReport from './components/DecisionReport';
 import {
   AuditTrace, CharterPanel, DebatePanel, OptionCards, Stopwatch, TaxonomyCard, Ticker, Waterfall,
 } from './components/panels';
@@ -212,6 +213,7 @@ export default function App() {
   const [scenarioOpen, setScenarioOpen] = useState(false);
   const [backtestOpen, setBacktestOpen] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
   // Beat-2 amber ring: option ids whose status just changed
   const [changedIds, setChangedIds] = useState<Set<string>>(new Set());
   const prevStatus = useRef<Record<string, string>>({});
@@ -387,6 +389,7 @@ export default function App() {
         <button className="scn-open-btn" onClick={() => setScenarioOpen(true)}>WHAT-IF ⌂</button>
         <button className="scn-open-btn" onClick={() => setBacktestOpen(true)}>BACKTEST ✓</button>
         <button className="scn-open-btn ai-open-btn" onClick={() => setAiOpen(true)}>AI ASSIST ✦</button>
+        <button className="scn-open-btn report-open-btn" onClick={() => setReportOpen(true)}>REPORT ▤</button>
         <div className="pitch">
           When Hormuz closed, India took <b>6 days</b> to reroute crude. TRINETRA does it in <b>4 minutes</b> —
           and every rejection is a machine-checked rule, not an AI guess.
@@ -473,6 +476,14 @@ export default function App() {
       {backtestOpen && <BacktestScorecard onClose={() => setBacktestOpen(false)} />}
 
       {aiOpen && <AiAssistPanel data={DATA} charter={charter} onClose={() => setAiOpen(false)} />}
+      {reportOpen && (
+        <DecisionReport
+          scenario={scenario} options={options} objections={objections} audit={audit} charter={charter}
+          verified={verifyChain(audit)} sandbox={sandbox} nodes={DATA.graph.nodes} cover={cover} safeLine={safeLine}
+          contributions={contributions} costOfDelayUsd={costOfDelayUsd} costTitle={costTitle}
+          onClose={() => setReportOpen(false)}
+        />
+      )}
 
       {tourStep != null && <div className="tour-dim" />}
 

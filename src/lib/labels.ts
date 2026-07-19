@@ -81,7 +81,7 @@ export function articleName(rule_id: string): string {
     is NEVER changed (it feeds the hash chain); this runs at render time only. */
 export function plainMessage(msg: string): string {
   return msg
-    .replace(/\b(?:gr|ref|sup|ck|cor):[a-z0-9_-]+/gi, (m) => prettify(m))
+    .replace(/\b(?:gr|ref|sup|ck|cor|sc|edge|node|est|evt):[a-z0-9_-]+/gi, (m) => prettify(m))
     .replace(/\d+\.\d{3,}/g, (m) => String(Math.round(parseFloat(m) * 10) / 10))
     .replace(/(\w)\/(\w)/g, '$1 · $2');
 }
