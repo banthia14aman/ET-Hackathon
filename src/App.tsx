@@ -19,6 +19,8 @@ import ScenarioBuilder from './components/ScenarioBuilder';
 import BacktestScorecard from './components/BacktestScorecard';
 import AiAssistPanel from './components/AiAssistPanel';
 import DecisionReport from './components/DecisionReport';
+import { narrateOptions } from './engine/ai/narrate';
+import type { LlmRecord } from './engine/ai/llm';
 import {
   AuditTrace, CharterPanel, DebatePanel, OptionCards, Stopwatch, TaxonomyCard, Ticker, Waterfall,
 } from './components/panels';
@@ -214,6 +216,8 @@ export default function App() {
   const [backtestOpen, setBacktestOpen] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
+  // live LLM narration for the visible option cards (presentation only; record-replayed).
+  const [liveRationales, setLiveRationales] = useState<Record<string, LlmRecord>>({});
   // Beat-2 amber ring: option ids whose status just changed
   const [changedIds, setChangedIds] = useState<Set<string>>(new Set());
   const prevStatus = useRef<Record<string, string>>({});
@@ -296,6 +300,18 @@ export default function App() {
   useEffect(() => {
     if (sel?.kind === 'route' && !options.some((o) => o.id === sel.id)) setSel(null);
   }, [options, sel]);
+
+  // LIVE LLM narration: every decision-state change re-narrates the visible cards through the
+  // record-replay client (identical state ⇒ replayed record, no re-call). Failures keep the
+  // cached rationale — narration never blocks or alters a decision.
+  useEffect(() => {
+    if (!scenario || options.length === 0) return;
+    let stale = false;
+    narrateOptions(options, scenario).then((r) => {
+      if (!stale && Object.keys(r).length) setLiveRationales((p) => ({ ...p, ...r }));
+    });
+    return () => { stale = true; };
+  }, [options, scenario]);
 
   // guided tour: run the step's action, spotlight its panel, and slide the card beside it
   useEffect(() => {
@@ -458,7 +474,7 @@ export default function App() {
         <DebatePanel options={options} objections={objections} />
       </div>
       <div className="panel" style={{ gridArea: 'options' }} data-tour="plan">
-        <OptionCards options={options} selectedId={sel?.kind === 'route' ? sel.id : undefined} changedIds={changedIds} onSelect={(id) => setSel({ kind: 'route', id })} />
+        <OptionCards options={options} liveRationales={liveRationales} selectedId={sel?.kind === 'route' ? sel.id : undefined} changedIds={changedIds} onSelect={(id) => setSel({ kind: 'route', id })} />
       </div>
       <div className="panel" style={{ gridArea: 'waterfall' }}>
         <Waterfall gap_kbd={scenario?.gap_kbd ?? 0} contributions={contributions} costOfDelayUsd={costOfDelayUsd} costTitle={costTitle} />

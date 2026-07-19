@@ -1,0 +1,14 @@
+name = "trinetra-llm"
+main = "worker.js"
+compatibility_date = "2026-07-01"
+
+# Secrets are NOT stored here — set them after first deploy:
+#   npx wrangler secret put NVIDIA_API_KEY        (required)
+#   npx wrangler secret put NVIDIA_MODEL          (optional; defaults to the qwen model)
+#
+# Optional per-IP rate limit: create a KV namespace and bind it as RL, e.g.
+#   npx wrangler kv namespace create RL
+# then uncomment and paste the id:
+# [[kv_namespaces]]
+# binding = "RL"
+# id = "<your-kv-namespace-id>"

@@ -92,10 +92,16 @@ that scan (a network call to a live model is the point). It is walled off from s
 and (b) *advisory* audit notes that can change nothing. So the guarantees hold precisely:
 **given the validated facts, scoring and its audit hashes are byte-identical.**
 
-**Live vs. offline.** The AI extraction and audit call an OpenAI-compatible model when
-`VITE_AI_ENDPOINT` + `VITE_AI_KEY` (optional `VITE_AI_MODEL`) are set; otherwise they use a
-deterministic offline stand-in so the demo runs in airplane mode. Either way the guardrails —
-strict schema + rules on intake, read-only on audit, human approval — are identical.
+**Live vs. offline.** In the browser the AI layer is **live by default**: extraction, the
+constitutional audit, and the option-card narration call NVIDIA NIM
+(`meta/llama-3.3-70b-instruct`) through a key-holding Cloudflare Worker
+(`infra/trinetra-llm`) — the browser never sees an API key. A **record-replay transcript**
+(`src/engine/ai/llm.ts`) records each live completion keyed by its request content, so
+identical state replays the recorded text instead of re-calling the model: *a live model makes
+the call; the record replays byte-identically.* Every live path degrades to a deterministic
+offline stand-in (and the build-time cache) on failure or in airplane mode — set
+`VITE_AI_LIVE=0` to force offline. Node (`npm run check`) is always offline. Either way the
+guardrails — strict schema + rules on intake, read-only on audit, human approval — are identical.
 
 ## Data provenance
 

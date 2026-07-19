@@ -8,6 +8,7 @@
 
 import type { Objection, OptionCard, RuleAuditNote, ScenarioState, StaticData } from './deps';
 import { RuleAuditSchema } from '../../contracts/schemas';
+import { chatLive, llmEndpoint, DEFAULT_LLM_MODEL } from './llm';
 
 export interface AuditOpts { endpoint?: string; apiKey?: string; model?: string; }
 
@@ -55,28 +56,26 @@ MISSING DATA, and UNSUPPORTED ASSUMPTIONS. You are ADVISORY ONLY — you cannot 
 status, or verdict; do not recommend a specific option. Return ONLY minified JSON:
 [{kind:"rule_gap"|"missing_data"|"unsupported_assumption",message:string,refs:string[],severity:"info"|"warn",by:string}]`;
 
-async function liveAudit(payload: unknown, o: Required<Pick<AuditOpts, 'endpoint' | 'apiKey' | 'model'>>): Promise<RuleAuditNote[]> {
-  const res = await fetch(o.endpoint, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', authorization: `Bearer ${o.apiKey}` },
-    body: JSON.stringify({ model: o.model, temperature: 0.2, messages: [
-      { role: 'system', content: SYS }, { role: 'user', content: JSON.stringify(payload) }] }),
-  });
-  if (!res.ok) throw new Error(`audit HTTP ${res.status}`);
-  const j = await res.json();
-  const raw = String(j.choices?.[0]?.message?.content ?? '[]').replace(/```json|```/g, '').trim();
+async function liveAudit(payload: unknown, o: { endpoint: string; apiKey?: string; model: string }): Promise<RuleAuditNote[]> {
+  const rec = await chatLive(
+    [{ role: 'system', content: SYS }, { role: 'user', content: JSON.stringify(payload) }],
+    { endpoint: o.endpoint, apiKey: o.apiKey, model: o.model, temperature: 0.2 },
+  );
+  const raw = rec.text.replace(/```json|```/g, '').trim();
   const parsed = RuleAuditSchema.safeParse(JSON.parse(raw)); // reject anything off-schema
-  return parsed.success ? parsed.data.map((n) => ({ ...n, by: `${o.model} (advisory)` })) : [];
+  return parsed.success ? parsed.data.map((n) => ({ ...n, by: `${rec.model} (advisory)` })) : [];
 }
 
-/** Run the constitutional audit. Live when configured, deterministic offline. Never gates. */
+/** Run the constitutional audit. LIVE BY DEFAULT in the browser (key-holding Worker);
+    deterministic offline stand-in in Node or on failure. Never gates. */
 export async function ruleAudit(
   scenario: ScenarioState, options: OptionCard[], objections: Objection[], data: StaticData, opts: AuditOpts = {},
 ): Promise<RuleAuditNote[]> {
-  if (opts.endpoint && opts.apiKey) {
-    const model = opts.model || 'gpt-4o-mini';
+  const endpoint = opts.endpoint ?? llmEndpoint();
+  if (endpoint) {
+    const model = opts.model || DEFAULT_LLM_MODEL;
     try {
-      const notes = await liveAudit({ scenario, options: options.map((o) => ({ id: o.id, grade: o.grade, status: o.status, eta_days: o.eta_days })), objections }, { endpoint: opts.endpoint, apiKey: opts.apiKey, model });
+      const notes = await liveAudit({ scenario, options: options.map((o) => ({ id: o.id, grade: o.grade, status: o.status, eta_days: o.eta_days })), objections }, { endpoint, apiKey: opts.apiKey, model });
       return notes.length ? notes : deterministicRuleAudit(scenario, options, objections, data);
     } catch {
       return deterministicRuleAudit(scenario, options, objections, data);

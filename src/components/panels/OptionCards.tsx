@@ -12,7 +12,9 @@ const TIER_LABEL: Record<string, string> = {
   RUN_NOW: 'Runs neat', BLEND: 'Blend only', CANNOT_RUN: 'Cannot run',
 };
 
-function Card({ o, selected, changed, onSelect }: { o: OptionCard; selected?: boolean; changed?: boolean; onSelect?: (id: string) => void }) {
+export interface LiveRationale { text: string; model: string }
+
+function Card({ o, live, selected, changed, onSelect }: { o: OptionCard; live?: LiveRationale; selected?: boolean; changed?: boolean; onSelect?: (id: string) => void }) {
   const rationale = (o as OptionCard & { rationale?: string }).rationale;
   const rail = RAIL_LABEL[o.payment_rail];
   const model = o as OptionCard & { model_tier?: string; model_confidence?: number };
@@ -38,7 +40,17 @@ function Card({ o, selected, changed, onSelect }: { o: OptionCard; selected?: bo
       {o.status === 'conditional' && o.conditions?.map((c) => (
         <div key={c} className="option-condition">⚠ {plainMessage(c)}</div>
       ))}
-      {rationale && !rationale.startsWith('[') && (
+      {live ? (
+        <>
+          <div className="option-rationale">{live.text}</div>
+          <div className="option-rationale-meta">
+            <span className="chip" style={{ color: 'var(--green)', borderColor: 'var(--green)' }}>
+              <span className="chip-dot" style={{ background: 'var(--green)' }} />LIVE ✦
+            </span>
+            <span className="label">AI rationale · {live.model} · live, recorded for replay</span>
+          </div>
+        </>
+      ) : rationale && !rationale.startsWith('[') && (
         <>
           <div className="option-rationale">{rationale}</div>
           <div className="option-rationale-meta">
@@ -53,7 +65,7 @@ function Card({ o, selected, changed, onSelect }: { o: OptionCard; selected?: bo
   );
 }
 
-export default function OptionCards({ options, selectedId, changedIds, onSelect }: { options: OptionCard[]; selectedId?: string; changedIds?: Set<string>; onSelect?: (id: string) => void }) {
+export default function OptionCards({ options, liveRationales, selectedId, changedIds, onSelect }: { options: OptionCard[]; liveRationales?: Record<string, LiveRationale>; selectedId?: string; changedIds?: Set<string>; onSelect?: (id: string) => void }) {
   const active = options.filter((o) => o.status !== 'rejected');
   const cards = active.slice(0, 3);
   const rows = [...active.slice(3), ...options.filter((o) => o.status === 'rejected')];
@@ -68,7 +80,7 @@ export default function OptionCards({ options, selectedId, changedIds, onSelect 
       <div className="panel-title">The plan</div>
       <div className="panel-sub">Top substitute cargoes the desk can execute now. Click one to trace its route on the map.</div>
       {options.length === 0 && <div className="debate-empty">No options yet — the crisis hasn't opened a gap.</div>}
-      {cards.map((o) => <Card key={o.id} o={o} selected={o.id === selectedId} changed={changedIds?.has(o.id)} onSelect={onSelect} />)}
+      {cards.map((o) => <Card key={o.id} o={o} live={liveRationales?.[o.id]} selected={o.id === selectedId} changed={changedIds?.has(o.id)} onSelect={onSelect} />)}
       {[...collapsed.entries()].map(([, { o, n }]) => {
         const model = o as OptionCard & { model_tier?: string; model_confidence?: number };
         const routable = o.lever === 'reroute' || o.lever === 'divert_on_water';

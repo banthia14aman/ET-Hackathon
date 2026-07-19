@@ -8,6 +8,7 @@
 // validate.ts gate (strict schema + domain rules) decides what actually reaches the engine.
 
 import type { CandidateFacts } from '../../contracts/types';
+import { chatLive, llmEndpoint, DEFAULT_LLM_MODEL } from './llm';
 
 export interface ExtractOpts { endpoint?: string; apiKey?: string; model?: string; }
 
@@ -70,33 +71,25 @@ Return ONLY minified JSON matching this TypeScript type — no prose, no markdow
 RULES: extract ONLY facts explicitly stated in the text; never invent a number, grade, or refinery;
 never output a score, ranking, verdict, or recommendation; omit any field you are unsure about.`;
 
-/** Live adapter: OpenAI-compatible chat completion → parsed JSON candidate facts. */
-async function liveExtract(text: string, o: Required<Pick<ExtractOpts, 'endpoint' | 'apiKey' | 'model'>>): Promise<CandidateFacts> {
-  const res = await fetch(o.endpoint, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', authorization: `Bearer ${o.apiKey}` },
-    body: JSON.stringify({
-      model: o.model, temperature: 0.1,
-      messages: [{ role: 'system', content: SYS }, { role: 'user', content: text }],
-    }),
-  });
-  if (!res.ok) throw new Error(`extract HTTP ${res.status}`);
-  const j = await res.json();
-  const raw = String(j.choices?.[0]?.message?.content ?? '').replace(/```json|```/g, '').trim();
-  return JSON.parse(raw) as CandidateFacts; // still a CANDIDATE — validate.ts gates it
-}
-
-/** Extract candidate facts. Live when configured, deterministic offline stand-in otherwise. */
+/** Extract candidate facts. LIVE BY DEFAULT in the browser (via the key-holding Cloudflare
+    Worker — record-replay in llm.ts); deterministic offline stand-in in Node or on failure. */
 export async function extractFacts(
   text: string, opts: ExtractOpts = {},
 ): Promise<{ candidates: CandidateFacts; model: string; live: boolean }> {
-  if (opts.endpoint && opts.apiKey) {
-    const model = opts.model || 'gpt-4o-mini';
+  const endpoint = opts.endpoint ?? llmEndpoint();
+  if (endpoint) {
+    const model = opts.model || DEFAULT_LLM_MODEL;
     try {
-      return { candidates: await liveExtract(text, { endpoint: opts.endpoint, apiKey: opts.apiKey, model }), model, live: true };
+      const rec = await chatLive(
+        [{ role: 'system', content: SYS }, { role: 'user', content: text }],
+        { endpoint, apiKey: opts.apiKey, model, temperature: 0.1 },
+      );
+      const raw = rec.text.replace(/```json|```/g, '').trim();
+      // still a CANDIDATE — validate.ts gates it
+      return { candidates: JSON.parse(raw) as CandidateFacts, model: rec.model, live: true };
     } catch {
-      return { candidates: heuristicExtract(text), model: `offline-heuristic (live ${model} failed)`, live: false };
+      return { candidates: heuristicExtract(text), model: `offline-heuristic (live ${model} unreachable)`, live: false };
     }
   }
-  return { candidates: heuristicExtract(text), model: 'offline-heuristic (LLM stand-in — set VITE_AI_ENDPOINT for a live model)', live: false };
+  return { candidates: heuristicExtract(text), model: 'offline-heuristic (deterministic stand-in)', live: false };
 }
