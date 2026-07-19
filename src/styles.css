@@ -286,6 +286,37 @@ body.projector { font-size: 14px; }
 
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 
+/* ---------- narrow / mobile ----------
+   The terminal is a fixed 3-column, 100vh grid built for a laptop/projector. Below 860px
+   there isn't room for it, so restack every named area into one scrollable column. Desktop
+   is untouched above the breakpoint; panels keep their inline gridArea names. */
+@media (max-width: 860px) {
+  html, body { overflow-x: hidden; }
+  .app-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    grid-template-areas:
+      'header' 'guide' 'ticker' 'taxonomy' 'map' 'debate' 'options' 'charter' 'waterfall';
+    height: auto;
+    min-height: 100vh;
+  }
+  /* command bar: wrap instead of running off-screen; pitch and KPI drop to their own line */
+  .header { flex-wrap: wrap; gap: 8px 12px; }
+  .pitch { flex-basis: 100%; max-width: none; order: 8; }
+  .header-kpi { border-left: none; padding-left: 0; }
+  /* guide + what-if banner: stack the message above the legend/controls */
+  .guide, .sandbox { grid-template-columns: 1fr; }
+  .guide-legend { justify-content: flex-start; max-width: none; }
+  /* the map fills a flex row on desktop — give it an explicit height once stacked, and let
+     the page scroll past it (the SVG's inline touch-action:none otherwise traps the gesture) */
+  [data-tour="map"] { height: 62vw; min-height: 240px; }
+  .map-container svg { touch-action: pan-y !important; }
+  /* the bottom bar spans 3 cols on desktop; let its hero / cost / bars wrap on a phone */
+  .waterfall { flex-wrap: wrap; gap: 14px 24px; height: auto; padding: 4px 0; }
+  .waterfall-cost { border-left: none; padding-left: 0; }
+  .waterfall-bars { flex-basis: 100%; }
+}
+
 /* ---- AI-assisted decision panel ---- */
 .ai-open-btn { border-color: var(--blue); color: var(--blue); }
 .ai-open-btn:hover { background: var(--blue); color: #000; }
