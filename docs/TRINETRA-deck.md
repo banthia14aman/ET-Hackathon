@@ -174,11 +174,12 @@ plan re-decides itself — and every demotion cites the article that caused it."
 ```
 Signals ─▶ Rescore ─▶ Options ─▶ Proposer ┈▶ Critic (ZERO LLM) ─▶ Arbiter ─▶ Audit
                                     ┊                                          (hash chain)
-                                    ┈▶ [cached LLM text]        [our trained model → the number]
+                                    ┈▶ [LIVE LLM · recorded]    [our trained model → the number]
 ```
 
 **Right tool per layer:** rules for the veto (can't hallucinate) · our model for the
-number (byte-identical) · an LLM only for the sentence (cached, offline).
+number (byte-identical) · an LLM only for the sentence (live at the edges via a
+key-holding worker, recorded for replay; cache is the airplane-mode fallback).
 
 **Speaker note:** "No `Date.now`, no `Math.random` on the derivation path. Two runs at the
 same sim-time are byte-identical, including every audit hash. **Run it again — byte-
@@ -199,17 +200,21 @@ identical. Try that with a prompt.**"
    reads free text     strict schema+rules    rescore·critic·arbiter     rule gaps·read-only  sign-off
 ```
 
-The gate, live (from the app's "⚠ Hallucination test"): a validated `shock: hormuz severe`
-survives; a hallucinated **`Brent 9000`**, a **200-day floor**, and a **made-up grade** are
-struck through and dropped — *"rejected by the validation gate — they never reached scoring."*
+Two live captures side by side: **the gate** (from "⚠ Hallucination test": `shock: hormuz
+severe` survives; a hallucinated **`Brent 9000`** and a **made-up grade** struck through —
+*"rejected by the validation gate — they never reached scoring"*) and **the model, live** (an
+APPROVED option card whose rationale was written by NVIDIA Llama-3.3-70B seconds ago, chip:
+**LIVE ✦ · recorded for replay**).
 
-**Speaker note (20s):** "The LLM does two jobs it's actually good at — reading messy human
-text into structured facts, and afterwards flagging rule gaps. It does the job it's *bad* at —
-setting a number — **never**. Every field it extracts must pass a strict schema and our domain
-rules before it touches the engine; anything it invents is dropped with a reason. The audit is
-read-only. Scoring is deterministic. A human signs. And all of it — the extraction, every
-rejection, the scoring, the audit, the approval — is on the same hash chain, byte-identical,
-offline. That's the difference between *using* an LLM and *trusting* one."
+**Callout:** *A live model makes the call. The record replays byte-identically. A human signs.*
+
+**Speaker note (20s):** "The LLM runs **live** on every decision-state change — NVIDIA, through
+a key-holding Cloudflare Worker, so the browser never sees a key. It does the jobs it's good at:
+reading messy text into candidate facts and narrating the plan. It does the job it's *bad* at —
+setting a number — **never**: every extracted field passes a strict schema and our domain rules,
+anything it invents is dropped with a reason, and scoring stays deterministic. Every completion
+is recorded, so the sealed record replays byte-identically offline. That's the difference
+between *using* a live LLM and *trusting* one."
 
 ---
 
