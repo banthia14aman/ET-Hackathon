@@ -9,6 +9,7 @@ type Sev = '' | 'partial' | 'severe';
 
 const PRESETS: { name: string; sev: Record<string, Sev>; brent: number }[] = [
   { name: 'Full Hormuz closure', sev: { hormuz: 'severe' }, brent: 130 },
+  { name: 'Red Sea / Bab-el-Mandeb closure (non-Hormuz)', sev: { 'bab-el-mandeb': 'severe', suez: 'severe' }, brent: 112 },
   { name: 'Two-strait crisis (Hormuz + Red Sea)', sev: { hormuz: 'severe', 'bab-el-mandeb': 'severe' }, brent: 145 },
   { name: 'Every chokepoint stressed', sev: { hormuz: 'partial', 'bab-el-mandeb': 'partial', suez: 'partial', malacca: 'partial' }, brent: 120 },
   { name: 'Calm baseline', sev: {}, brent: 72 },
