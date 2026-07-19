@@ -114,7 +114,8 @@ grades, volumes, refinery assignments. Every claim carries a provenance chip."
 
 **Visual:** three taxonomy rows, **Merey 16 highlighted red.**
 
-- 200+ crude grades × refinery assay envelopes (API, sulfur, TAN, Ni/V, residue, pour).
+- 10 fully-assayed hero grades × refinery assay envelopes (API, sulfur, TAN, Ni/V, residue,
+  pour) — on a schema built to hold 200+.
 - A **written Decision Charter** (7 articles) the AI is bound by.
 - A **trained compatibility model** — *our* number, byte-identical every run.
 
@@ -226,8 +227,9 @@ between *using* a live LLM and *trusting* one."
 **Visual:** a chokepoint map + a YAML config stub loading in the same engine + a buyer
 ladder (refiner desk → national oil company → ministry cell).
 
-**Honest footer:** live production feeds (Kpler/Spire) are adapter stubs today —
-~30 lines, marked "production license."
+**Honest footer:** live production feeds (Kpler/Spire) are adapter stubs today — behind the
+same 3-method `FeedAdapter` interface the replay uses (`src/engine/feeds.ts`), marked
+"production license." Going live is a license key, not a rewrite — and that claim is code.
 
 ---
 
@@ -247,15 +249,16 @@ on the record. That is TRINETRA." *(No thank-you slide.)*
 
 > When the Strait of Hormuz closed in March 2026, India took six days to produce a crude
 > rerouting plan. TRINETRA produces one in four minutes. An event-driven watchtower
-> converts live AIS and news streams into geospatial evidence, cutting detection lead time
-> from days to minutes. A governed multi-agent debate — proposer versus a zero-LLM critic,
-> every claim carrying a cited provenance chip — then generates an executable plan: grades,
-> volumes, laycans, and refinery assignments, constrained by a proprietary taxonomy of
-> 200+ crude grades and refinery compatibilities. Fidelity is backtested: replayed on the
-> 2023 Red Sea crisis with zero retuning, the plan matches the reroutes traders actually
-> executed — days earlier. Executability is governed, not assumed: operators edit the
-> charter and every decision traces to the rule permitting it, sealed in a signed audit
-> trace. Response time: 4 minutes 7 seconds, on the record. Six days to four minutes.
+> replays real AIS and news feeds into geospatial evidence, cutting detection lead time
+> from days to minutes. A governed multi-agent debate — a live LLM proposer versus a
+> zero-LLM critic, every claim carrying a cited provenance chip — then generates an
+> executable plan: grades, volumes, laycans, and refinery assignments, constrained by
+> fully-assayed crude grades and refinery compatibility envelopes. Fidelity is backtested
+> against the 2023 Red Sea crisis with zero retuning: the options traders actually executed
+> were in our top five — surfaced days earlier. Executability is governed, not assumed:
+> operators edit the charter and every decision traces to the rule permitting it, sealed in
+> a signed audit trace. Response time: 4 minutes 7 seconds, on the record. Six days to four
+> minutes.
 
 ## Appendix B — The hindsight-bias answer (the most important Q&A, ~28s)
 

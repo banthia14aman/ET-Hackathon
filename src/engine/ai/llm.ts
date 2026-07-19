@@ -31,8 +31,26 @@ export function llmEndpoint(): string | undefined {
   return env.VITE_AI_ENDPOINT || DEFAULT_LLM_ENDPOINT;
 }
 
-// module-level session transcript: content-hash key → recorded completion
+// content-hash key → recorded completion. PERSISTED (localStorage) so record-replay is
+// cross-session: reload the app, replay the same state, and the same recorded text returns —
+// "live model makes the call; the record replays byte-identically" survives a restart.
+const STORE_KEY = 'trinetra-llm-transcript';
+const MAX_RECORDS = 300; // FIFO cap so we never hit the storage quota
 const transcript = new Map<string, LlmRecord>();
+try {
+  if (typeof localStorage !== 'undefined') {
+    const saved = JSON.parse(localStorage.getItem(STORE_KEY) ?? '{}') as Record<string, LlmRecord>;
+    for (const [k, v] of Object.entries(saved)) if (v && typeof v.text === 'string') transcript.set(k, v);
+  }
+} catch { /* corrupt/absent store — start fresh */ }
+
+function persist(): void {
+  try {
+    if (typeof localStorage === 'undefined') return;
+    while (transcript.size > MAX_RECORDS) transcript.delete(transcript.keys().next().value!);
+    localStorage.setItem(STORE_KEY, JSON.stringify(Object.fromEntries(transcript)));
+  } catch { /* quota/private mode — recording stays in-memory */ }
+}
 
 /** The recorded transcript (for export/inspection alongside the audit trail). */
 export function llmTranscript(): Record<string, LlmRecord> {
@@ -85,6 +103,7 @@ export async function chatLive(messages: ChatMessage[], opts: ChatOpts = {}): Pr
 
       const rec: LlmRecord = { text, model: j.model ?? model, live: true, replayed: false };
       transcript.set(key, rec);
+      persist();
       return rec;
     } catch (e) { lastErr = e; }
   }

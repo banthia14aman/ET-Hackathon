@@ -47,7 +47,7 @@ shows the validation gate rejecting `Brent 9000`, a 200-day floor, and a made-up
 npm install        # once, on a machine with registry access
 npm run dev        # Vite dev server
 npm run build      # typecheck + production bundle → dist/
-npm run check      # deterministic self-checks + integration checks (82/82)
+npm run check      # deterministic self-checks + integration checks (87/87)
 ```
 
 `npm run check` needs **only Node 22+** (22.6–22.17 via the bundled
@@ -76,7 +76,7 @@ src/lib/                store, canonical JSON + sha256, fmt, geo, pipeline (engi
                         computeFromText = the AI-assisted flow; approveDecision = human sign-off)
 src/components/         MapView + panels/* + AiAssistPanel (the AI-assisted decision UI)
 src/cache/              build-time LLM cache (the source of LLM proposer/memo text)
-scripts/check.mjs       the check suite (82 checks)
+scripts/check.mjs       the check suite (87 checks)
 docs/                   plan, beats, provenance, ml-architecture, DEFENSE-STUDY-GUIDE, deck
 ```
 

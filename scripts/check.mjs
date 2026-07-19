@@ -124,6 +124,25 @@ check('integration: shocks active post-Mar-11',
   r1.scenario.shocks_active.includes('shock:hormuz-partial') && r1.scenario.shocks_active.includes('shock:hormuz-severe'),
   r1.scenario.shocks_active.join(','));
 
+// (a2) feed-adapter contract — "going live is a license key, not a rewrite", as code
+const feeds = await mod('../src/engine/feeds.ts');
+for (const r of feeds.selfCheck(bundle)) check(r.name, r.pass, r.detail);
+
+// (a3) demo-consistency pins — the guided tour may never drift from the engine or the voiceover doc
+{
+  const appSrc = readFileSync(path.join(root, 'src', 'App.tsx'), 'utf8');
+  const m = /about ([\d,]+) kb\/d/.exec(appSrc);
+  const spoken = m ? Number(m[1].replace(/,/g, '')) : NaN;
+  check('tour: spoken shortfall matches the engine at the beat (±3%)',
+    Number.isFinite(spoken) && Math.abs(spoken - r1.scenario.gap_kbd) / r1.scenario.gap_kbd < 0.03,
+    `caption says ${spoken}, engine computes ${Math.round(r1.scenario.gap_kbd)}`);
+  const tourDoc = readFileSync(path.join(root, 'docs', 'demo-tour.md'), 'utf8');
+  const captions = [...appSrc.matchAll(/text: '([^']+)'/g)].map((x) => x[1]);
+  const missing = captions.filter((c) => !tourDoc.includes(c));
+  check('tour: every in-app caption appears VERBATIM in docs/demo-tour.md (the voiceover)',
+    captions.length >= 9 && missing.length === 0, missing.map((c) => c.slice(0, 60)).join(' | '));
+}
+
 // (b) Beat 1 acceptance — Merey card + TAN/rail/voyage objections
 const merey = r1.options.find((o) => o.grade === 'gr:merey-16' && o.target_refinery === 'ref:jamnagar');
 check('beat1: Merey→Jamnagar reroute card exists', !!merey, r1.options.map((o) => o.id).join('\n'));

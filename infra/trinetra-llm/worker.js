@@ -32,6 +32,9 @@ export default {
     const origin = request.headers.get("Origin") || "";
     if (request.method === "OPTIONS") return new Response(null, { headers: cors(origin) });
     if (request.method !== "POST") return json({ error: "POST only" }, 405, origin);
+    // Enforce the allowlist server-side: browser calls carry Origin; anything else is refused.
+    // (Raises the bar for quota-burning scripts; the KV rate limit below is the second rail.)
+    if (!ALLOWED_ORIGINS.includes(origin)) return json({ error: "Origin not allowed" }, 403, origin);
     if (!env.NVIDIA_API_KEY) return json({ error: "NVIDIA_API_KEY not set on this Worker." }, 503, origin);
 
     // Light per-IP rate limit — only if you bind a KV namespace named RL; skipped otherwise.

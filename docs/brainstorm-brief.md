@@ -51,7 +51,7 @@ Backup lines:
 **Specific fixes:**
 - *AIS dead zone → feature:* compute transit-flow proxy at coverage edges (entered west, never appeared east within expected time = "dark transit" flag). Optional static Sentinel-1 SAR scene as ground-truth evidence layer.
 - *GDELT noise → demo moment:* cluster 40 raw hits → 1 candidate → LLM verifies against independent source (UKMTO/RSS) → only corroborated events fire; uncorroborated sit in a visible "unconfirmed signals" tray. Measurable precision claim.
-- *Paid sources → adapter stubs:* `SpireAdapter`, `KplerAdapter` visible in repo, ~30 lines, marked "production license." "Upgrading is a license key, not a rewrite."
+- *Paid sources → adapter stubs:* `SpireAdapter`, `KplerAdapter` in `src/engine/feeds.ts` behind the same 3-method `FeedAdapter` interface (pull → normalize → emit) the replay uses, marked "production license." "Upgrading is a license key, not a rewrite."
 
 ### 2.2 Validation (kills the hindsight-bias bomb)
 1. **Freeze the knowledge base at 2018** (`kb_frozen_2018`, checksummed, every record source+dated). Angola isn't "in the database" — it *emerges* from a query over structural facts (who produces what grade, which refineries can run it, port capacities).

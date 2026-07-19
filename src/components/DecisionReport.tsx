@@ -14,6 +14,7 @@ import type {
 import { optionLabel, STATUS_LABEL, STATUS_PILL, articleName, plainMessage, prettify } from '../lib/labels';
 import { fmtKbd, fmtUsdBbl, fmtDelta, fmtDays, fmtUsdBig, fmtTs } from '../lib/fmt';
 import { PROVENANCE_STATEMENT } from '../engine/ai/brief';
+import { llmTranscript } from '../engine/ai/llm';
 
 const NATIONAL_RUNS_KBD = 4900; // India's ~4.9 mb/d refinery runs (PPAC-derived; prov E). % share only.
 
@@ -393,6 +394,11 @@ export default function DecisionReport(props: DecisionReportProps) {
             Alter any earlier row and its fingerprint changes, breaking every row after it and flipping the seal to CHAIN BROKEN.
             (Full 64-character hashes are on hover.) Verify it yourself: each fingerprint is SHA-256 over the canonical JSON of
             that step; re-run the same replay offline and every fingerprint reproduces byte-for-byte — <span className="rep-fn">npm run check</span> replays twice and compares.
+          </p>
+          <p className="report-fine">
+            <b>Live-model record:</b> every live LLM completion (option narration, extraction, rule audit) is
+            content-addressed and recorded on this device ({Object.keys(llmTranscript()).length} recorded); identical
+            inputs replay the recorded text instead of re-calling the model. The model is non-deterministic — the record is not.
           </p>
           <p className="report-caveat">
             A verified chain proves no step was altered or reordered after the fact. It does <b>not</b> certify the input

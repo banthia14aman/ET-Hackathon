@@ -218,6 +218,8 @@ export default function App() {
   const [reportOpen, setReportOpen] = useState(false);
   // live LLM narration for the visible option cards (presentation only; record-replayed).
   const [liveRationales, setLiveRationales] = useState<Record<string, LlmRecord>>({});
+  // first-visit nudge: route a cold judge into the guided tour instead of the dense terminal.
+  const [demoNudge, setDemoNudge] = useState(false);
   // Beat-2 amber ring: option ids whose status just changed
   const [changedIds, setChangedIds] = useState<Set<string>>(new Set());
   const prevStatus = useRef<Record<string, string>>({});
@@ -239,7 +241,7 @@ export default function App() {
       text: 'Jamnagar’s days-of-cover falls below the safe line and a national shortfall opens — about 1,660 kb/d, a third of India’s daily crude runs.',
       action: () => goTo(BEAT_T) },
     { area: 'plan', title: 'The options',
-      text: 'The desk’s AI proposes substitute cargoes from around the world. Each carries a provenance chip and a prediction from our own trained compatibility model. Click any card to trace its route on the map.',
+      text: 'The desk’s AI proposes substitute cargoes from around the world. Each carries a provenance chip, a prediction from our own trained compatibility model — and a rationale written seconds ago by a live NVIDIA model, recorded for replay: the LIVE ✦ chip.',
       action: () => goTo(BEAT_T) },
     { area: 'debate', title: 'The critic — with no AI',
       text: 'A rules-only critic demotes the sanctioned Venezuelan Merey: too heavy and sour to run neat, an OFAC-flagged payment rail, and a 43-day voyage against a 12-day buffer. It cannot hallucinate — it contains no model.',
@@ -253,9 +255,12 @@ export default function App() {
     { area: 'rules', title: 'The proof',
       text: 'Every step — propose, critique, arbitrate — is hash-chained and re-runs byte-identically, offline. That signed trace is what a regulator can audit.',
       action: () => { exitSandbox(); goTo(BEAT_T); } },
+    { area: 'header', title: 'The report',
+      text: 'One click writes the whole argument into a plain-English Decision & Audit Report — the problem, every option considered, why the machine blocked what it blocked with cited rules, and the tamper-evident trail. Save as PDF: that is what a regulator signs.',
+      action: () => setReportOpen(true) },
     { area: 'header', title: 'Six days to four minutes',
       text: 'An AI that argues under rules you wrote, a machine that enforces them, and a decision on the record. That is TRINETRA.',
-      action: () => goTo(BEAT_T) },
+      action: () => { setReportOpen(false); goTo(BEAT_T); } },
   ];
 
   useEffect(() => {
@@ -265,6 +270,7 @@ export default function App() {
       void runAt(DEMO_START);
       const q = new URLSearchParams(location.search);
       if (q.get('tour') === '1' || q.get('judge') === '1') { setTourStep(0); if (q.get('tour') === '1') setTourPlaying(true); }
+      else { try { if (!localStorage.getItem('trinetra-toured')) setDemoNudge(true); } catch { /* private mode */ } }
     }
     const onKey = (e: KeyboardEvent) => {
       // never hijack typing/caret keys while an input has focus (Beat-2 charter edit, What-if slider)
@@ -401,7 +407,11 @@ export default function App() {
       <header className="header" data-tour="header">
         <div className="wordmark">TRIN<span className="eye">△</span>ETRA</div>
         <div className="cmdline">CRUDE DECISION <span className="go-key">GO</span></div>
-        <button className="tour-open-btn" onClick={() => { setTourStep(0); setTourPlaying(false); }}>▶ DEMO</button>
+        <span className="tour-open-wrap">
+          <button className={`tour-open-btn${demoNudge ? ' tour-nudge' : ''}`}
+            onClick={() => { setTourStep(0); setTourPlaying(false); setDemoNudge(false); try { localStorage.setItem('trinetra-toured', '1'); } catch { /* ignore */ } }}>▶ DEMO</button>
+          {demoNudge && <span className="tour-nudge-tip">90-second guided tour</span>}
+        </span>
         <button className="scn-open-btn" onClick={() => setScenarioOpen(true)}>WHAT-IF ⌂</button>
         <button className="scn-open-btn" onClick={() => setBacktestOpen(true)}>BACKTEST ✓</button>
         <button className="scn-open-btn ai-open-btn" onClick={() => setAiOpen(true)}>AI ASSIST ✦</button>
