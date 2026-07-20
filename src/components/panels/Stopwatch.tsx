@@ -23,7 +23,13 @@ function DecisionClock({ active }: { active: boolean }) {
       onClick={() => setFrozen((f) => !f)}
       title={frozen ? 'Decision clock frozen — click to resume' : 'Real wall time since the crisis opened — click to freeze at the decision'}
     >
-      ⏱ {mmss} <span className="dc-label">{frozen ? 'DECISION TIME · FROZEN' : 'REAL TIME · CLOCK IS REAL'}</span>
+      {/* Cinematic count-up shown only in projector/record mode (body.projector) — the honest
+          "six days → four minutes" money shot; the inline chip stays for the normal terminal. */}
+      <span className="dc-hero" aria-hidden>
+        <span className="dc-hero-time">{mmss}</span>
+        <span className="dc-hero-cap">{frozen ? 'DECISION MADE · vs India’s 6 DAYS' : 'DECIDING · REAL WALL TIME'}</span>
+      </span>
+      <span className="dc-inline">⏱ {mmss} <span className="dc-label">{frozen ? 'DECISION TIME · FROZEN' : 'REAL TIME · CLOCK IS REAL'}</span></span>
     </span>
   );
 }

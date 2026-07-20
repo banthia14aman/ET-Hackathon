@@ -3,7 +3,7 @@
 //   → ④ AI constitutional audit (advisory, read-only)  → ⑤ decision brief + HUMAN approval.
 // Everything is hash-chained. The LLM never sets a score; the audit never changes one.
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { AiAssistResult, StaticData } from '../lib/pipeline';
 import { computeFromText, approveDecision } from '../lib/pipeline';
 import type { CharterArticle, DecisionBrief, FieldRejection, RuleAuditNote } from '../contracts/types';
@@ -48,22 +48,32 @@ function Notes({ notes }: { notes: RuleAuditNote[] }) {
   );
 }
 
-export default function AiAssistPanel({ data, charter, onClose }: { data: StaticData; charter: CharterArticle[]; onClose: () => void }) {
+export default function AiAssistPanel({ data, charter, autoRun, onClose }: { data: StaticData; charter: CharterArticle[]; autoRun?: 'hallucination'; onClose: () => void }) {
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<AiAssistResult | null>(null);
   const [brief, setBrief] = useState<DecisionBrief | null>(null);
 
-  const run = async () => {
-    if (!text.trim()) return;
+  const run = async (override?: string) => {
+    const src = (override ?? text).trim();
+    if (!src) return;
     setBusy(true); setResult(null); setBrief(null);
     try {
       // live model used only if you set VITE_AI_ENDPOINT + VITE_AI_KEY; otherwise offline stand-in.
       const env = (import.meta as unknown as { env?: Record<string, string | undefined> }).env ?? {};
-      const r = await computeFromText(data, text, charter, { endpoint: env.VITE_AI_ENDPOINT, apiKey: env.VITE_AI_KEY, model: env.VITE_AI_MODEL });
+      const r = await computeFromText(data, src, charter, { endpoint: env.VITE_AI_ENDPOINT, apiKey: env.VITE_AI_KEY, model: env.VITE_AI_MODEL });
       setResult(r); setBrief(r.brief);
     } finally { setBusy(false); }
   };
+
+  // Guided-tour / auto-demo: open pre-loaded with the hallucination example and run it, so the
+  // gate visibly rejects fabricated fields on camera without the presenter typing anything.
+  useEffect(() => {
+    if (autoRun !== 'hallucination') return;
+    const ex = EXAMPLES[2].text;
+    setText(ex); void run(ex);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoRun]);
 
   const approve = async () => {
     if (!result || !brief) return;
@@ -89,7 +99,7 @@ export default function AiAssistPanel({ data, charter, onClose }: { data: Static
           </div>
           <textarea className="ai-textarea" value={text} onChange={(e) => setText(e.target.value)} rows={4}
             placeholder="e.g. Hormuz declared closed, Brent to 118, offered a Merey cargo for Jamnagar, raise the floor to 15…" />
-          <button className="ai-run-btn" onClick={run} disabled={busy || !text.trim()}>
+          <button className="ai-run-btn" onClick={() => run()} disabled={busy || !text.trim()}>
             {busy ? 'Working…' : '▶ Extract → validate → score → audit'}
           </button>
 
@@ -98,7 +108,15 @@ export default function AiAssistPanel({ data, charter, onClose }: { data: Static
               <div className="ai-step">① AI SENSE-MAKING <span className="ai-tag ai-tag-advisory">advisory</span> — LLM proposes; rules validate</div>
               <FactChips validated={result.extraction.validated} rejected={result.extraction.rejected} />
               {result.extraction.rejected.length > 0 && (
-                <div className="ai-guard">🛡 {result.extraction.rejected.length} candidate field(s) rejected by the validation gate — they never reached scoring.</div>
+                <div className="ai-reject-hero">
+                  <div className="ai-reject-stamp">🛡 REJECTED · never reached the decision</div>
+                  <div className="ai-reject-fields">
+                    {result.extraction.rejected.map((r, i) => (
+                      <span key={i} className="ai-reject-field" title={r.reason}>{r.field}{r.value ? ` = ${r.value}` : ''}</span>
+                    ))}
+                  </div>
+                  <div className="ai-reject-sub">The {result.extraction.live ? 'live model' : 'model'} proposed these. The deterministic gate struck every one before scoring — the LLM sets no number.</div>
+                </div>
               )}
 
               <div className="ai-step">② DETERMINISTIC SCORING <span className="ai-tag ai-tag-auth">authoritative</span> — zero-LLM critic + arbiter</div>

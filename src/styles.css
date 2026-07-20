@@ -186,11 +186,25 @@ body.projector { font-size: 14px; }
 .decision-clock { font-size: 13px; font-weight: 700; color: var(--green); cursor: pointer; margin-top: 2px; }
 .decision-clock.frozen { color: var(--amber); }
 .decision-clock .dc-label { font-size: 9px; font-weight: 700; color: var(--dim); letter-spacing: 0.05em; }
+.dc-hero { display: none; }
+/* projector / record mode: promote the real wall clock to a cinematic count-up overlay */
+body.projector .decision-clock .dc-inline { display: none; }
+body.projector .dc-hero {
+  display: flex; flex-direction: column; align-items: flex-end; position: fixed; top: 10px; right: 10px; z-index: 46;
+  pointer-events: none; padding: 8px 16px 9px; background: #000; border: 1px solid var(--green); min-width: 168px;
+}
+body.projector .decision-clock.frozen .dc-hero { border-color: var(--amber); }
+body.projector .dc-hero-time { font: 700 46px var(--mono); line-height: 1; letter-spacing: -1px; color: var(--green); font-variant-numeric: tabular-nums; }
+body.projector .decision-clock.frozen .dc-hero-time { color: var(--amber); }
+body.projector .dc-hero-cap { font: 700 11px var(--mono); letter-spacing: 0.08em; color: var(--dim); margin-top: 3px; }
 
 /* ---------- audit ---------- */
 .audit-row { display: grid; grid-template-columns: 22px 60px 1fr 74px; gap: 8px; padding: 2px 0; font-size: 12px; align-items: center; }
 .audit-row .a-hash { color: var(--accent); }
-.audit-seal { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; padding: 1px 8px; border: 1px solid; }
+.audit-seal { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; padding: 1px 8px; border: 1px solid; transition: color 200ms; }
+.audit-seal.seal-broken { animation: seal-flip 260ms ease; }
+@keyframes seal-flip { 0% { transform: scale(1.25); } 100% { transform: scale(1); } }
+.audit-row-broken { background: rgba(255,77,77,0.10); }
 
 /* ---------- map overlay (HTML, unaffected by zoom) ---------- */
 .map-container:fullscreen { width: 100vw; height: 100vh; background: #000; }
@@ -342,6 +356,13 @@ body.projector { font-size: 14px; }
 .ai-ok { color: var(--green); border-color: rgba(53,208,127,0.5); background: rgba(53,208,127,0.08); }
 .ai-bad { color: var(--red); border-color: rgba(255,82,82,0.5); background: rgba(255,82,82,0.08); text-decoration: line-through; }
 .ai-guard { margin-top: 7px; font-size: 11px; color: var(--red); }
+/* hallucination-hero: the money shot — fabricated fields struck down big, on camera */
+.ai-reject-hero { margin-top: 10px; border: 1.5px solid var(--red); background: rgba(255,77,77,0.07); padding: 10px 12px; animation: reject-slam 320ms cubic-bezier(0.2,0.9,0.2,1); }
+@keyframes reject-slam { 0% { transform: scale(1.04); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+.ai-reject-stamp { font-size: 13px; font-weight: 800; color: var(--red); letter-spacing: 0.06em; text-transform: uppercase; }
+.ai-reject-fields { display: flex; flex-wrap: wrap; gap: 8px 12px; margin: 8px 0 6px; }
+.ai-reject-field { font: 700 18px var(--mono); color: var(--red); text-decoration: line-through; text-decoration-thickness: 2px; }
+.ai-reject-sub { font-size: 11px; color: var(--dim); line-height: 1.35; }
 .ai-empty { font-size: 12px; color: var(--dim); font-style: italic; }
 .ai-brief-head { font-size: 13px; font-weight: 700; color: var(--amber); margin-bottom: 6px; }
 .ai-decisions { display: flex; flex-direction: column; gap: 3px; }

@@ -215,6 +215,7 @@ export default function App() {
   const [scenarioOpen, setScenarioOpen] = useState(false);
   const [backtestOpen, setBacktestOpen] = useState(false);
   const [aiOpen, setAiOpen] = useState(false);
+  const [aiAutoRun, setAiAutoRun] = useState<'hallucination' | undefined>(undefined);
   const [reportOpen, setReportOpen] = useState(false);
   // live LLM narration for the visible option cards (presentation only; record-replayed).
   const [liveRationales, setLiveRationales] = useState<Record<string, LlmRecord>>({});
@@ -243,9 +244,12 @@ export default function App() {
     { area: 'plan', title: 'The options',
       text: 'The desk’s AI proposes substitute cargoes from around the world. Each carries a provenance chip, a prediction from our own trained compatibility model — and a rationale written seconds ago by a live NVIDIA model, recorded for replay: the LIVE ✦ chip.',
       action: () => goTo(BEAT_T) },
+    { area: 'plan', title: 'The gate catches a lie',
+      text: 'Feed the AI a poisoned note — Brent at $9,000, a made-up grade, a 200-day cover floor. It reads them as candidates; the deterministic gate strikes every fabrication before it can touch a decision. The model proposes; the rules dispose.',
+      action: () => { setSel(null); setAiAutoRun('hallucination'); setAiOpen(true); } },
     { area: 'debate', title: 'The critic — with no AI',
       text: 'A rules-only critic demotes the sanctioned Venezuelan Merey: too heavy and sour to run neat, an OFAC-flagged payment rail, and a 43-day voyage against a 12-day buffer. It cannot hallucinate — it contains no model.',
-      action: () => { goTo(BEAT_T); window.setTimeout(() => { const m = store.getState().options.find((o) => o.grade === 'gr:merey-16' && o.target_refinery === 'ref:jamnagar'); if (m) setSel({ kind: 'route', id: m.id }); }, 450); } },
+      action: () => { setAiOpen(false); goTo(BEAT_T); window.setTimeout(() => { const m = store.getState().options.find((o) => o.grade === 'gr:merey-16' && o.target_refinery === 'ref:jamnagar'); if (m) setSel({ kind: 'route', id: m.id }); }, 450); } },
     { area: 'rules', title: 'Change one rule',
       text: 'Raise the security floor from 10 to 15 days of cover — and the plan re-decides itself. Six long-haul cargoes just failed, each flashing amber.',
       action: () => { setSel(null); goTo(BEAT_T); window.setTimeout(() => void onCharterParam('A2', 15), 550); } },
@@ -501,7 +505,7 @@ export default function App() {
 
       {backtestOpen && <BacktestScorecard onClose={() => setBacktestOpen(false)} />}
 
-      {aiOpen && <AiAssistPanel data={DATA} charter={charter} onClose={() => setAiOpen(false)} />}
+      {aiOpen && <AiAssistPanel data={DATA} charter={charter} autoRun={aiAutoRun} onClose={() => { setAiOpen(false); setAiAutoRun(undefined); }} />}
       {reportOpen && (
         <DecisionReport
           scenario={scenario} options={options} objections={objections} audit={audit} charter={charter}
