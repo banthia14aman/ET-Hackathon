@@ -420,10 +420,6 @@ export default function App() {
         <button className="scn-open-btn" onClick={() => setBacktestOpen(true)}>BACKTEST ✓</button>
         <button className="scn-open-btn ai-open-btn" onClick={() => setAiOpen(true)}>AI ASSIST ✦</button>
         <button className="scn-open-btn report-open-btn" onClick={() => setReportOpen(true)}>REPORT ▤</button>
-        <div className="pitch">
-          When Hormuz closed, India took <b>6 days</b> to reroute crude. TRINETRA does it in <b>4 minutes</b> —
-          and every rejection is a machine-checked rule, not an AI guess.
-        </div>
         <div className="header-kpi">
           <span className={`kpi-num ${coverBelow ? 'kpi-below' : 'kpi-ok'}`}>
             {cover !== null ? `${cover.toFixed(0)} d` : '—'}

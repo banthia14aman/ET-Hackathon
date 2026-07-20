@@ -82,7 +82,7 @@ body.projector { font-size: 14px; }
 .go-key { background: var(--amber); color: #000; font-weight: 700; padding: 0 6px; font-size: 11px; }
 .pitch { flex: 1; font-size: 12px; color: var(--text); max-width: 620px; line-height: 1.35; }
 .pitch b { color: var(--amber); font-weight: 700; }
-.header-kpi { display: flex; flex-direction: column; align-items: flex-end; text-align: right; border-left: 1px solid var(--border); padding-left: 16px; }
+.header-kpi { margin-left: auto; display: flex; flex-direction: column; align-items: flex-end; text-align: right; border-left: 1px solid var(--border); padding-left: 16px; }
 .header-kpi .kpi-num { font-size: 26px; font-weight: 700; line-height: 1; letter-spacing: -0.5px; }
 .header-kpi .kpi-cap { font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
 .kpi-below { color: var(--red); }
