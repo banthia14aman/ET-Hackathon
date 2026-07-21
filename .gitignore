@@ -9,3 +9,6 @@ tsconfig.tsbuildinfo
 .env.*
 !.env.example
 .vercel
+
+# Video b-roll pack — regenerate with scratchpad/capture-broll.py (large 4K PNGs)
+video-assets/*.png

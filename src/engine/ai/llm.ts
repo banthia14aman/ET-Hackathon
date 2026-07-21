@@ -77,14 +77,16 @@ export async function chatLive(messages: ChatMessage[], opts: ChatOpts = {}): Pr
   const hit = transcript.get(key);
   if (hit) return { ...hit, replayed: true };
 
-  // one retry on transient upstream failures (NIM free-tier 429s / hiccups); 25s cap per
-  // attempt so a hung upstream can never stall the UI — callers fall back on final throw.
+  // one retry on transient upstream failures (NIM free-tier 429s / hiccups); 45s cap per
+  // attempt — NIM's free tier can genuinely take 30s+ under load, and falling back to the
+  // offline stand-in too eagerly would hide the live model. A hung upstream still can't stall
+  // the UI: narration is async and every caller falls back on the final throw.
   let lastErr: unknown;
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
       const res = await fetch(endpoint, {
         method: 'POST',
-        signal: AbortSignal.timeout(25_000),
+        signal: AbortSignal.timeout(45_000),
         headers: {
           'content-type': 'application/json',
           ...(opts.apiKey ? { authorization: `Bearer ${opts.apiKey}` } : {}), // worker needs no client key
