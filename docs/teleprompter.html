@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TRINETRA — 3-min video teleprompter</title>
+<style>
+  :root{
+    --bg:#07080a; --ink:#f2f4f7; --dim:#69727f; --amber:#ffa028; --green:#33ff77; --rule:#1e222a;
+    --mono:'SF Mono','JetBrains Mono',Menlo,Consolas,ui-monospace,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --vo:44px;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);overflow:hidden;}
+
+  /* ---- stage ---- */
+  #stage{position:fixed;inset:0 0 66px 0;overflow:hidden;}
+  #stage.mirror{transform:scaleX(-1);}
+  #track{position:absolute;left:0;right:0;top:0;padding:46vh 6vw 60vh;will-change:transform;}
+
+  /* reading line — where your eye sits */
+  #guide{position:fixed;left:0;right:0;top:38%;height:0;border-top:1px solid rgba(255,160,40,.30);pointer-events:none;z-index:5;}
+  #guide::after{content:'';position:absolute;left:0;right:0;top:-58px;height:116px;
+    background:linear-gradient(180deg,transparent,rgba(255,160,40,.05) 45%,transparent);}
+
+  /* ---- script blocks ---- */
+  .blk{margin:0 0 4.6rem;max-width:1180px;}
+  .meta{display:flex;align-items:baseline;gap:14px;font-family:var(--mono);font-size:15px;
+    letter-spacing:.06em;color:var(--amber);text-transform:uppercase;margin-bottom:10px;}
+  .meta .t{font-variant-numeric:tabular-nums;opacity:.75;}
+  .cue{font-family:var(--mono);font-size:16px;line-height:1.5;color:var(--dim);margin:0 0 20px;
+    padding-left:14px;border-left:2px solid var(--rule);max-width:64ch;}
+  .cue b{color:#8e97a4;font-weight:600;}
+  .vo{font-size:var(--vo);line-height:1.36;font-weight:500;letter-spacing:-.005em;
+    max-width:30ch;margin:0;text-wrap:pretty;}
+  .vo em{font-style:normal;color:var(--amber);}          /* emphasis — hit these words */
+  .vo .num{color:var(--green);font-variant-numeric:tabular-nums;}
+  .beat{display:inline-flex;align-items:center;gap:8px;margin-top:20px;font-family:var(--mono);
+    font-size:15px;letter-spacing:.08em;color:var(--green);text-transform:uppercase;}
+  .beat::before{content:'';width:26px;height:2px;background:var(--green);}
+  .end{font-family:var(--mono);font-size:15px;color:var(--dim);letter-spacing:.08em;}
+
+  /* ---- control bar ---- */
+  #bar{position:fixed;left:0;right:0;bottom:0;height:66px;display:flex;align-items:center;gap:18px;
+    padding:0 18px;background:#0b0d10;border-top:1px solid var(--rule);font-family:var(--mono);font-size:13px;}
+  button{font:inherit;background:#12151a;color:var(--ink);border:1px solid var(--rule);padding:7px 13px;
+    cursor:pointer;letter-spacing:.04em;}
+  button:hover{border-color:#39404b;}
+  button:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
+  #play{min-width:104px;background:var(--amber);color:#000;border-color:var(--amber);font-weight:700;}
+  #play.on{background:#12151a;color:var(--amber);}
+  .grp{display:flex;align-items:center;gap:7px;}
+  .lbl{color:var(--dim);letter-spacing:.08em;}
+  .val{color:var(--amber);font-variant-numeric:tabular-nums;min-width:44px;}
+  #clock{margin-left:auto;display:flex;align-items:baseline;gap:10px;font-variant-numeric:tabular-nums;}
+  #elapsed{font-size:26px;font-weight:700;letter-spacing:-.5px;}
+  #target{color:var(--dim);}
+  #pace{padding:3px 9px;border:1px solid currentColor;font-size:12px;letter-spacing:.06em;}
+  .ok{color:var(--green);} .warn{color:var(--amber);}
+  #prog{position:fixed;left:0;bottom:66px;height:2px;background:var(--amber);width:0;z-index:9;}
+  kbd{font:inherit;color:var(--dim);}
+  @media (prefers-reduced-motion:reduce){#track{transition:none;}}
+</style>
+</head>
+<body>
+
+<div id="guide"></div>
+<div id="stage"><div id="track">
+
+  <div class="blk" data-t="0">
+    <div class="meta"><span class="t">0:00</span><span>The stakes</span></div>
+    <p class="cue"><b>ON SCREEN</b> — Terminal fades up; map, crude routes, ticker.</p>
+    <p class="vo">This is the maritime network feeding India's crude. In March 2026, the Strait of Hormuz closed — roughly <span class="num">forty percent</span> of daily intake. The institutions running these refineries <em>had the data</em>. It still took <span class="num">six days</span> to agree on a plan. In that window, panic buying drove Brent sharply higher. On India's spot-exposed barrels, that delay cost an <em>estimated hundred million dollars</em> — and we show our arithmetic.</p>
+  </div>
+
+  <div class="blk" data-t="22">
+    <div class="meta"><span class="t">0:22</span><span>The real vulnerability</span></div>
+    <p class="cue"><b>ON SCREEN</b> — Slow pan across panels: charter, provenance chips.</p>
+    <p class="vo">A physical bottleneck is a known variable. The real vulnerability is a decision process that takes six days to answer a problem that changes <em>every hour</em>. And handing that billion-dollar call to a generative model is a liability — models hallucinate. They invent numbers. That makes them <em>unfit</em> to dictate national supply.</p>
+  </div>
+
+  <div class="blk" data-t="42">
+    <div class="meta"><span class="t">0:42</span><span>The structural separation</span></div>
+    <p class="cue"><b>ON SCREEN</b> — Left panels, then right panels.</p>
+    <p class="vo">So TRINETRA separates the work <em>structurally</em>. On the left, AI reads the mess — the notes, the headlines. On the right, a rigid rules charter does the scoring. Each problem goes to the safest tool for it: the model reads language, deterministic code owns <em>every number</em>. Speed of a model, arithmetic you can audit.</p>
+  </div>
+
+  <div class="blk" data-t="62">
+    <div class="meta"><span class="t">1:02</span><span>The crisis + the live model</span></div>
+    <p class="cue"><b>ON SCREEN</b> — Map flies to Hormuz; KPI red; THE PLAN populates; zoom the <b>LIVE ✦</b> chip.</p>
+    <p class="vo">Simulate the disruption: the national safety line turns red, exposing a <span class="num">1.66 million barrel</span> daily shortfall. The AI proposes substitute cargoes in seconds — and every rationale you're reading is written <em>live, right now</em>, by a model running on NVIDIA. It writes the sentence. It <em>never sets the number</em>.</p>
+  </div>
+
+  <div class="blk" data-t="80">
+    <div class="meta"><span class="t">1:20</span><span>The gate ★</span></div>
+    <p class="cue"><b>ON SCREEN</b> — Poisoned note runs; the big <b>REJECTED</b> stamp slams in.</p>
+    <p class="vo">Because trusting extraction is a <em>safety</em> question, we attacked it ourselves. We told the AI oil trades at <span class="num">nine thousand dollars</span>, for a refinery that doesn't exist. It tried to pass them through — and the deterministic gate <em>struck every one</em>, because they violate the real refinery schema.</p>
+    <div class="beat">Hold — 1 second on the red stamp</div>
+    <p class="vo" style="margin-top:20px">The model is kept off the mathematical path entirely. It can write a sentence. It has <em>no mechanism</em> to change a score.</p>
+  </div>
+
+  <div class="blk" data-t="102">
+    <div class="meta"><span class="t">1:42</span><span>Constitution + zero-LLM critic</span></div>
+    <p class="cue"><b>ON SCREEN</b> — Charter A1–A7; Merey selected; objections drop in one by one.</p>
+    <p class="vo">On the right is the Decision Charter — a machine-enforced constitution: <span class="num">seven articles</span> covering the security floor, concentration caps, sanctions. When the AI proposes rerouting sanctioned Venezuelan <em>Merey</em>, TRINETRA hands it to a <em>zero-LLM critic</em> — pure logic, no language model. It <em>demotes</em> the cargo: a flagged sanctions rail, and a chemistry mismatch — API <span class="num">sixteen</span>, too heavy for that refinery.</p>
+  </div>
+
+  <div class="blk" data-t="126">
+    <div class="meta"><span class="t">2:06</span><span>Human authority</span></div>
+    <p class="cue"><b>ON SCREEN</b> — Edit A2 floor 10 → 15; cards re-sort, flash amber.</p>
+    <p class="vo">And a human stays the <em>final gate</em>. Raise the security floor from <span class="num">ten days to fifteen</span> — the plan instantly re-decides itself, and every cargo that falls <em>cites the rule that felled it</em>. Nothing executes without a person signing.</p>
+  </div>
+
+  <div class="blk" data-t="140">
+    <div class="meta"><span class="t">2:20</span><span>The proof ★</span></div>
+    <p class="cue"><b>ON SCREEN</b> — Report scroll → <b>⚡ TAMPER TEST</b> → seal flips red → restores.</p>
+    <p class="vo">Afterwards, an operator has to prove to a regulator the plan came from <em>the rules</em> — not a model's hidden bias. Every step is written to a <span class="num">SHA-256</span> hash chain. Don't trust the green seal — flip a <em>single bit</em>, and the chain breaks instantly. That turns a dashboard into an <em>auditable record anyone can re-verify</em>.</p>
+  </div>
+
+  <div class="blk" data-t="158">
+    <div class="meta"><span class="t">2:38</span><span>A graph, not a script</span></div>
+    <p class="cue"><b>ON SCREEN</b> — Red Sea what-if; a different set of refineries lights up.</p>
+    <p class="vo">And the logic underneath is a <em>global supply graph</em>. Switch the disruption from Hormuz to the Red Sea and the same engine re-scores the entire network — surfacing which refineries are exposed by that <em>new geography</em>.</p>
+  </div>
+
+  <div class="blk" data-t="172">
+    <div class="meta"><span class="t">2:52</span><span>Close ★</span></div>
+    <p class="cue"><b>ON SCREEN</b> — Hero clock ticking → <b>freezes</b>. Cut to wordmark.</p>
+    <p class="vo">Human institutions took <span class="num">six days</span>. TRINETRA delivers the routing plan in <em>minutes</em> — and that clock is real. AI for sense-making. Rules for the decision. Humans for authority. <em>That is TRINETRA.</em></p>
+    <div class="beat">Hold on the frozen clock, then cut</div>
+    <p class="end" style="margin-top:3rem">— end of script —</p>
+  </div>
+
+</div></div>
+
+<div id="prog"></div>
+
+<div id="bar">
+  <button id="play" aria-label="Play or pause scrolling">▶ PLAY</button>
+  <button id="restart" title="Restart (R)">↺ RESTART</button>
+  <div class="grp"><span class="lbl">SPEED</span><span class="val" id="spd">1.00×</span>
+    <button id="slower" title="Slower (↓)">−</button><button id="faster" title="Faster (↑)">+</button></div>
+  <div class="grp"><span class="lbl">SIZE</span>
+    <button id="smaller" title="Smaller ([)">A−</button><button id="bigger" title="Bigger (])">A+</button></div>
+  <button id="mirror" title="Mirror for a teleprompter rig (M)">MIRROR</button>
+  <button id="full" title="Fullscreen (F)">FULLSCREEN</button>
+  <div id="clock">
+    <span id="pace" class="ok">ON PACE</span>
+    <span id="elapsed">0:00</span><span id="target">/ 3:00</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  var track=document.getElementById('track'), stage=document.getElementById('stage');
+  var playBtn=document.getElementById('play'), prog=document.getElementById('prog');
+  var elapsedEl=document.getElementById('elapsed'), paceEl=document.getElementById('pace'), spdEl=document.getElementById('spd');
+  var TARGET=180;                    // 3:00 — the script is written to this
+  var y=0, speed=1, playing=false, t0=0, elapsed=0, raf=null, pxPerSec=0;
+
+  function measure(){
+    var total=track.scrollHeight-stage.clientHeight;
+    pxPerSec=Math.max(total,1)/TARGET;   // default speed always lands the script at 3:00
+  }
+  function fmt(s){var m=Math.floor(s/60);var r=Math.floor(s%60);return m+':'+(r<10?'0':'')+r;}
+
+  function frame(now){
+    if(!playing) return;
+    var dt=(now-t0)/1000; t0=now;
+    elapsed+=dt; y+=pxPerSec*speed*dt;
+    var max=track.scrollHeight-stage.clientHeight;
+    if(y>=max){y=max; setPlaying(false);}
+    track.style.transform='translateY('+(-y)+'px)';
+    elapsedEl.textContent=fmt(elapsed);
+    prog.style.width=(max?(y/max*100):0)+'%';
+    // pace = where the script says you should be vs. where you are
+    var blocks=track.querySelectorAll('.blk'), due=0;
+    for(var i=0;i<blocks.length;i++){
+      var top=blocks[i].offsetTop-track.offsetTop;
+      if(top<=y+stage.clientHeight*0.38) due=+blocks[i].dataset.t;
+    }
+    var drift=elapsed-due;
+    paceEl.textContent = drift>12?'SLOW '+fmt(drift):(drift<-12?'FAST':'ON PACE');
+    paceEl.className = Math.abs(drift)>12?'warn':'ok';
+    raf=requestAnimationFrame(frame);
+  }
+  function setPlaying(on){
+    playing=on; playBtn.textContent=on?'❚❚ PAUSE':'▶ PLAY'; playBtn.classList.toggle('on',on);
+    if(on){t0=performance.now(); raf=requestAnimationFrame(frame);} else if(raf){cancelAnimationFrame(raf); raf=null;}
+  }
+  function restart(){setPlaying(false); y=0; elapsed=0; track.style.transform='translateY(0)';
+    elapsedEl.textContent='0:00'; prog.style.width='0'; paceEl.textContent='ON PACE'; paceEl.className='ok';}
+  function setSpeed(v){speed=Math.min(3,Math.max(.3,v)); spdEl.textContent=speed.toFixed(2)+'×';}
+  function setSize(px){document.documentElement.style.setProperty('--vo',px+'px'); measure();}
+  var size=44;
+
+  playBtn.onclick=function(){setPlaying(!playing);};
+  document.getElementById('restart').onclick=restart;
+  document.getElementById('faster').onclick=function(){setSpeed(speed+.05);};
+  document.getElementById('slower').onclick=function(){setSpeed(speed-.05);};
+  document.getElementById('bigger').onclick=function(){size=Math.min(96,size+4); setSize(size);};
+  document.getElementById('smaller').onclick=function(){size=Math.max(22,size-4); setSize(size);};
+  document.getElementById('mirror').onclick=function(){stage.classList.toggle('mirror');};
+  document.getElementById('full').onclick=function(){
+    if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen();};
+
+  document.addEventListener('keydown',function(e){
+    if(e.code==='Space'){e.preventDefault(); setPlaying(!playing);}
+    else if(e.key==='ArrowUp'){e.preventDefault(); setSpeed(speed+.05);}
+    else if(e.key==='ArrowDown'){e.preventDefault(); setSpeed(speed-.05);}
+    else if(e.key==='r'||e.key==='R'){restart();}
+    else if(e.key==='m'||e.key==='M'){stage.classList.toggle('mirror');}
+    else if(e.key==='f'||e.key==='F'){document.getElementById('full').click();}
+    else if(e.key===']'){size=Math.min(96,size+4); setSize(size);}
+    else if(e.key==='['){size=Math.max(22,size-4); setSize(size);}
+    else if(e.key==='ArrowRight'||e.key==='ArrowLeft'){   // jump section
+      e.preventDefault();
+      var blocks=[].slice.call(track.querySelectorAll('.blk'));
+      var tops=blocks.map(function(b){return b.offsetTop-track.offsetTop-stage.clientHeight*0.30;});
+      var i=0; for(var k=0;k<tops.length;k++){ if(tops[k]<=y+2) i=k; }
+      i=e.key==='ArrowRight'?Math.min(tops.length-1,i+1):Math.max(0,i-1);
+      y=Math.max(0,tops[i]); elapsed=+blocks[i].dataset.t;
+      track.style.transform='translateY('+(-y)+'px)'; elapsedEl.textContent=fmt(elapsed);
+    }
+  });
+
+  window.addEventListener('resize',measure);
+  measure(); setSpeed(1);
+})();
+</script>
+</body>
+</html>
